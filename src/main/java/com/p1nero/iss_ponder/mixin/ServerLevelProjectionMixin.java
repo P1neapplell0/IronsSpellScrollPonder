@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Mirrors the ServerLevel side effects that a client-only PonderLevel cannot observe by itself.
- * The descriptors correspond to Minecraft 1.20.1 and must be checked after a mappings or game upgrade.
+ * The overload descriptors below match Minecraft 1.21.1's Mojmap {@code ServerLevel} source.
  */
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelProjectionMixin {

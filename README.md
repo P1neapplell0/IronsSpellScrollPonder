@@ -73,12 +73,12 @@ for the complete API.
 
 This branch targets:
 
-- Minecraft `1.20.1`
-- Forge `47.4.4` or newer in the Forge 47 line
-- Iron's Spells 'n Spellbooks `1.20.1-3.15.4` or newer compatible releases
-- Java `17`
+- Minecraft `1.21.1`
+- NeoForge `21.1.234` or newer in the NeoForge 21.1 line
+- Iron's Spells 'n Spellbooks `1.21.1-3.16.2`
+- Java `21`
 
-Ponder `1.0.92` and Flywheel `1.0.0-215` are packaged with Jar-in-Jar and do not
+Ponder `1.0.87+mc1.21.1` and Flywheel `1.0.6` are packaged with Jar-in-Jar and do not
 need to be installed separately. Iron's Spellbooks and its normal runtime
 dependencies are still required. Install this mod on both the client and server.
 
@@ -116,6 +116,18 @@ reactive defense, and subsequent-projectile mechanics. See
 [SPECIAL_SPELLS.md](SPECIAL_SPELLS.md) for the test matrix and
 [TECHNICAL_NOTES.md](TECHNICAL_NOTES.md) for the verified architecture, source
 references, and upgrade checklist.
+
+## Development
+
+The `1.21.1` branch uses ModDevGradle `2.0.143`, Gradle `8.11.1`, Parchment
+`2024.11.17`, and Java `21`:
+
+```text
+./gradlew build
+./gradlew runClient
+```
+
+The release artifact is `build/libs/iss_ponder-neoforge1.21.1-1.0.0.jar`.
 
 ## License
 

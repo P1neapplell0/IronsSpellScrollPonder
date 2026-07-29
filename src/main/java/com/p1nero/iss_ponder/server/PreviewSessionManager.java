@@ -13,7 +13,16 @@ import io.redspace.ironsspellbooks.api.spells.CastSource;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.network.EntityEventPacket;
+import io.redspace.ironsspellbooks.network.particles.AbsorptionParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.BloodSiphonParticlesPacket;
 import io.redspace.ironsspellbooks.network.particles.FieryExplosionParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.FortifyAreaParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.FrostStepParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.HealParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.OakskinParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.RegenCloudParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.ShockwaveParticlesPacket;
+import io.redspace.ironsspellbooks.network.particles.TeleportParticlesPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStartTrackingPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStopTrackingPacket;
 import io.netty.buffer.Unpooled;
@@ -22,9 +31,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -44,15 +55,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.network.ICustomPacket;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.PlayLevelSoundEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.event.PlayLevelSoundEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +81,7 @@ import java.util.UUID;
  * {@code MagicData}, and {@code MagicManager#tick}. PonderLevel is client-only,
  * so arbitrary spell logic must remain in this real ServerLevel.</p>
  */
-@Mod.EventBusSubscriber(modid = ISSPonderMod.MOD_ID)
+@EventBusSubscriber(modid = ISSPonderMod.MOD_ID)
 public final class PreviewSessionManager {
     public static final ResourceKey<Level> PREVIEW_LEVEL = ResourceKey.create(
             Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(ISSPonderMod.MOD_ID, "spell_preview"));
@@ -80,9 +91,6 @@ public final class PreviewSessionManager {
     private static final float TARGET_HEALTH = 2_048.0F;
     private static final int CAST_DELAY = 30;
     private static final int MAX_CAST_TICKS = 20 * 15;
-    // Iron's 3.15.4 client-only particle messages that are safe to replay against PonderLevel.
-    // Tracking-only IDs 39-42 are forwarded from their typed messages instead of this raw self-send path.
-    private static final Set<Integer> PLAYER_VISUAL_PACKET_TYPES = Set.of(16, 17, 21, 22, 23, 26, 27, 31, 43);
     private static final Map<UUID, PreviewSession> SESSIONS = new HashMap<>();
 
     private PreviewSessionManager() {
@@ -192,10 +200,7 @@ public final class PreviewSessionManager {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
+    public static void onServerTick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();
         List<UUID> missingPlayers = new ArrayList<>();
         for (PreviewSession session : List.copyOf(SESSIONS.values())) {
@@ -265,7 +270,7 @@ public final class PreviewSessionManager {
             if (!session.projectionReady || session.simulatedPlayer == null) {
                 continue;
             }
-            AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+            AABB bounds = sceneBounds(session.origin);
             if (!bounds.contains(entity.position())) {
                 continue;
             }
@@ -293,7 +298,7 @@ public final class PreviewSessionManager {
             if (!session.projectionReady || session.simulatedPlayer == null) {
                 continue;
             }
-            AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+            AABB bounds = sceneBounds(session.origin);
             if (!bounds.contains(serverPosition)) {
                 continue;
             }
@@ -314,7 +319,7 @@ public final class PreviewSessionManager {
             if (!session.projectionReady || session.simulatedPlayer == null) {
                 continue;
             }
-            AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+            AABB bounds = sceneBounds(session.origin);
             if (!bounds.contains(serverPosition)) {
                 continue;
             }
@@ -447,7 +452,7 @@ public final class PreviewSessionManager {
 
     private static void tickSimulatedPlayer(MinecraftServer server, PreviewSession session, MagicData magicData) {
         try {
-            // Reference: Forge FakePlayer#tick is intentionally empty. ServerPlayer#doTick reaches the normal
+            // Reference: NeoForge FakePlayer#tick is intentionally empty. ServerPlayer#doTick reaches the normal
             // player lifecycle used by Iron's MagicManager/MagicData while the dummy connection absorbs packets.
             session.simulatedPlayer.doTick();
         } catch (RuntimeException exception) {
@@ -513,10 +518,13 @@ public final class PreviewSessionManager {
         }
     }
 
-    public static void forwardCustomPacket(ServerPlayer fakePlayer, ICustomPacket<?> packet) {
-        // Reference: Iron's SimpleChannel name is irons_spellbooks:messages. Preserve the raw discriminator and
-        // payload here; PreviewPacketBridge owns the deliberately small, version-specific visual allowlist.
-        if (!packet.getName().equals(ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "messages"))) {
+    public static void forwardPlayerVisualPacket(ServerPlayer fakePlayer, CustomPacketPayload packet) {
+        // Tracking payloads are captured by the corresponding PacketDistributor hook and must not be replayed twice.
+        if (isTrackingVisualPacket(packet)) {
+            return;
+        }
+        ModNetwork.ProjectionIronPacket projectedPacket = encodeVisualPacket(packet);
+        if (projectedPacket == null) {
             return;
         }
         for (PreviewSession session : List.copyOf(SESSIONS.values())) {
@@ -527,53 +535,70 @@ public final class PreviewSessionManager {
             if (player == null) {
                 continue;
             }
-            // Forge 1.20.1 ClientboundCustomPayloadPacket#getIndex returns Integer.MAX_VALUE. The actual
-            // SimpleChannel discriminator is the first byte written by IndexedMessageCodec#tryEncode.
-            net.minecraft.network.FriendlyByteBuf source = packet.getInternalData();
-            if (source == null || !source.isReadable()) {
-                if (source != null) {
-                    source.release();
-                }
-                continue;
+            if (session.forwardedPacketTypes.add(projectedPacket.index())) {
+                ISSPonderMod.LOGGER.debug("Forwarding Iron preview visual {} for {}", projectedPacket.index(),
+                        session.spell.getSpellId());
             }
-            try {
-                int discriminator = source.readUnsignedByte();
-                if (!PLAYER_VISUAL_PACKET_TYPES.contains(discriminator)) {
-                    continue;
-                }
-                byte[] payload = new byte[source.readableBytes()];
-                source.readBytes(payload);
-                if (session.forwardedPacketTypes.add(discriminator)) {
-                    ISSPonderMod.LOGGER.debug("Forwarding Iron preview packet {} for {}", discriminator,
-                            session.spell.getSpellId());
-                }
-                ModNetwork.sendToPlayer(player, new ModNetwork.ProjectionIronPacket(discriminator, payload));
-            } finally {
-                source.release();
-            }
+            ModNetwork.sendToPlayer(player, projectedPacket);
         }
     }
 
-    public static void forwardTrackingVisualPacket(Entity trackedEntity, Object message) {
+    public static void forwardTrackingVisualPacket(Entity trackedEntity, CustomPacketPayload message) {
         if (!(trackedEntity.level() instanceof ServerLevel level) || level.dimension() != PREVIEW_LEVEL) {
             return;
         }
+        ModNetwork.ProjectionIronPacket projectedPacket = encodeVisualPacket(message);
+        if (projectedPacket == null) {
+            return;
+        }
+        forProjection(level, trackedEntity.position(), (player, ignored) ->
+                ModNetwork.sendToPlayer(player, projectedPacket));
+    }
+
+    private static ModNetwork.ProjectionIronPacket encodeVisualPacket(CustomPacketPayload message) {
         int discriminator;
         java.util.function.Consumer<net.minecraft.network.FriendlyByteBuf> encoder;
-        if (message instanceof FieryExplosionParticlesPacket packet) {
+        if (message instanceof TeleportParticlesPacket packet) {
+            discriminator = 16;
+            encoder = packet::write;
+        } else if (message instanceof FrostStepParticlesPacket packet) {
+            discriminator = 17;
+            encoder = packet::write;
+        } else if (message instanceof HealParticlesPacket packet) {
+            discriminator = 21;
+            encoder = packet::write;
+        } else if (message instanceof BloodSiphonParticlesPacket packet) {
+            discriminator = 22;
+            encoder = packet::write;
+        } else if (message instanceof RegenCloudParticlesPacket packet) {
+            discriminator = 23;
+            encoder = packet::write;
+        } else if (message instanceof AbsorptionParticlesPacket packet) {
+            discriminator = 26;
+            encoder = packet::write;
+        } else if (message instanceof FortifyAreaParticlesPacket packet) {
+            discriminator = 27;
+            encoder = packet::write;
+        } else if (message instanceof OakskinParticlesPacket packet) {
+            discriminator = 31;
+            encoder = packet::write;
+        } else if (message instanceof FieryExplosionParticlesPacket packet) {
             discriminator = 39;
-            encoder = packet::toBytes;
+            encoder = packet::write;
         } else if (message instanceof EntityEventPacket<?> packet) {
             discriminator = 40;
-            encoder = packet::toBytes;
+            encoder = packet::write;
         } else if (message instanceof GuidingBoltManagerStartTrackingPacket packet) {
             discriminator = 41;
-            encoder = packet::toBytes;
+            encoder = packet::write;
         } else if (message instanceof GuidingBoltManagerStopTrackingPacket packet) {
             discriminator = 42;
-            encoder = packet::toBytes;
+            encoder = packet::write;
+        } else if (message instanceof ShockwaveParticlesPacket packet) {
+            discriminator = 43;
+            encoder = packet::write;
         } else {
-            return;
+            return null;
         }
 
         net.minecraft.network.FriendlyByteBuf buffer =
@@ -582,15 +607,14 @@ public final class PreviewSessionManager {
             encoder.accept(buffer);
             byte[] payload = new byte[buffer.readableBytes()];
             buffer.readBytes(payload);
-            forProjection(level, trackedEntity.position(), (player, ignored) ->
-                    ModNetwork.sendToPlayer(player, new ModNetwork.ProjectionIronPacket(discriminator, payload)));
+            return new ModNetwork.ProjectionIronPacket(discriminator, payload);
         } finally {
             buffer.release();
         }
     }
 
     /** Messages handled by the tracking hook must not also be replayed by the FakePlayer self-send hook. */
-    public static boolean isTrackingVisualPacket(Object message) {
+    private static boolean isTrackingVisualPacket(CustomPacketPayload message) {
         return message instanceof FieryExplosionParticlesPacket
                 || message instanceof EntityEventPacket<?>
                 || message instanceof GuidingBoltManagerStartTrackingPacket
@@ -642,7 +666,7 @@ public final class PreviewSessionManager {
         session.primaryTargetId = spawnTarget(level, origin, 0.5, 1.0, 3.0);
         spawnTarget(level, origin, -0.5, 1.0, 3.0);
         spawnTarget(level, origin, 1.5, 1.0, 3.0);
-        AABB sceneBounds = new AABB(origin.offset(-24, -8, -24), origin.offset(25, 24, 25));
+        AABB sceneBounds = sceneBounds(origin);
         for (Zombie zombie : level.getEntities(EntityTypeTest.forClass(Zombie.class), sceneBounds,
                 entity -> entity.getTags().contains(PREVIEW_ENTITY_TAG))) {
             faceTowards(zombie, session.simulatedPlayer);
@@ -670,6 +694,11 @@ public final class PreviewSessionManager {
         return zombie.getUUID();
     }
 
+    private static AABB sceneBounds(BlockPos origin) {
+        return new AABB(Vec3.atLowerCornerOf(origin.offset(-24, -8, -24)),
+                Vec3.atLowerCornerOf(origin.offset(25, 24, 25)));
+    }
+
     private static void discardScene(ServerLevel level, PreviewSession session) {
         if (level == null) {
             return;
@@ -687,7 +716,7 @@ public final class PreviewSessionManager {
             // generic entity query before their first normal tick. Always dispose the session-owned reference.
             simulatedPlayer.discard();
         }
-        AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+        AABB bounds = sceneBounds(session.origin);
         for (Entity entity : level.getEntities((Entity) null, bounds, entity -> entity != null)) {
             entity.discard();
         }
@@ -715,7 +744,7 @@ public final class PreviewSessionManager {
             return;
         }
         ServerLevel level = session.simulatedPlayer.serverLevel();
-        AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+        AABB bounds = sceneBounds(session.origin);
         List<Entity> entities = new ArrayList<>();
         // ServerLevel manages players separately from ordinary entities. A newly added FakePlayer may not be
         // returned by getEntities until doTick() runs, but cast-start packets are sent before that first tick.
@@ -752,11 +781,11 @@ public final class PreviewSessionManager {
                 } catch (RuntimeException exception) {
                     ISSPonderMod.LOGGER.debug("Could not serialize preview entity {}", typeId, exception);
                 }
-                if (entity instanceof net.minecraftforge.entity.IEntityAdditionalSpawnData additionalSpawnData) {
-                    // Reference: NetworkHooks#getEntitySpawningPacket appends this mod-defined payload. It is
+                if (entity instanceof IEntityWithComplexSpawn additionalSpawnData) {
+                    // Reference: NeoForge AdvancedAddEntityPayload appends this mod-defined payload. It remains
                     // separate from NBT and is required by effects such as RayOfFrostVisualEntity#distance.
-                    net.minecraft.network.FriendlyByteBuf buffer =
-                            new net.minecraft.network.FriendlyByteBuf(Unpooled.buffer());
+                    RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(
+                            Unpooled.buffer(), level.registryAccess());
                     try {
                         additionalSpawnData.writeSpawnData(buffer);
                         spawnData = new byte[buffer.readableBytes()];

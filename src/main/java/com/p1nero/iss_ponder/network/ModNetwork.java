@@ -3,84 +3,123 @@ package com.p1nero.iss_ponder.network;
 import com.p1nero.iss_ponder.ISSPonderMod;
 import com.p1nero.iss_ponder.server.PreviewSessionManager;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamMemberEncoder;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-import java.util.function.Supplier;
+import java.util.Map;
 import java.util.UUID;
 
 public final class ModNetwork {
-    // Registration order is the wire discriminator table. Bump this protocol whenever order or encoding changes.
+    // Bump this version whenever an existing payload's binary encoding changes.
     private static final String PROTOCOL = "7";
-    private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(ISSPonderMod.MOD_ID, "main"),
-            () -> PROTOCOL,
-            PROTOCOL::equals,
-            PROTOCOL::equals
+    private static final Map<Class<?>, CustomPacketPayload.Type<?>> PAYLOAD_TYPES = Map.ofEntries(
+            payloadType(StartPreview.class, "start_preview"),
+            payloadType(EndPreview.class, "end_preview"),
+            payloadType(ReplayPreview.class, "replay_preview"),
+            payloadType(SwitchPreview.class, "switch_preview"),
+            payloadType(PreviewReady.class, "preview_ready"),
+            payloadType(PreviewStatus.class, "preview_status"),
+            payloadType(ProjectionStart.class, "projection_start"),
+            payloadType(ProjectionEntity.class, "projection_entity"),
+            payloadType(ProjectionEntityEvent.class, "projection_entity_event"),
+            payloadType(ProjectionEnd.class, "projection_end"),
+            payloadType(ProjectionBlock.class, "projection_block"),
+            payloadType(ProjectionParticle.class, "projection_particle"),
+            payloadType(ProjectionCastStarted.class, "projection_cast_started"),
+            payloadType(ProjectionCastProgress.class, "projection_cast_progress"),
+            payloadType(ProjectionCastEffect.class, "projection_cast_effect"),
+            payloadType(ProjectionCastFinished.class, "projection_cast_finished"),
+            payloadType(ProjectionIronPacket.class, "projection_iron_packet")
     );
-    private static int packetId;
 
     private ModNetwork() {
     }
 
-    public static void register() {
-        CHANNEL.messageBuilder(StartPreview.class, packetId++).encoder(StartPreview::encode).decoder(StartPreview::decode)
-                .consumerMainThread(StartPreview::handle).add();
-        CHANNEL.messageBuilder(EndPreview.class, packetId++).encoder(EndPreview::encode).decoder(EndPreview::decode)
-                .consumerMainThread(EndPreview::handle).add();
-        CHANNEL.messageBuilder(ReplayPreview.class, packetId++).encoder(ReplayPreview::encode).decoder(ReplayPreview::decode)
-                .consumerMainThread(ReplayPreview::handle).add();
-        CHANNEL.messageBuilder(SwitchPreview.class, packetId++).encoder(SwitchPreview::encode).decoder(SwitchPreview::decode)
-                .consumerMainThread(SwitchPreview::handle).add();
-        CHANNEL.messageBuilder(PreviewReady.class, packetId++).encoder(PreviewReady::encode).decoder(PreviewReady::decode)
-                .consumerMainThread(PreviewReady::handle).add();
-        CHANNEL.messageBuilder(PreviewStatus.class, packetId++).encoder(PreviewStatus::encode).decoder(PreviewStatus::decode)
-                .consumerMainThread(PreviewStatus::handle).add();
-        CHANNEL.messageBuilder(ProjectionStart.class, packetId++).encoder(ProjectionStart::encode).decoder(ProjectionStart::decode)
-                .consumerMainThread(ProjectionStart::handle).add();
-        CHANNEL.messageBuilder(ProjectionEntity.class, packetId++).encoder(ProjectionEntity::encode).decoder(ProjectionEntity::decode)
-                .consumerMainThread(ProjectionEntity::handle).add();
-        CHANNEL.messageBuilder(ProjectionEntityEvent.class, packetId++).encoder(ProjectionEntityEvent::encode).decoder(ProjectionEntityEvent::decode)
-                .consumerMainThread(ProjectionEntityEvent::handle).add();
-        CHANNEL.messageBuilder(ProjectionEnd.class, packetId++).encoder(ProjectionEnd::encode).decoder(ProjectionEnd::decode)
-                .consumerMainThread(ProjectionEnd::handle).add();
-        CHANNEL.messageBuilder(ProjectionBlock.class, packetId++).encoder(ProjectionBlock::encode).decoder(ProjectionBlock::decode)
-                .consumerMainThread(ProjectionBlock::handle).add();
-        CHANNEL.messageBuilder(ProjectionParticle.class, packetId++).encoder(ProjectionParticle::encode).decoder(ProjectionParticle::decode)
-                .consumerMainThread(ProjectionParticle::handle).add();
-        CHANNEL.messageBuilder(ProjectionCastStarted.class, packetId++).encoder(ProjectionCastStarted::encode).decoder(ProjectionCastStarted::decode)
-                .consumerMainThread(ProjectionCastStarted::handle).add();
-        CHANNEL.messageBuilder(ProjectionCastProgress.class, packetId++).encoder(ProjectionCastProgress::encode).decoder(ProjectionCastProgress::decode)
-                .consumerMainThread(ProjectionCastProgress::handle).add();
-        CHANNEL.messageBuilder(ProjectionCastEffect.class, packetId++).encoder(ProjectionCastEffect::encode).decoder(ProjectionCastEffect::decode)
-                .consumerMainThread(ProjectionCastEffect::handle).add();
-        CHANNEL.messageBuilder(ProjectionCastFinished.class, packetId++).encoder(ProjectionCastFinished::encode).decoder(ProjectionCastFinished::decode)
-                .consumerMainThread(ProjectionCastFinished::handle).add();
-        CHANNEL.messageBuilder(ProjectionIronPacket.class, packetId++).encoder(ProjectionIronPacket::encode).decoder(ProjectionIronPacket::decode)
-                .consumerMainThread(ProjectionIronPacket::handle).add();
+    public static void register(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(PROTOCOL);
+        playToServer(registrar, StartPreview.class, StartPreview::encode, StartPreview::decode, StartPreview::handle);
+        playToServer(registrar, EndPreview.class, EndPreview::encode, EndPreview::decode, EndPreview::handle);
+        playToServer(registrar, ReplayPreview.class, ReplayPreview::encode, ReplayPreview::decode, ReplayPreview::handle);
+        playToServer(registrar, SwitchPreview.class, SwitchPreview::encode, SwitchPreview::decode, SwitchPreview::handle);
+        playToClient(registrar, PreviewReady.class, PreviewReady::encode, PreviewReady::decode, PreviewReady::handle);
+        playToClient(registrar, PreviewStatus.class, PreviewStatus::encode, PreviewStatus::decode, PreviewStatus::handle);
+        playToClient(registrar, ProjectionStart.class, ProjectionStart::encode, ProjectionStart::decode, ProjectionStart::handle);
+        playToClient(registrar, ProjectionEntity.class, ProjectionEntity::encode, ProjectionEntity::decode, ProjectionEntity::handle);
+        playToClient(registrar, ProjectionEntityEvent.class, ProjectionEntityEvent::encode, ProjectionEntityEvent::decode, ProjectionEntityEvent::handle);
+        playToClient(registrar, ProjectionEnd.class, ProjectionEnd::encode, ProjectionEnd::decode, ProjectionEnd::handle);
+        playToClient(registrar, ProjectionBlock.class, ProjectionBlock::encode, ProjectionBlock::decode, ProjectionBlock::handle);
+        playToClient(registrar, ProjectionParticle.class, ProjectionParticle::encode, ProjectionParticle::decode, ProjectionParticle::handle);
+        playToClient(registrar, ProjectionCastStarted.class, ProjectionCastStarted::encode, ProjectionCastStarted::decode, ProjectionCastStarted::handle);
+        playToClient(registrar, ProjectionCastProgress.class, ProjectionCastProgress::encode, ProjectionCastProgress::decode, ProjectionCastProgress::handle);
+        playToClient(registrar, ProjectionCastEffect.class, ProjectionCastEffect::encode, ProjectionCastEffect::decode, ProjectionCastEffect::handle);
+        playToClient(registrar, ProjectionCastFinished.class, ProjectionCastFinished::encode, ProjectionCastFinished::decode, ProjectionCastFinished::handle);
+        playToClient(registrar, ProjectionIronPacket.class, ProjectionIronPacket::encode, ProjectionIronPacket::decode, ProjectionIronPacket::handle);
     }
 
-    public static void sendToServer(Object message) {
-        CHANNEL.sendToServer(message);
+    public static void sendToServer(CustomPacketPayload message) {
+        PacketDistributor.sendToServer(message);
     }
 
-    public static void sendToPlayer(ServerPlayer player, Object message) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
+    public static void sendToPlayer(ServerPlayer player, CustomPacketPayload message) {
+        PacketDistributor.sendToPlayer(player, message);
     }
 
-    public record StartPreview(ResourceLocation spellId, int spellLevel) {
+    private static <T extends Payload> Map.Entry<Class<?>, CustomPacketPayload.Type<?>> payloadType(
+            Class<T> payloadClass, String path) {
+        return Map.entry(payloadClass, new CustomPacketPayload.Type<>(
+                ResourceLocation.fromNamespaceAndPath(ISSPonderMod.MOD_ID, path)));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Payload> CustomPacketPayload.Type<T> typeFor(Class<T> payloadClass) {
+        return (CustomPacketPayload.Type<T>) PAYLOAD_TYPES.get(payloadClass);
+    }
+
+    private static <T extends Payload> StreamCodec<RegistryFriendlyByteBuf, T> codec(
+            StreamMemberEncoder<RegistryFriendlyByteBuf, T> encoder,
+            StreamDecoder<RegistryFriendlyByteBuf, T> decoder) {
+        return CustomPacketPayload.codec(encoder, decoder);
+    }
+
+    private static <T extends Payload> void playToServer(PayloadRegistrar registrar, Class<T> payloadClass,
+                                                         StreamMemberEncoder<RegistryFriendlyByteBuf, T> encoder,
+                                                         StreamDecoder<RegistryFriendlyByteBuf, T> decoder,
+                                                         IPayloadHandler<T> handler) {
+        registrar.playToServer(typeFor(payloadClass), codec(encoder, decoder), handler);
+    }
+
+    private static <T extends Payload> void playToClient(PayloadRegistrar registrar, Class<T> payloadClass,
+                                                         StreamMemberEncoder<RegistryFriendlyByteBuf, T> encoder,
+                                                         StreamDecoder<RegistryFriendlyByteBuf, T> decoder,
+                                                         IPayloadHandler<T> handler) {
+        registrar.playToClient(typeFor(payloadClass), codec(encoder, decoder), handler);
+    }
+
+    private interface Payload extends CustomPacketPayload {
+        @Override
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        default CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+            return typeFor((Class) getClass());
+        }
+    }
+
+    public record StartPreview(ResourceLocation spellId, int spellLevel) implements Payload {
         private static void encode(StartPreview message, FriendlyByteBuf buffer) {
             buffer.writeResourceLocation(message.spellId);
             buffer.writeVarInt(message.spellLevel);
@@ -90,15 +129,12 @@ public final class ModNetwork {
             return new StartPreview(buffer.readResourceLocation(), buffer.readVarInt());
         }
 
-        private static void handle(StartPreview message, Supplier<NetworkEvent.Context> contextSupplier) {
-            ServerPlayer player = contextSupplier.get().getSender();
-            if (player != null) {
-                PreviewSessionManager.start(player, message.spellId, message.spellLevel);
-            }
+        private static void handle(StartPreview message, IPayloadContext context) {
+            PreviewSessionManager.start((ServerPlayer) context.player(), message.spellId, message.spellLevel);
         }
     }
 
-    public record EndPreview() {
+    public record EndPreview() implements Payload {
         private static void encode(EndPreview message, FriendlyByteBuf buffer) {
         }
 
@@ -106,15 +142,12 @@ public final class ModNetwork {
             return new EndPreview();
         }
 
-        private static void handle(EndPreview message, Supplier<NetworkEvent.Context> contextSupplier) {
-            ServerPlayer player = contextSupplier.get().getSender();
-            if (player != null) {
-                PreviewSessionManager.end(player);
-            }
+        private static void handle(EndPreview message, IPayloadContext context) {
+            PreviewSessionManager.end((ServerPlayer) context.player());
         }
     }
 
-    public record ReplayPreview() {
+    public record ReplayPreview() implements Payload {
         private static void encode(ReplayPreview message, FriendlyByteBuf buffer) {
         }
 
@@ -122,15 +155,12 @@ public final class ModNetwork {
             return new ReplayPreview();
         }
 
-        private static void handle(ReplayPreview message, Supplier<NetworkEvent.Context> contextSupplier) {
-            ServerPlayer player = contextSupplier.get().getSender();
-            if (player != null) {
-                PreviewSessionManager.replay(player);
-            }
+        private static void handle(ReplayPreview message, IPayloadContext context) {
+            PreviewSessionManager.replay((ServerPlayer) context.player());
         }
     }
 
-    public record SwitchPreview(ResourceLocation spellId, int spellLevel) {
+    public record SwitchPreview(ResourceLocation spellId, int spellLevel) implements Payload {
         private static void encode(SwitchPreview message, FriendlyByteBuf buffer) {
             buffer.writeResourceLocation(message.spellId);
             buffer.writeVarInt(message.spellLevel);
@@ -140,16 +170,13 @@ public final class ModNetwork {
             return new SwitchPreview(buffer.readResourceLocation(), buffer.readVarInt());
         }
 
-        private static void handle(SwitchPreview message, Supplier<NetworkEvent.Context> contextSupplier) {
-            ServerPlayer player = contextSupplier.get().getSender();
-            if (player != null) {
-                PreviewSessionManager.switchSpell(player, message.spellId, message.spellLevel);
-            }
+        private static void handle(SwitchPreview message, IPayloadContext context) {
+            PreviewSessionManager.switchSpell((ServerPlayer) context.player(), message.spellId, message.spellLevel);
         }
     }
 
     public record PreviewReady(ResourceLocation spellId, int spellLevel, boolean simulationAllowed,
-                               double projectionX, double projectionY, double projectionZ) {
+                               double projectionX, double projectionY, double projectionZ) implements Payload {
         public PreviewReady(ResourceLocation spellId, int spellLevel, boolean simulationAllowed) {
             this(spellId, spellLevel, simulationAllowed, 0, 0, 0);
         }
@@ -168,30 +195,28 @@ public final class ModNetwork {
                     buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
         }
 
-        private static void handle(PreviewReady message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.ClientPreviewController.open(
-                            message.spellId, message.spellLevel, message.simulationAllowed,
-                            message.projectionX, message.projectionY, message.projectionZ));
+        private static void handle(PreviewReady message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.ClientPreviewController.open(
+                    message.spellId, message.spellLevel, message.simulationAllowed,
+                    message.projectionX, message.projectionY, message.projectionZ);
         }
     }
 
-    public record PreviewStatus(Component status) {
-        private static void encode(PreviewStatus message, FriendlyByteBuf buffer) {
-            buffer.writeComponent(message.status);
+    public record PreviewStatus(Component status) implements Payload {
+        private static void encode(PreviewStatus message, RegistryFriendlyByteBuf buffer) {
+            ComponentSerialization.STREAM_CODEC.encode(buffer, message.status);
         }
 
-        private static PreviewStatus decode(FriendlyByteBuf buffer) {
-            return new PreviewStatus(buffer.readComponent());
+        private static PreviewStatus decode(RegistryFriendlyByteBuf buffer) {
+            return new PreviewStatus(ComponentSerialization.STREAM_CODEC.decode(buffer));
         }
 
-        private static void handle(PreviewStatus message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.ClientPreviewController.setStatus(message.status));
+        private static void handle(PreviewStatus message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.ClientPreviewController.setStatus(message.status);
         }
     }
 
-    public record ProjectionStart(double x, double y, double z) {
+    public record ProjectionStart(double x, double y, double z) implements Payload {
         private static void encode(ProjectionStart message, FriendlyByteBuf buffer) {
             buffer.writeDouble(message.x);
             buffer.writeDouble(message.y);
@@ -202,24 +227,22 @@ public final class ModNetwork {
             return new ProjectionStart(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
         }
 
-        private static void handle(ProjectionStart message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                try {
-                    com.p1nero.iss_ponder.client.PreviewProjection.resetForReplay(message.x, message.y, message.z);
-                } catch (RuntimeException exception) {
-                    ISSPonderMod.LOGGER.error("Could not recreate the virtual spell preview", exception);
-                    com.p1nero.iss_ponder.client.PreviewProjection.clear();
-                    net.minecraft.client.Minecraft.getInstance().setScreen(null);
-                }
-            });
+        private static void handle(ProjectionStart message, IPayloadContext context) {
+            try {
+                com.p1nero.iss_ponder.client.PreviewProjection.resetForReplay(message.x, message.y, message.z);
+            } catch (RuntimeException exception) {
+                ISSPonderMod.LOGGER.error("Could not recreate the virtual spell preview", exception);
+                com.p1nero.iss_ponder.client.PreviewProjection.clear();
+                net.minecraft.client.Minecraft.getInstance().setScreen(null);
+            }
         }
     }
 
     public record ProjectionEntity(int id, boolean removed, UUID uuid, String typeId, String name,
                                    double x, double y, double z, float yaw, float pitch, float health,
                                    int hurtTime, boolean swinging, CompoundTag data, byte[] spawnData,
-                                   java.util.List<SynchedEntityData.DataValue<?>> syncedData) {
-        private static void encode(ProjectionEntity message, FriendlyByteBuf buffer) {
+                                   java.util.List<SynchedEntityData.DataValue<?>> syncedData) implements Payload {
+        private static void encode(ProjectionEntity message, RegistryFriendlyByteBuf buffer) {
             buffer.writeVarInt(message.id);
             buffer.writeBoolean(message.removed);
             buffer.writeUUID(message.uuid);
@@ -239,7 +262,7 @@ public final class ModNetwork {
             buffer.writeByte(255);
         }
 
-        private static ProjectionEntity decode(FriendlyByteBuf buffer) {
+        private static ProjectionEntity decode(RegistryFriendlyByteBuf buffer) {
             int id = buffer.readVarInt();
             boolean removed = buffer.readBoolean();
             UUID uuid = buffer.readUUID();
@@ -264,22 +287,20 @@ public final class ModNetwork {
                     x, y, z, yaw, pitch, health, hurtTime, swinging, data, spawnData, syncedData);
         }
 
-        private static void handle(ProjectionEntity message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                if (message.removed) {
-                    com.p1nero.iss_ponder.client.ClientPreviewController.removeProjectionEntity(message.id);
-                } else {
-                    com.p1nero.iss_ponder.client.ClientPreviewController.spawnProjectionEntity(
-                            message.id, message.uuid, message.typeId, message.name,
-                            message.x, message.y, message.z, message.yaw, message.pitch, message.health,
-                            message.hurtTime, message.swinging, message.data, message.spawnData, message.syncedData);
-                }
-            });
+        private static void handle(ProjectionEntity message, IPayloadContext context) {
+            if (message.removed) {
+                com.p1nero.iss_ponder.client.ClientPreviewController.removeProjectionEntity(message.id);
+            } else {
+                com.p1nero.iss_ponder.client.ClientPreviewController.spawnProjectionEntity(
+                        message.id, message.uuid, message.typeId, message.name,
+                        message.x, message.y, message.z, message.yaw, message.pitch, message.health,
+                        message.hurtTime, message.swinging, message.data, message.spawnData, message.syncedData);
+            }
         }
     }
 
     /** Mirrors vanilla {@code ClientboundEntityEventPacket} for entities in the isolated Ponder level. */
-    public record ProjectionEntityEvent(int id, byte eventId) {
+    public record ProjectionEntityEvent(int id, byte eventId) implements Payload {
         private static void encode(ProjectionEntityEvent message, FriendlyByteBuf buffer) {
             buffer.writeVarInt(message.id);
             buffer.writeByte(message.eventId);
@@ -289,14 +310,12 @@ public final class ModNetwork {
             return new ProjectionEntityEvent(buffer.readVarInt(), buffer.readByte());
         }
 
-        private static void handle(ProjectionEntityEvent message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.handleVanillaEntityEvent(
-                            message.id, message.eventId));
+        private static void handle(ProjectionEntityEvent message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.handleVanillaEntityEvent(message.id, message.eventId);
         }
     }
 
-    public record ProjectionEnd() {
+    public record ProjectionEnd() implements Payload {
         private static void encode(ProjectionEnd message, FriendlyByteBuf buffer) {
         }
 
@@ -304,13 +323,12 @@ public final class ModNetwork {
             return new ProjectionEnd();
         }
 
-        private static void handle(ProjectionEnd message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.clear());
+        private static void handle(ProjectionEnd message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.clear();
         }
     }
 
-    public record ProjectionBlock(long position, int stateId) {
+    public record ProjectionBlock(long position, int stateId) implements Payload {
         private static void encode(ProjectionBlock message, FriendlyByteBuf buffer) {
             buffer.writeLong(message.position);
             buffer.writeVarInt(message.stateId);
@@ -320,18 +338,16 @@ public final class ModNetwork {
             return new ProjectionBlock(buffer.readLong(), buffer.readVarInt());
         }
 
-        private static void handle(ProjectionBlock message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.updateBlock(
-                            net.minecraft.core.BlockPos.of(message.position), message.stateId));
+        private static void handle(ProjectionBlock message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.updateBlock(
+                    net.minecraft.core.BlockPos.of(message.position), message.stateId);
         }
     }
 
     public record ProjectionParticle(ParticleOptions particle, boolean longDistance, double x, double y, double z,
-                                     int count, float xOffset, float yOffset, float zOffset, float speed) {
-        private static void encode(ProjectionParticle message, FriendlyByteBuf buffer) {
-            buffer.writeVarInt(BuiltInRegistries.PARTICLE_TYPE.getId(message.particle.getType()));
-            message.particle.writeToNetwork(buffer);
+                                     int count, float xOffset, float yOffset, float zOffset, float speed) implements Payload {
+        private static void encode(ProjectionParticle message, RegistryFriendlyByteBuf buffer) {
+            ParticleTypes.STREAM_CODEC.encode(buffer, message.particle);
             buffer.writeBoolean(message.longDistance);
             buffer.writeDouble(message.x);
             buffer.writeDouble(message.y);
@@ -343,31 +359,21 @@ public final class ModNetwork {
             buffer.writeFloat(message.speed);
         }
 
-        private static ProjectionParticle decode(FriendlyByteBuf buffer) {
-            ParticleType<?> type = BuiltInRegistries.PARTICLE_TYPE.byId(buffer.readVarInt());
-            if (type == null) {
-                throw new IllegalArgumentException("Unknown projection particle type");
-            }
-            ParticleOptions particle = readParticle(type, buffer);
+        private static ProjectionParticle decode(RegistryFriendlyByteBuf buffer) {
+            ParticleOptions particle = ParticleTypes.STREAM_CODEC.decode(buffer);
             return new ProjectionParticle(particle, buffer.readBoolean(), buffer.readDouble(), buffer.readDouble(),
                     buffer.readDouble(), buffer.readVarInt(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
                     buffer.readFloat());
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private static ParticleOptions readParticle(ParticleType type, FriendlyByteBuf buffer) {
-            return (ParticleOptions) type.getDeserializer().fromNetwork(type, buffer);
-        }
-
-        private static void handle(ProjectionParticle message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.addParticle(message.particle, message.longDistance,
-                            message.x, message.y, message.z, message.count, message.xOffset, message.yOffset,
-                            message.zOffset, message.speed));
+        private static void handle(ProjectionParticle message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.addParticle(message.particle, message.longDistance,
+                    message.x, message.y, message.z, message.count, message.xOffset, message.yOffset,
+                    message.zOffset, message.speed);
         }
     }
 
-    public record ProjectionCastStarted(String spellId, int spellLevel) {
+    public record ProjectionCastStarted(String spellId, int spellLevel) implements Payload {
         private static void encode(ProjectionCastStarted message, FriendlyByteBuf buffer) {
             buffer.writeUtf(message.spellId, 256);
             buffer.writeVarInt(message.spellLevel);
@@ -377,13 +383,12 @@ public final class ModNetwork {
             return new ProjectionCastStarted(buffer.readUtf(256), buffer.readVarInt());
         }
 
-        private static void handle(ProjectionCastStarted message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.castStarted(message.spellId, message.spellLevel));
+        private static void handle(ProjectionCastStarted message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.castStarted(message.spellId, message.spellLevel);
         }
     }
 
-    public record ProjectionCastProgress(float progress) {
+    public record ProjectionCastProgress(float progress) implements Payload {
         private static void encode(ProjectionCastProgress message, FriendlyByteBuf buffer) {
             buffer.writeFloat(message.progress);
         }
@@ -392,15 +397,14 @@ public final class ModNetwork {
             return new ProjectionCastProgress(buffer.readFloat());
         }
 
-        private static void handle(ProjectionCastProgress message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.updateCastProgress(message.progress));
+        private static void handle(ProjectionCastProgress message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.updateCastProgress(message.progress);
         }
     }
 
     public record ProjectionCastEffect(String spellId, int spellLevel,
                                        io.redspace.ironsspellbooks.api.spells.CastSource castSource,
-                                       io.redspace.ironsspellbooks.api.spells.ICastData castData) {
+                                       io.redspace.ironsspellbooks.api.spells.ICastData castData) implements Payload {
         private static void encode(ProjectionCastEffect message, FriendlyByteBuf buffer) {
             buffer.writeUtf(message.spellId, 256);
             buffer.writeVarInt(message.spellLevel);
@@ -427,13 +431,13 @@ public final class ModNetwork {
             return new ProjectionCastEffect(spellId, level, source, castData);
         }
 
-        private static void handle(ProjectionCastEffect message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.castEffect(message.spellId, message.spellLevel, message.castData));
+        private static void handle(ProjectionCastEffect message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.castEffect(
+                    message.spellId, message.spellLevel, message.castData);
         }
     }
 
-    public record ProjectionCastFinished(String spellId, boolean cancelled) {
+    public record ProjectionCastFinished(String spellId, boolean cancelled) implements Payload {
         private static void encode(ProjectionCastFinished message, FriendlyByteBuf buffer) {
             buffer.writeUtf(message.spellId, 256);
             buffer.writeBoolean(message.cancelled);
@@ -443,14 +447,13 @@ public final class ModNetwork {
             return new ProjectionCastFinished(buffer.readUtf(256), buffer.readBoolean());
         }
 
-        private static void handle(ProjectionCastFinished message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewProjection.castFinished(message.spellId, message.cancelled));
+        private static void handle(ProjectionCastFinished message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewProjection.castFinished(message.spellId, message.cancelled);
         }
     }
 
     /** Raw Iron's Spellbooks packet payload captured from the server-only FakePlayer. */
-    public record ProjectionIronPacket(int index, byte[] payload) {
+    public record ProjectionIronPacket(int index, byte[] payload) implements Payload {
         private static void encode(ProjectionIronPacket message, FriendlyByteBuf buffer) {
             buffer.writeVarInt(message.index);
             buffer.writeByteArray(message.payload);
@@ -460,9 +463,8 @@ public final class ModNetwork {
             return new ProjectionIronPacket(buffer.readVarInt(), buffer.readByteArray(1 << 20));
         }
 
-        private static void handle(ProjectionIronPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.PreviewPacketBridge.handle(message.index, message.payload));
+        private static void handle(ProjectionIronPacket message, IPayloadContext context) {
+            com.p1nero.iss_ponder.client.PreviewPacketBridge.handle(message.index, message.payload);
         }
     }
 }

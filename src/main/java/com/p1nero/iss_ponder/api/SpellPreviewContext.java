@@ -2,6 +2,7 @@ package com.p1nero.iss_ponder.api;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -46,13 +47,13 @@ public record SpellPreviewContext(ServerLevel level, ServerPlayer caster, @Nulla
         return hurt;
     }
 
-    /** Runs the normal item finish path so Forge item-use events still fire. */
+    /** Runs the normal item finish path so NeoForge item-use events still fire. */
     public ItemStack consume(ItemStack stack) {
         return stack.finishUsingItem(level, caster);
     }
 
     /** Allows an effect's removal callback to deal its intended damage before restoring preview invulnerability. */
-    public boolean removeEffectAllowDamage(MobEffect effect) {
+    public boolean removeEffectAllowDamage(Holder<MobEffect> effect) {
         boolean invulnerable = caster.isInvulnerable();
         caster.setInvulnerable(false);
         boolean removed = caster.removeEffect(effect);

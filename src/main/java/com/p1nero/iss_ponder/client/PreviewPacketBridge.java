@@ -5,15 +5,15 @@ import io.redspace.ironsspellbooks.player.ClientSpellCastHelper;
 import io.redspace.ironsspellbooks.effect.guiding_bolt.GuidingBoltManager;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Replays an allowlist of Iron's built-in client particle packets against the virtual level.
- * Packet indexes and payload layouts are tied to Iron's Spellbooks 3.15.4 and must be re-audited on upgrade.
- * Index 22 maps to BloodSiphonParticlesPacket; its dedicated adapter mirrors
+ * Replays an allowlist of Iron's built-in client particle payloads against the virtual level.
+ * The integer keys are this mod's stable visual IDs; payload layouts are tied to Iron's Spellbooks 3.16.2.
+ * Visual ID 22 maps to BloodSiphonParticlesPacket; its dedicated adapter mirrors
  * ClientSpellCastHelper#handleClientboundBloodSiphonParticles directly in PonderLevel.
  */
 public final class PreviewPacketBridge {
@@ -48,7 +48,7 @@ public final class PreviewPacketBridge {
     }
 
     private static void decodeVisualPacket(int index, FriendlyByteBuf buffer) {
-        // Indexes follow Iron's Spellbooks 3.15.4 PacketDistributor#register in exact registration order.
+        // Visual IDs preserve the original bridge table, but Iron's 3.16.2 payloads are captured by concrete type.
         switch (index) {
             case 16 -> ClientSpellCastHelper.handleClientboundTeleport(readPosition(buffer), readPosition(buffer));
             case 17 -> ClientSpellCastHelper.handleClientboundFrostStep(readPosition(buffer), readPosition(buffer));
@@ -72,7 +72,7 @@ public final class PreviewPacketBridge {
             case 43 -> {
                 Vec3 position = readPosition(buffer);
                 float radius = buffer.readFloat();
-                ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(ResourceLocation.parse(buffer.readUtf()));
+                ParticleType<?> particle = BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(buffer.readUtf()));
                 if (particle != null) {
                     ClientSpellCastHelper.handleClientboundShockwaveParticle(position, radius, particle);
                 }

@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-/** Built-in corrections derived from the corresponding Iron's Spellbooks 3.15.4 spell/effect classes. */
+/** Built-in corrections derived from the corresponding Iron's Spellbooks 3.16.2 spell/effect classes. */
 public final class BuiltinSpellPreviewAdapters {
     private static boolean registered;
 
@@ -61,7 +61,7 @@ public final class BuiltinSpellPreviewAdapters {
                 if (context.ticksSinceLastCast() == 6) {
                     context.hurtCasterFromPrimaryTarget(8.0F);
                 } else if (context.ticksSinceLastCast() == 24) {
-                    context.removeEffectAllowDamage(MobEffectRegistry.HEARTSTOP.get());
+                    context.removeEffectAllowDamage(MobEffectRegistry.HEARTSTOP);
                 }
                 return context.ticksSinceLastCast() >= 38 ? Action.COMPLETE : Action.WAIT;
             }

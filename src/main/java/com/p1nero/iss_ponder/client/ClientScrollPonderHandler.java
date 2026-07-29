@@ -14,15 +14,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.Nullable;
 
-@Mod.EventBusSubscriber(modid = ISSPonderMod.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ISSPonderMod.MOD_ID, value = Dist.CLIENT)
 public final class ClientScrollPonderHandler {
     private static final int HOLD_TICKS = 12;
     private static ItemStack hoveredStack = ItemStack.EMPTY;
@@ -42,7 +42,7 @@ public final class ClientScrollPonderHandler {
             return;
         }
 
-        if (!ItemStack.isSameItemSameTags(hoveredStack, stack)) {
+        if (!ItemStack.isSameItemSameComponents(hoveredStack, stack)) {
             hoveredStack = stack.copy();
             holdTicks = 0;
         }
@@ -76,11 +76,7 @@ public final class ClientScrollPonderHandler {
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-
+    public static void onClientTick(ClientTickEvent.Post event) {
         if (ClientPreviewController.isPending() || ClientPreviewController.isPreviewOpen()) {
             holdTicks = 0;
             return;
@@ -106,7 +102,7 @@ public final class ClientScrollPonderHandler {
     }
 
     @SubscribeEvent
-    public static void hideHud(RenderGuiOverlayEvent.Pre event) {
+    public static void hideHud(RenderGuiEvent.Pre event) {
         if (ClientPreviewController.isPreviewOpen()) {
             event.setCanceled(true);
         }

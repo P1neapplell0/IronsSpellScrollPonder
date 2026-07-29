@@ -2,8 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.p1nero.iss_ponder.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "iss_ponder.refmap.json",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ServerLevelProjectionMixin",
     "AbstractSpellProjectionMixin",

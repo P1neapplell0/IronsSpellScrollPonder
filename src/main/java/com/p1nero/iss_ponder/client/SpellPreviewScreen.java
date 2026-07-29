@@ -524,16 +524,16 @@ public class SpellPreviewScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (spellMenu.isVisible()) {
-            return spellMenu.mouseScrolled(delta);
+            return spellMenu.mouseScrolled(scrollY);
         }
         if (mouseX >= width - panelWidth()) {
-            panelScroll -= delta * 18.0;
+            panelScroll -= scrollY * 18.0;
             clampPanelScroll();
             return true;
         }
-        ClientPreviewController.zoomCamera(delta);
+        ClientPreviewController.zoomCamera(scrollY);
         return true;
     }
 

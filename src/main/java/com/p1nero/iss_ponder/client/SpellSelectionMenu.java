@@ -5,7 +5,6 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.ChatFormatting;
-import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -14,6 +13,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.StringUtil;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -296,7 +296,7 @@ final class SpellSelectionMenu {
             String clipboard = Minecraft.getInstance().keyboardHandler.getClipboard();
             for (int i = 0; i < clipboard.length() && query.length() < 64; i++) {
                 char character = clipboard.charAt(i);
-                if (SharedConstants.isAllowedChatCharacter(character)) {
+                if (StringUtil.isAllowedChatCharacter(character)) {
                     query += character;
                 }
             }
@@ -307,7 +307,7 @@ final class SpellSelectionMenu {
     }
 
     boolean charTyped(char codePoint) {
-        if (!visible || closingAt >= 0 || !SharedConstants.isAllowedChatCharacter(codePoint) || query.length() >= 64) {
+        if (!visible || closingAt >= 0 || !StringUtil.isAllowedChatCharacter(codePoint) || query.length() >= 64) {
             return visible;
         }
         query += codePoint;

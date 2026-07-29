@@ -8,15 +8,20 @@ continues in a new session.
 
 | Component | Development baseline | Where it is pinned |
 | --- | --- | --- |
-| Minecraft | `1.20.1` | `gradle.properties` |
-| Forge | `47.4.4` | `gradle.properties` |
-| Parchment | `2023.09.03-1.20.1` | `gradle.properties` |
-| Iron's Spellbooks | CurseForge file `7691158`, mod `3.15.4` | `build.gradle`, `mods.toml` |
-| Ponder | `1.0.92` | `gradle.properties`, Jar-in-Jar |
-| Flywheel | `1.0.0-215` | `gradle.properties`, Jar-in-Jar |
-| Player Animator | CurseForge file `4587214` | `build.gradle` |
+| Minecraft | `1.21.1` | `gradle.properties` |
+| NeoForge | `21.1.234` | `gradle.properties` |
+| ModDevGradle | `2.0.143` | `build.gradle` |
+| Parchment | `2024.11.17` for `1.21.1` | `gradle.properties` |
+| Iron's Spellbooks | CurseForge file `8364935`, mod `1.21.1-3.16.2` | `build.gradle`, `neoforge.mods.toml` |
+| Iron's Lib | `1.21.1-2.1.0` | `gradle.properties` |
+| Ponder | `1.0.87+mc1.21.1` | `gradle.properties`, Jar-in-Jar |
+| Flywheel | `1.0.6` | `gradle.properties`, Jar-in-Jar |
+| Player Animator | `2.0.4+1.21.1` | `gradle.properties` |
+| Curios | `9.5.1+1.21.1` | `gradle.properties` |
+| GeckoLib | `4.9.2` | `gradle.properties` |
 
-Do not assume packet discriminators, private field names, Mixin descriptors, or
+The project uses Gradle `8.11.1` and Java `21`. Do not assume payload layouts,
+private field names, Mixin descriptors, or
 animation-layer behavior are stable across upgrades.
 
 ## Why the Preview Is Split Across Server and Client
@@ -41,7 +46,7 @@ scroll tooltip
 ```
 
 The real player is only the observer and packet recipient. The simulated caster
-is a Forge `FakePlayer` placed in a per-player cell in the preview dimension.
+is a NeoForge `FakePlayer` placed in a per-player cell in the preview dimension.
 
 ## Component Map
 
@@ -57,7 +62,7 @@ is a Forge `FakePlayer` placed in a per-player cell in the preview dimension.
 | `PreviewPacketBridge` | Replays an allowlist of Iron's custom client particle packets. |
 | `AbstractSpellProjectionMixin` | Observes the post-cast point where Iron's normally sends `OnClientCastPacket`. |
 | `ServerLevelProjectionMixin` | Captures server particle and block-update calls. |
-| `IronPacketDistributorProjectionMixin` | Captures FakePlayer and tracking-only Iron's messages before Forge writes them to dummy or untracked connections. |
+| `IronPacketDistributorProjectionMixin` | Captures FakePlayer and tracking-only Iron's typed payloads at NeoForge's `PacketDistributor`. |
 
 ## Casting Lifecycle
 
@@ -68,7 +73,7 @@ is a Forge `FakePlayer` placed in a per-player cell in the preview dimension.
 2. Send `ProjectionCastStarted` before initiation. This ordering matters for
    instant spells, whose `castSpell` can run inside `attemptInitiateCast`.
 3. Call `AbstractSpell.attemptInitiateCast(..., CastSource.COMMAND, ...)`.
-4. Call `FakePlayer.doTick()` on later server ticks. Forge's `FakePlayer.tick()`
+4. Call `FakePlayer.doTick()` on later server ticks. NeoForge's `FakePlayer.tick()`
    is empty; `doTick()` reaches the vanilla player tick and Iron's
    `MagicManager`/`MagicData` lifecycle.
 5. Synchronize `MagicData.getCastCompletionPercent()` for non-instant spells.
@@ -81,7 +86,7 @@ then calls `AbstractSpell.onClientCast` in the projected context.
 
 ### Upstream Iron's References
 
-These were inspected from the decompiled `3.15.4` dependency:
+These were inspected from the resolved `1.21.1-3.16.2` dependency:
 
 - `io.redspace.ironsspellbooks.api.spells.AbstractSpell`
   - `attemptInitiateCast`
@@ -123,7 +128,7 @@ summons, area effects, and particles need room outside the plate.
 
 ### Upstream Ponder References
 
-The current implementation is based on Ponder `1.0.92`:
+The current implementation is based on Ponder `1.0.87+mc1.21.1`:
 
 - `net.createmod.ponder.enums.PonderKeybinds#PONDER`
   - supplies the configurable key state and translated key name
@@ -154,21 +159,20 @@ factory also updates the global `IronsAdjustmentModifier.INSTANCE`. A preview
 contains the real local player, a context `LocalPlayer`, and a projected
 `RemotePlayer`, so that singleton can point at the wrong player. The projection
 now replaces the caster's Iron layer with an isolated priority-42 layer and
-plays the same `PlayerAnimationRegistry` keyframes directly. It also compensates
+creates each registered `IPlayable` through `IPlayable#playAnimation`. It also compensates
 when the virtual level does not advance Player Animator's normal tick lifecycle.
 
 The caster keeps its simulated server UUID for entity relationships, but renders
 with the observing player's skin. `PreviewRemotePlayer` copies the local
-player's GameProfile properties and snapshots its resolved skin texture plus
-`default`/`slim` model. The explicit rendering overrides are required because
-vanilla `AbstractClientPlayer#getSkinTextureLocation` and `getModelName` query
-the connection's `PlayerInfo` by entity UUID; the isolated FakePlayer is not in
-the real tab list and would otherwise fall back to a default skin.
+player's GameProfile properties and snapshots its resolved `PlayerSkin`, which
+contains both the texture and `WIDE`/`SLIM` model. The `getSkin` override is
+required because vanilla queries `PlayerInfo` by entity UUID; the isolated
+FakePlayer is not in the real tab list and would otherwise use a default skin.
 
 The missing start animation was not caused by the isolated layer. The projected
 start path created `new MagicData()` and immediately called `initiateCast`, but
 the no-argument constructor leaves `syncedSpellData` null and `initiateCast`
-dereferences that field directly. Iron's 3.15.4
+dereferences that field directly. Iron's 3.16.2
 `ClientSpellCastHelper#handleClientBoundOnCastStarted` does not construct or
 initialize `MagicData`; it installs the animation first and passes null to
 `onClientPreCast`. The preview deliberately supplies usable `MagicData` for
@@ -180,7 +184,7 @@ matching the upstream ordering, so a future pre-cast-state failure cannot
 swallow the visible pose.
 
 The isolated layer remains intentionally different from Iron's global factory:
-it installs a raw `KeyframeAnimationPlayer` without the singleton
+it installs a fresh animation from `IPlayable` without the singleton
 `IronsAdjustmentModifier`. This avoids cross-player state between the real
 player, projected context player, and projected caster. Keep that difference in
 mind if a future spell proves to depend on an aiming adjustment rather than its
@@ -192,22 +196,20 @@ Never leave the global Minecraft player or level swapped outside the narrow
 
 ## Custom Packet Bridge
 
-Forge custom packets sent to the simulated player are captured at Iron's
-`PacketDistributor#sendToPlayer`, then encoded through Iron's own
-`SimpleChannel`. This interception point matters: Forge's
-`PacketDistributor#playerConsumer` writes directly to
-`player.connection.connection`, bypassing both
-`ServerGamePacketListenerImpl#send(Packet)` and FakePlayer's no-op listener
-override. Only packets on Iron's `irons_spellbooks:messages` channel are
-forwarded. Their numeric discriminator and raw payload are preserved.
+Iron's 3.16.2 implements every visual message as a `CustomPacketPayload` and
+sends it through NeoForge's static `PacketDistributor`. The projection Mixin
+therefore targets `sendToPlayer`, `sendToPlayersTrackingEntity`, and
+`sendToPlayersTrackingEntityAndSelf`. The last target is required because
+`RayOfSiphoningSpell` uses it for `BloodSiphonParticlesPacket`.
 
-`PreviewPacketBridge` intentionally replays only an allowlist of visual packet
-layouts. Forge's play custom packet returns `Integer.MAX_VALUE` from
-`getIndex()`; the actual SimpleChannel discriminator is the first byte of
-`getInternalData()`. The server strips that byte, and the client synchronously
-decodes the remaining body. Most handlers run inside the projected context.
+`PreviewSessionManager#encodeVisualPacket` accepts only reviewed concrete Iron
+payload classes, invokes their public `write(FriendlyByteBuf)` methods, and maps
+them to this mod's internal visual IDs. These integers are no longer Iron packet
+discriminators. `PreviewPacketBridge` decodes the reviewed layouts on the client,
+usually inside the projected Minecraft player/level context. Inventory, HUD,
+camera, capability, and other real-player mutations are intentionally excluded.
 
-Packet `22` is deliberately different. `BloodSiphonParticlesPacket` already
+Visual ID `22` is deliberately different. `BloodSiphonParticlesPacket` already
 contains both required positions, so its adapter decodes them without a global
 Minecraft player swap, translates them relative to the preview origin, and
 submits particles directly to `PonderLevel`. It reproduces Iron's exact 40
@@ -220,25 +222,25 @@ ribbon for the duration of the cast. This fallback is rendered after
 
 Important consequences:
 
-- Numeric packet IDs are version-specific. Re-audit all IDs after updating
-  Iron's Spellbooks.
+- Concrete payload classes and their `write` layouts are version-specific.
+  Re-audit `encodeVisualPacket` and `PreviewPacketBridge` after updating Iron's.
 - Do not forward inventory, HUD, camera, capability, or real-player mutation
   packets merely to increase coverage.
 - A packet with positions stored as `BlockPos`, primitive coordinates, nested
   objects, entity IDs, or directions needs a dedicated translation adapter.
 - `ray_of_siphoning` uses `BloodSiphonParticlesPacket` and
   `ClientSpellCastHelper#handleClientboundBloodSiphonParticles`; its beam is a
-  required regression test for index `22` and projected `Vec3` translation.
+  required regression test for visual ID `22` and projected `Vec3` translation.
 
 ## Entity Spawn Data and Vanilla Events
 
-Entity NBT and synchronized entity data are not the complete Forge spawn
-contract. Entities implementing `IEntityAdditionalSpawnData` append a custom
-payload in `NetworkHooks#getEntitySpawningPacket`. The server projection now
-captures that payload with `writeSpawnData`, includes it in the initial entity
-snapshot, and applies it with `readSpawnData` immediately after client entity
-construction. The payload is intentionally sent only with the initial snapshot,
-matching its spawn-only lifecycle.
+Entity NBT and synchronized entity data are not the complete NeoForge spawn
+contract. Entities implementing `IEntityWithComplexSpawn` append data through
+`AdvancedAddEntityPayload`. The server projection captures it with
+`writeSpawnData(RegistryFriendlyByteBuf)`, includes it in the initial snapshot,
+and applies it with `readSpawnData` immediately after client construction. Both
+buffers use the corresponding level's `RegistryAccess`. The payload is sent only
+with the initial snapshot, matching its spawn-only lifecycle.
 
 This is required by
 `io.redspace.ironsspellbooks.entity.spells.ray_of_frost.RayOfFrostVisualEntity`:
@@ -257,7 +259,7 @@ client then follows `ClientPacketListener#handleEntityEvent` by invoking
 sound. Event projection is therefore necessary for both `fang_strike` and
 `fang_ward`.
 
-Both additions changed the wire format/order, so `ModNetwork.PROTOCOL` is `7`.
+These additions changed the wire format, so `ModNetwork.PROTOCOL` is `7`.
 
 ## Mixin Maintenance
 
@@ -265,15 +267,17 @@ The Mixin descriptors in `iss_ponder.mixins.json` are version-sensitive:
 
 - `AbstractSpellProjectionMixin` targets the non-remapped Iron's method
   `AbstractSpell#castSpell`.
-- `IronPacketDistributorProjectionMixin` targets the non-remapped Iron's
-  `sendToPlayer` and `sendToPlayersTrackingEntity` methods. Injecting into a
-  server packet listener cannot observe `PacketDistributor.PLAYER` traffic on
-  Forge 1.20.1 because that distributor writes to the underlying connection.
+- `IronPacketDistributorProjectionMixin` targets NeoForge
+  `PacketDistributor#sendToPlayer`, `sendToPlayersTrackingEntity`, and
+  `sendToPlayersTrackingEntityAndSelf`, including all vararg payloads.
 - `ServerLevelProjectionMixin` targets both particle overloads and
   `sendBlockUpdated`, plus `broadcastEntityEvent` for vanilla transient entity
   events such as evoker-fang event `4`.
 
-After any Minecraft, Forge, or Iron's upgrade, run a client and dedicated server
+ModDevGradle 2.0 uses Mojmap names directly for this 1.21.1 build. The obsolete
+MCP-only Mixin annotation processor was removed; Iron's 3.16.2 is distributed
+without the refmap named in its own Mixin JSON as well. After any Minecraft,
+NeoForge, or Iron's upgrade, run a client and dedicated server
 with Mixin debug logging. A successful Java compile does not prove an injection
 descriptor still matches at runtime.
 
@@ -288,7 +292,7 @@ cast or depends on persistent/global state.
 | `recall` | Information-only | Teleports the caster and depends on stored state | Keep restricted. |
 | `portal` | Information-only | Creates persistent world entities/links | Keep restricted. |
 | `ray_of_siphoning` | Generic cast plus packet-22 Ponder adapter | `RayOfSiphoningSpell#onCast` sends `BloodSiphonParticlesPacket`; `ClientSpellCastHelper` emits 40 short-lived particles per packet | User-verified: the projected beam is visible. Recheck the start animation after the `MagicData` fix. |
-| `ray_of_frost` | Generic entity projection plus Forge additional spawn data | `RayOfFrostVisualEntity#writeSpawnData` transfers the beam distance outside NBT | Build-verified; focused visual acceptance is still required. |
+| `ray_of_frost` | Generic entity projection plus NeoForge complex spawn data | `RayOfFrostVisualEntity#writeSpawnData` transfers the beam distance outside NBT | Build-verified; focused visual acceptance is still required. |
 | `fang_strike`, `fang_ward` | Generic entity projection plus vanilla entity events | `ExtendedEvokerFang#tick` broadcasts event `4`; projected `EvokerFangs#handleEntityEvent` consumes it | Build-verified; focused visual acceptance is still required. |
 | `echoing_strikes` | Physical follow-up attack adapter | `EchoingStrikesSpell#onCast`; `EchoingStrikesEffect#createEcho` | User-verified: the physical hit correctly triggers the later echo entity hit. |
 
@@ -300,8 +304,8 @@ in `SPECIAL_SPELLS.md`. Keep spell IDs centralized in that registry.
 
 ## Known Gaps and Regression Cases
 
-The following items came from prior runtime feedback and must not be described as
-fixed until they are visually verified:
+The following visual results were accepted on the previous 1.20.1 branch. Treat
+them as 1.21.1 regression cases until they are visually verified on this branch:
 
 - Start animations require visual acceptance after initializing
   `MagicData.syncedSpellData` and installing the keyframes before client
@@ -309,8 +313,8 @@ fixed until they are visually verified:
 - Hurt time, swing state, and vanilla hurt event 2 are now projected. Live
   testing confirmed target tint; hurt animation and sound still require focused
   acceptance.
-- The Ponder-specific blood-siphon beam is user-verified. Other tracking-only
-  custom visual packets still need catalog-wide verification.
+- The Ponder-specific blood-siphon beam was user-verified on 1.20.1. Its 1.21.1
+  capture path now uses `sendToPlayersTrackingEntityAndSelf` and needs retesting.
 - `ray_of_frost` additional spawn data and vanilla event `4` for `fang_strike`
   and `fang_ward` are build-verified but still need focused visual acceptance.
 - `echoing_strikes` performs a physical follow-up attack through the adapter API
@@ -336,14 +340,14 @@ Minimum regression categories:
 
 ## Build and Release Checklist
 
-1. Run `./gradlew clean build`.
+1. Run `./gradlew compileJava` and `./gradlew build` with Java 21.
 2. Run `./gradlew runGameTestServer` and confirm the preview dimension loads.
 3. Run `./gradlew runClient` and test the regression categories above.
-4. Inspect `build/libs/*-all.jar` and its `META-INF/jarjar/metadata.json`.
+4. Inspect `build/libs/iss_ponder-neoforge1.21.1-1.0.0.jar` and its
+   `META-INF/jarjar/metadata.json`.
 5. Confirm bundled Ponder/Flywheel versions and licenses.
-6. Confirm `ModNetwork.PROTOCOL` was bumped for any wire-format or packet-order
-   change.
-7. Re-audit Iron's raw packet discriminator allowlist.
+6. Confirm `ModNetwork.PROTOCOL` was bumped for any payload wire-format change.
+7. Re-audit Iron's typed visual payload allowlist and `write` layouts.
 8. Recheck all Mixin target descriptors at runtime.
 9. Test two simultaneous players to detect preview-cell leakage.
 10. Test close, disconnect, replay, switch spell, server stop, and exceptions for
@@ -364,3 +368,18 @@ Before editing this subsystem in a new session:
 7. Keep global Minecraft context swaps inside `try/finally`.
 8. Preserve server validation for every spell ID and level received from the
    client.
+
+## 1.21.1 Migration Verification
+
+The migration switched from NeoGradle UserDev to ModDevGradle `2.0.143` and
+retained the standard `runClient`, `runServer`, `runData`, and
+`runGameTestServer` tasks. The following non-runtime checks pass:
+
+- `./gradlew compileJava`
+- `./gradlew build`
+- JSON and `pack.mcmeta` parsing with `jq`
+- `git diff --check`
+
+The produced JAR contains Ponder `1.0.87+mc1.21.1` and Flywheel `1.0.6` under
+`META-INF/jarjar`. A normal client launch and the focused visual checklist remain
+manual acceptance work; build verification does not launch `runClient`.

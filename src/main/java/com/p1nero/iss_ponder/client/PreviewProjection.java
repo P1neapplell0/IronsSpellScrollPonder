@@ -6,11 +6,11 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import com.p1nero.iss_ponder.ISSPonderMod;
 import dev.kosmx.playerAnim.api.TransformType;
+import dev.kosmx.playerAnim.api.IPlayable;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
-import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.core.util.Vec3f;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
@@ -29,11 +29,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -45,6 +47,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.joml.Matrix4f;
 
 import java.util.HashMap;
@@ -206,11 +209,11 @@ public final class PreviewProjection {
                 }
             }
             if (spawnData != null && spawnData.length > 0
-                    && entity instanceof net.minecraftforge.entity.IEntityAdditionalSpawnData additionalSpawnData) {
-                // Reference: NetworkHooks#getEntitySpawningPacket writes this payload after the vanilla spawn
-                // fields. RayOfFrostVisualEntity stores its beam distance only here, never in entity NBT.
-                net.minecraft.network.FriendlyByteBuf buffer = new net.minecraft.network.FriendlyByteBuf(
-                        io.netty.buffer.Unpooled.wrappedBuffer(spawnData));
+                    && entity instanceof IEntityWithComplexSpawn additionalSpawnData) {
+                // Reference: NeoForge AdvancedAddEntityPayload writes this after the vanilla spawn fields.
+                // RayOfFrostVisualEntity stores its beam distance only here, never in entity NBT.
+                RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(
+                        io.netty.buffer.Unpooled.wrappedBuffer(spawnData), level.registryAccess());
                 try {
                     additionalSpawnData.readSpawnData(buffer);
                 } catch (RuntimeException exception) {
@@ -576,15 +579,14 @@ public final class PreviewProjection {
             return;
         }
         ModifierLayer<IAnimation> layer = getAnimationLayer(true);
-        KeyframeAnimation keyframes = PlayerAnimationRegistry.getAnimation(animation);
-        if (layer != null && keyframes != null) {
+        IPlayable playable = PlayerAnimationRegistry.getAnimation(animation);
+        if (layer != null && playable != null) {
             // Unlike the real player, the projected caster has no preceding locomotion pose to blend from.
-            // A fade modifier can remain at its identity pose in Ponder's isolated render stack, so install the
-            // same Iron's keyframes directly. Cast finish still fades the animation out below.
-            layer.setAnimation(new KeyframeAnimationPlayer(keyframes));
+            // Install a fresh instance from the registered Iron's animation. Cast finish fades it out below.
+            layer.setAnimation(playable.playAnimation());
             pendingAnimationDiagnostic = animation;
             animationDiagnosticTicks = 0;
-        } else if (keyframes == null) {
+        } else if (playable == null) {
             ISSPonderMod.LOGGER.debug("Missing preview player animation {}", animation);
         } else {
             ISSPonderMod.LOGGER.debug("Missing preview player animation layer for {}", animation);
@@ -714,9 +716,8 @@ public final class PreviewProjection {
 
     private static void beamVertex(VertexConsumer vertices, Matrix4f matrix, Vec3 position,
                                    int red, int green, int blue, int alpha) {
-        vertices.vertex(matrix, (float) position.x, (float) position.y, (float) position.z)
-                .color(red, green, blue, alpha)
-                .endVertex();
+        vertices.addVertex(matrix, (float) position.x, (float) position.y, (float) position.z)
+                .setColor(red, green, blue, alpha);
     }
 
     private static final class RenderSystemFacade {
@@ -733,8 +734,7 @@ public final class PreviewProjection {
             try {
                 com.mojang.blaze3d.systems.RenderSystem.setupLevelDiffuseLighting(
                         new org.joml.Vector3f((float) DIFFUSE_LIGHT_0.x, (float) DIFFUSE_LIGHT_0.y, (float) DIFFUSE_LIGHT_0.z),
-                        new org.joml.Vector3f((float) DIFFUSE_LIGHT_1.x, (float) DIFFUSE_LIGHT_1.y, (float) DIFFUSE_LIGHT_1.z),
-                        pose.last().pose());
+                        new org.joml.Vector3f((float) DIFFUSE_LIGHT_1.x, (float) DIFFUSE_LIGHT_1.y, (float) DIFFUSE_LIGHT_1.z));
                 Matrix4f projection = new Matrix4f(com.mojang.blaze3d.systems.RenderSystem.getProjectionMatrix());
                 projection.translate(0, 0, 800);
                 com.mojang.blaze3d.systems.RenderSystem.setProjectionMatrix(projection, VertexSorting.DISTANCE_TO_ORIGIN);
@@ -770,38 +770,25 @@ public final class PreviewProjection {
     /**
      * Keeps the simulated caster's server UUID while rendering the observer's resolved skin and arm model.
      *
-     * <p>Reference: vanilla {@code AbstractClientPlayer#getSkinTextureLocation/getModelName} normally look up
-     * {@code PlayerInfo} by entity UUID. The preview FakePlayer is intentionally absent from the real tab list, so
-     * those methods would otherwise select a default skin even when its copied profile has texture properties.</p>
+     * <p>Reference: vanilla {@code AbstractClientPlayer#getSkin} normally looks up {@code PlayerInfo} by entity UUID.
+     * The preview FakePlayer is intentionally absent from the real tab list, so it needs the observer's already
+     * resolved {@link PlayerSkin} supplied directly.</p>
      */
     private static final class PreviewRemotePlayer extends RemotePlayer {
-        private final ResourceLocation skinTexture;
-        private final String skinModel;
+        private final PlayerSkin skin;
 
         private PreviewRemotePlayer(ClientLevel level, GameProfile profile, LocalPlayer skinSource) {
             super(level, profile);
             if (skinSource != null) {
-                skinTexture = skinSource.getSkinTextureLocation();
-                skinModel = skinSource.getModelName();
+                skin = skinSource.getSkin();
             } else {
-                skinTexture = DefaultPlayerSkin.getDefaultSkin(profile.getId());
-                skinModel = DefaultPlayerSkin.getSkinModelName(profile.getId());
+                skin = DefaultPlayerSkin.get(profile);
             }
         }
 
         @Override
-        public boolean isSkinLoaded() {
-            return true;
-        }
-
-        @Override
-        public ResourceLocation getSkinTextureLocation() {
-            return skinTexture;
-        }
-
-        @Override
-        public String getModelName() {
-            return skinModel;
+        public PlayerSkin getSkin() {
+            return skin;
         }
     }
 }
