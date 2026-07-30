@@ -5,6 +5,7 @@ import com.p1nero.iss_ponder.ISSPonderMod;
 import com.p1nero.iss_ponder.api.SpellPreviewAdapter;
 import com.p1nero.iss_ponder.api.SpellPreviewAdapters;
 import com.p1nero.iss_ponder.api.SpellPreviewContext;
+import com.p1nero.iss_ponder.mixin.WallOfFireEntityAccessor;
 import com.p1nero.iss_ponder.network.ModNetwork;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -12,6 +13,9 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.entity.mobs.dead_king_boss.DeadKingSoulEntity;
+import io.redspace.ironsspellbooks.entity.spells.fiery_dagger.FieryDaggerEntity;
+import io.redspace.ironsspellbooks.entity.spells.wall_of_fire.WallOfFireEntity;
 import io.redspace.ironsspellbooks.network.EntityEventPacket;
 import io.redspace.ironsspellbooks.network.particles.AbsorptionParticlesPacket;
 import io.redspace.ironsspellbooks.network.particles.BloodSiphonParticlesPacket;
@@ -25,13 +29,21 @@ import io.redspace.ironsspellbooks.network.particles.ShockwaveParticlesPacket;
 import io.redspace.ironsspellbooks.network.particles.TeleportParticlesPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStartTrackingPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStopTrackingPacket;
+import io.redspace.ironsspellbooks.particle.SoulfireRayParticleOptions;
+import io.redspace.ironsspellbooks.particle.SwirlingParticleOptions;
+import io.redspace.ironsspellbooks.particle.TintedBubblePopParticleOptions;
+import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
+import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
@@ -53,6 +65,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
@@ -64,6 +77,7 @@ import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -252,9 +266,68 @@ public final class PreviewSessionManager {
     public static void forwardParticles(ServerLevel level, ParticleOptions particle, boolean longDistance,
                                         double x, double y, double z, int count,
                                         double xOffset, double yOffset, double zOffset, double speed) {
-        forProjectionRelative(level, new Vec3(x, y, z), (player, projected) -> ModNetwork.sendToPlayer(player,
-                new ModNetwork.ProjectionParticle(particle, longDistance, projected.x, projected.y, projected.z,
-                        count, (float) xOffset, (float) yOffset, (float) zOffset, (float) speed)));
+        if (level.dimension() != PREVIEW_LEVEL) {
+            return;
+        }
+        Vec3 serverPosition = new Vec3(x, y, z);
+        for (PreviewSession session : List.copyOf(SESSIONS.values())) {
+            if (!session.projectionReady || session.simulatedPlayer == null
+                    || !sceneBounds(session.origin).contains(serverPosition)) {
+                continue;
+            }
+            ServerPlayer player = level.getServer().getPlayerList().getPlayer(session.playerId);
+            if (player == null || player.connection == null) {
+                continue;
+            }
+            Vec3 origin = Vec3.atLowerCornerOf(session.origin);
+            Vec3 projected = serverPosition.subtract(origin);
+            ParticleOptions projectedParticle = projectParticleOptions(level, particle, origin);
+            ModNetwork.sendToPlayer(player, new ModNetwork.ProjectionParticle(projectedParticle, longDistance,
+                    projected.x, projected.y, projected.z, count, (float) xOffset, (float) yOffset,
+                    (float) zOffset, (float) speed));
+        }
+    }
+
+    /**
+     * Translates absolute positions stored inside Iron's particle options along with the particle origin.
+     *
+     * <p>References: Iron's Spellbooks 3.16.2 {@code ZapParticle}, {@code SoulfireRayParticle}, and
+     * {@code TraceParticle} use absolute destinations; {@code TintedBubblePopParticle} looks up its cauldron by
+     * absolute block position. Vanilla vibration particles can also contain a block position source. Leaving any
+     * of these in the isolated server cell either queries the wrong virtual block or creates a multi-million-block
+     * path. {@code SwirlingParticleOptions} is recursive, so its nested particle must follow the same rule.</p>
+     */
+    private static ParticleOptions projectParticleOptions(ServerLevel level, ParticleOptions particle, Vec3 origin) {
+        if (particle instanceof ZapParticleOption zap) {
+            return new ZapParticleOption(zap.getDestination().subtract(origin));
+        }
+        if (particle instanceof SoulfireRayParticleOptions ray) {
+            return new SoulfireRayParticleOptions(ray.getDestination().subtract(origin));
+        }
+        if (particle instanceof TraceParticleOptions trace) {
+            Vector3f destination = new Vector3f(trace.destination)
+                    .sub((float) origin.x, (float) origin.y, (float) origin.z);
+            return new TraceParticleOptions(destination, new Vector3f(trace.color));
+        }
+        if (particle instanceof TintedBubblePopParticleOptions bubble) {
+            return new TintedBubblePopParticleOptions(bubble.cauldronPos().subtract(BlockPos.containing(origin)));
+        }
+        if (particle instanceof VibrationParticleOption vibration
+                && vibration.getDestination() instanceof BlockPositionSource blockSource) {
+            return blockSource.getPosition(level)
+                    .map(position -> new VibrationParticleOption(
+                            new BlockPositionSource(BlockPos.containing(position.subtract(origin))),
+                            vibration.getArrivalInTicks()))
+                    .orElse(vibration);
+        }
+        if (particle instanceof SwirlingParticleOptions swirling) {
+            ParticleOptions nested = projectParticleOptions(level, swirling.particleOptions(), origin);
+            if (nested != swirling.particleOptions()) {
+                return new SwirlingParticleOptions(nested, swirling.normal(), swirling.up(),
+                        swirling.heightWidthSpeed(), swirling.deltaHeightWidthSpeed());
+            }
+        }
+        return particle;
     }
 
     public static void forwardBlock(ServerLevel level, BlockPos position, BlockState state) {
@@ -745,6 +818,7 @@ public final class PreviewSessionManager {
         }
         ServerLevel level = session.simulatedPlayer.serverLevel();
         AABB bounds = sceneBounds(session.origin);
+        Vec3 projectionOrigin = Vec3.atLowerCornerOf(session.origin);
         List<Entity> entities = new ArrayList<>();
         // ServerLevel manages players separately from ordinary entities. A newly added FakePlayer may not be
         // returned by getEntities until doTick() runs, but cast-start packets are sent before that first tick.
@@ -762,7 +836,7 @@ public final class PreviewSessionManager {
             // Keep the server entity id. PonderLevel is isolated, and projectile NBT
             // references owners/targets by this id.
             int id = session.projectionIds.computeIfAbsent(entity.getUUID(), ignored -> entity.getId());
-            Vec3 position = entity.position().subtract(session.origin.getX(), session.origin.getY(), session.origin.getZ());
+            Vec3 position = entity.position().subtract(projectionOrigin);
             String typeId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
             String name = entity instanceof ServerPlayer serverPlayer ? serverPlayer.getGameProfile().getName() : "";
             float health = entity instanceof LivingEntity living ? living.getHealth() : -1.0F;
@@ -787,7 +861,8 @@ public final class PreviewSessionManager {
                     RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(
                             Unpooled.buffer(), level.registryAccess());
                     try {
-                        additionalSpawnData.writeSpawnData(buffer);
+                        writeProjectedSpawnData(entity, additionalSpawnData, buffer,
+                                projectionOrigin);
                         spawnData = new byte[buffer.readableBytes()];
                         buffer.readBytes(spawnData);
                     } catch (RuntimeException exception) {
@@ -800,7 +875,7 @@ public final class PreviewSessionManager {
             ModNetwork.sendToPlayer(player, new ModNetwork.ProjectionEntity(id, false, entity.getUUID(), typeId, name,
                     position.x, position.y, position.z, entity.getYRot(), entity.getXRot(), health,
                     hurtTime, swinging, data, spawnData,
-                    java.util.Objects.requireNonNullElseGet(entity.getEntityData().getNonDefaultValues(), java.util.List::of)));
+                    projectSyncedEntityData(entity, projectionOrigin)));
         }
         for (Map.Entry<UUID, Integer> entry : new ArrayList<>(session.projectionIds.entrySet())) {
             if (!current.contains(entry.getKey())) {
@@ -817,6 +892,57 @@ public final class PreviewSessionManager {
         int xCell = (int) (Math.floorMod(uuid.getMostSignificantBits(), 300_000L) - 150_000L);
         int zCell = (int) (Math.floorMod(uuid.getLeastSignificantBits(), 300_000L) - 150_000L);
         return new BlockPos(xCell * 128, FLOOR_Y, zCell * 128);
+    }
+
+    /** Translates the one reviewed Iron entity data vector that represents an absolute world position. */
+    private static List<SynchedEntityData.DataValue<?>> projectSyncedEntityData(Entity entity, Vec3 origin) {
+        List<SynchedEntityData.DataValue<?>> values = java.util.Objects.requireNonNullElseGet(
+                entity.getEntityData().getNonDefaultValues(), List::of);
+        if (!(entity instanceof DeadKingSoulEntity)) {
+            return values;
+        }
+        return values.stream().map(value -> {
+            if (value.serializer() == EntityDataSerializers.VECTOR3 && value.value() instanceof Vector3f position) {
+                Vector3f projected = new Vector3f(position)
+                        .sub((float) origin.x, (float) origin.y, (float) origin.z);
+                return new SynchedEntityData.DataValue<>(value.id(), EntityDataSerializers.VECTOR3, projected);
+            }
+            return value;
+        }).toList();
+    }
+
+    /**
+     * Applies the origin translation to absolute positions embedded in Iron's additional spawn payloads.
+     * Reference: Iron's 3.16.2 {@code WallOfFireEntity#writeSpawnData} writes absolute anchors as floats, while
+     * {@code FieryDaggerEntity#writeSpawnData} writes its absolute owner tracking point as doubles.
+     */
+    private static void writeProjectedSpawnData(Entity entity, IEntityWithComplexSpawn spawnData,
+                                                RegistryFriendlyByteBuf buffer, Vec3 origin) {
+        Vec3 daggerOwnerTrack = null;
+        List<Vec3> wallAnchors = null;
+        try {
+            if (entity instanceof FieryDaggerEntity dagger && dagger.ownerTrack != null) {
+                daggerOwnerTrack = dagger.ownerTrack;
+                dagger.ownerTrack = daggerOwnerTrack.subtract(origin);
+            }
+            if (entity instanceof WallOfFireEntity) {
+                WallOfFireEntityAccessor wall = (WallOfFireEntityAccessor) entity;
+                wallAnchors = wall.issPonder$getAnchorPoints();
+                if (wallAnchors != null) {
+                    wall.issPonder$setAnchorPoints(wallAnchors.stream()
+                            .map(position -> position.subtract(origin))
+                            .toList());
+                }
+            }
+            spawnData.writeSpawnData(buffer);
+        } finally {
+            if (daggerOwnerTrack != null) {
+                ((FieryDaggerEntity) entity).ownerTrack = daggerOwnerTrack;
+            }
+            if (wallAnchors != null) {
+                ((WallOfFireEntityAccessor) entity).issPonder$setAnchorPoints(wallAnchors);
+            }
+        }
     }
 
     private static final class PreviewSession {

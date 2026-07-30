@@ -122,6 +122,23 @@ they reach the client. The Ponder scene is centered at `BlockPos.ZERO`, while th
 server cells are spread far apart to reduce interference between simultaneous
 sessions.
 
+This rule includes positions nested inside particle options, not only the
+particle packet's outer `x/y/z`. Iron's 3.16.2 stores absolute destinations in
+`ZapParticleOption`, `SoulfireRayParticleOptions`, and `TraceParticleOptions`,
+and stores an absolute cauldron position in
+`TintedBubblePopParticleOptions`. Vanilla `VibrationParticleOption` can contain
+a `BlockPositionSource`, while `SwirlingParticleOptions` can recursively wrap
+another particle option. `PreviewSessionManager#projectParticleOptions`
+translates those fields before network encoding. Entity-backed vibration
+sources retain their entity ID because projected entities deliberately preserve
+server IDs. Direction, color, scale, normal, motion, and size vectors must not
+be translated.
+
+Destination-bearing client particles are also rejected when their endpoint is
+non-finite or more than 128 blocks from the projected spawn. This is a final
+guard against add-ons passing an unprojected coordinate into an implementation
+that allocates geometry or child particles in proportion to path length.
+
 The client base plate is `7 x 7`, but projection and cleanup bounds are larger.
 Do not shrink those bounds to match the visible floor: large projectiles,
 summons, area effects, and particles need room outside the plate.
@@ -247,6 +264,25 @@ This is required by
 its beam `distance` is transferred through additional spawn data and is not
 saved by `Entity#saveWithoutId`. NBT-only reconstruction therefore produced a
 valid entity with a zero-length frost ray.
+
+Additional spawn data follows the same nested-coordinate rule as particle
+options. Iron's `WallOfFireEntity#writeSpawnData` writes absolute wall anchors
+as floats, and `FieryDaggerEntity#writeSpawnData` writes an absolute owner
+tracking point. `PreviewSessionManager#writeProjectedSpawnData` temporarily
+supplies origin-relative values while calling Iron's own encoder, then restores
+the server entity in a `finally` block. The wall anchor accessor is intentional:
+subtracting the origin only after the absolute coordinates were encoded as
+floats would permanently lose sub-block precision in distant preview cells.
+Other reviewed Iron's 3.16.2 complex spawn payloads contain entity IDs,
+directions, counters, radii, or beam lengths; those values remain unchanged.
+
+Synchronized entity data is also reviewed by value semantics rather than Java
+type alone. `DeadKingSoulEntity.DATA_RESPAWN_POS` is the only Iron's 3.16.2
+entity data field using `EntityDataSerializers.VECTOR3`, and its client tick
+moves toward that absolute respawn position. The projection translates that
+specific value. A future `VECTOR3`, `BLOCK_POS`, or `OPTIONAL_BLOCK_POS` field
+must be classified before forwarding because it may instead be a direction or
+local offset.
 
 Vanilla entity events are a separate transient channel. The
 `ServerLevelProjectionMixin` captures `ServerLevel#broadcastEntityEvent`, maps

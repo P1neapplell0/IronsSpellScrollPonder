@@ -6,7 +6,8 @@
   "mixins": [
     "ServerLevelProjectionMixin",
     "AbstractSpellProjectionMixin",
-    "IronPacketDistributorProjectionMixin"
+    "IronPacketDistributorProjectionMixin",
+    "WallOfFireEntityAccessor"
   ],
   "client": [
   ],
