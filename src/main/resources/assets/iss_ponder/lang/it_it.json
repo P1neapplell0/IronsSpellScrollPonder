@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Tieni premuto [%s] per vedere l'anteprima dell'incantesimo",
   "gui.iss_ponder.title": "Anteprima incantesimo",
-  "gui.iss_ponder.replay": "Ripeti",
+  "gui.iss_ponder.play": "Riproduci",
+  "gui.iss_ponder.pause": "Pausa",
   "gui.iss_ponder.preparing": "Preparazione anteprima",
   "gui.iss_ponder.casting": "Lancio in corso",
   "gui.iss_ponder.follow_up": "Dimostrazione dell'azione successiva",

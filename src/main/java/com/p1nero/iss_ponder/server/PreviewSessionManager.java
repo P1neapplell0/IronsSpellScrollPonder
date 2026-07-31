@@ -34,7 +34,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
@@ -77,10 +79,14 @@ public final class PreviewSessionManager {
 
     private static final String PREVIEW_ENTITY_TAG = "iss_ponder_preview_entity";
     private static final int FLOOR_Y = 64;
+    private static final int FLOOR_MIN_X = -3;
+    private static final int FLOOR_MAX_X = 3;
+    private static final int FLOOR_MIN_Z = -5;
+    private static final int FLOOR_MAX_Z = 5;
     private static final float TARGET_HEALTH = 2_048.0F;
     private static final int CAST_DELAY = 30;
     private static final int MAX_CAST_TICKS = 20 * 15;
-    // Iron's 3.15.4 client-only particle messages that are safe to replay against PonderLevel.
+    // Iron's 3.16.2 client-only particle messages that are safe to replay against PonderLevel.
     // Tracking-only IDs 39-42 are forwarded from their typed messages instead of this raw self-send path.
     private static final Set<Integer> PLAYER_VISUAL_PACKET_TYPES = Set.of(16, 17, 21, 22, 23, 26, 27, 31, 43);
     private static final Map<UUID, PreviewSession> SESSIONS = new HashMap<>();
@@ -466,7 +472,7 @@ public final class PreviewSessionManager {
     private static void completePreview(MinecraftServer server, PreviewSession session) {
         session.phase = CastPhase.COMPLETE;
         ModNetwork.sendToPlayer(findRealPlayer(server, session), new ModNetwork.PreviewStatus(
-                net.minecraft.network.chat.Component.translatable("gui.iss_ponder.complete")));
+                net.minecraft.network.chat.Component.translatable("gui.iss_ponder.complete"), true));
     }
 
     private static void resetLifecycle(PreviewSession session, int now) {
@@ -619,27 +625,29 @@ public final class PreviewSessionManager {
         // Remove the wider floor used by earlier preview layouts from persisted preview dimensions.
         for (int x = -9; x <= 9; x++) {
             for (int z = -8; z <= 11; z++) {
-                if (Math.abs(x) > 3 || Math.abs(z) > 3) {
+                if (x < FLOOR_MIN_X || x > FLOOR_MAX_X || z < FLOOR_MIN_Z || z > FLOOR_MAX_Z) {
                     level.setBlockAndUpdate(origin.offset(x, 0, z), Blocks.AIR.defaultBlockState());
                 }
             }
         }
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
+        for (int x = FLOOR_MIN_X; x <= FLOOR_MAX_X; x++) {
+            for (int z = FLOOR_MIN_Z; z <= FLOOR_MAX_Z; z++) {
                 BlockPos floor = origin.offset(x, 0, z);
-                boolean border = Math.abs(x) == 3 || Math.abs(z) == 3;
+                boolean border = x == FLOOR_MIN_X || x == FLOOR_MAX_X
+                        || z == FLOOR_MIN_Z || z == FLOOR_MAX_Z;
                 level.setBlockAndUpdate(floor, (border ? Blocks.POLISHED_DEEPSLATE : Blocks.DEEPSLATE_TILES).defaultBlockState());
                 for (int y = 1; y <= 8; y++) {
                     level.setBlockAndUpdate(floor.above(y), Blocks.AIR.defaultBlockState());
                 }
             }
         }
-        for (int z = -3; z <= 3; z++) {
+        for (int z = FLOOR_MIN_Z; z <= FLOOR_MAX_Z; z++) {
             level.setBlockAndUpdate(origin.offset(0, 0, z), Blocks.POLISHED_BLACKSTONE.defaultBlockState());
         }
-        level.setBlockAndUpdate(origin.offset(0, 0, 3), Blocks.CHISELED_DEEPSLATE.defaultBlockState());
+        level.setBlockAndUpdate(origin.offset(0, 0, FLOOR_MAX_Z), Blocks.CHISELED_DEEPSLATE.defaultBlockState());
 
-        session.primaryTargetId = spawnTarget(level, origin, 0.5, 1.0, 3.0);
+        session.primaryTargetId = spawnTarget(level, origin, 0.5, 1.0, 3.0,
+                session.adapter.primaryTargetType());
         spawnTarget(level, origin, -0.5, 1.0, 3.0);
         spawnTarget(level, origin, 1.5, 1.0, 3.0);
         AABB sceneBounds = new AABB(origin.offset(-24, -8, -24), origin.offset(25, 24, 25));
@@ -647,8 +655,14 @@ public final class PreviewSessionManager {
                 entity -> entity.getTags().contains(PREVIEW_ENTITY_TAG))) {
             faceTowards(zombie, session.simulatedPlayer);
         }
+        SpellPreviewContext context = context(session, session.simulatedPlayer.server.getTickCount());
         try {
-            session.adapter.onSceneReady(context(session, session.simulatedPlayer.server.getTickCount()));
+            installInitialBlocks(level, session, session.adapter.initialBlocks(context));
+        } catch (RuntimeException exception) {
+            ISSPonderMod.LOGGER.error("Spell preview initial blocks failed for {}", session.spell.getSpellId(), exception);
+        }
+        try {
+            session.adapter.onSceneReady(context);
         } catch (RuntimeException exception) {
             ISSPonderMod.LOGGER.error("Spell preview scene hook failed for {}", session.spell.getSpellId(), exception);
         }
@@ -656,18 +670,50 @@ public final class PreviewSessionManager {
 
     private static UUID spawnTarget(ServerLevel level, BlockPos origin,
                                     double relativeX, double relativeY, double relativeZ) {
-        Zombie zombie = new Zombie(level);
-        zombie.moveTo(origin.getX() + relativeX, origin.getY() + relativeY,
-                origin.getZ() + relativeZ, 180, 0);
-        zombie.setNoAi(true);
-        zombie.setPersistenceRequired();
-        zombie.addTag(PREVIEW_ENTITY_TAG);
-        if (zombie.getAttribute(Attributes.MAX_HEALTH) != null) {
-            zombie.getAttribute(Attributes.MAX_HEALTH).setBaseValue(TARGET_HEALTH);
+        return spawnTarget(level, origin, relativeX, relativeY, relativeZ, EntityType.ZOMBIE);
+    }
+
+    private static UUID spawnTarget(ServerLevel level, BlockPos origin,
+                                    double relativeX, double relativeY, double relativeZ,
+                                    EntityType<? extends LivingEntity> targetType) {
+        LivingEntity target = targetType.create(level);
+        if (target == null) {
+            target = new Zombie(level);
         }
-        zombie.setHealth(TARGET_HEALTH);
-        level.addFreshEntity(zombie);
-        return zombie.getUUID();
+        target.moveTo(origin.getX() + relativeX, origin.getY() + relativeY,
+                origin.getZ() + relativeZ, 180, 0);
+        if (target instanceof Mob mob) {
+            mob.setNoAi(true);
+            mob.setPersistenceRequired();
+        }
+        target.addTag(PREVIEW_ENTITY_TAG);
+        if (target.getAttribute(Attributes.MAX_HEALTH) != null) {
+            target.getAttribute(Attributes.MAX_HEALTH).setBaseValue(TARGET_HEALTH);
+        }
+        target.setHealth(TARGET_HEALTH);
+        level.addFreshEntity(target);
+        return target.getUUID();
+    }
+
+    private static void installInitialBlocks(ServerLevel level, PreviewSession session,
+                                             Map<BlockPos, BlockState> initialBlocks) {
+        AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+        for (Map.Entry<BlockPos, BlockState> entry : initialBlocks.entrySet()) {
+            BlockPos relative = entry.getKey();
+            BlockState state = entry.getValue();
+            if (relative == null || state == null) {
+                continue;
+            }
+            BlockPos serverPosition = session.origin.offset(relative);
+            if (!bounds.contains(Vec3.atCenterOf(serverPosition))) {
+                ISSPonderMod.LOGGER.warn("Ignored out-of-bounds initial preview block {} for {}",
+                        relative, session.spell.getSpellId());
+                continue;
+            }
+            BlockPos immutableRelative = relative.immutable();
+            session.initialBlocks.put(immutableRelative, state);
+            level.setBlockAndUpdate(serverPosition, state);
+        }
     }
 
     private static void discardScene(ServerLevel level, PreviewSession session) {
@@ -687,6 +733,10 @@ public final class PreviewSessionManager {
             // generic entity query before their first normal tick. Always dispose the session-owned reference.
             simulatedPlayer.discard();
         }
+        for (BlockPos relative : session.initialBlocks.keySet()) {
+            level.setBlockAndUpdate(session.origin.offset(relative), Blocks.AIR.defaultBlockState());
+        }
+        session.initialBlocks.clear();
         AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
         for (Entity entity : level.getEntities((Entity) null, bounds, entity -> entity != null)) {
             entity.discard();
@@ -716,6 +766,10 @@ public final class PreviewSessionManager {
         }
         ServerLevel level = session.simulatedPlayer.serverLevel();
         AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+        if (forceSpawn) {
+            session.initialBlocks.forEach((position, state) -> ModNetwork.sendToPlayer(player,
+                    new ModNetwork.ProjectionBlock(position.asLong(), Block.getId(state))));
+        }
         List<Entity> entities = new ArrayList<>();
         // ServerLevel manages players separately from ordinary entities. A newly added FakePlayer may not be
         // returned by getEntities until doTick() runs, but cast-start packets are sent before that first tick.
@@ -805,6 +859,7 @@ public final class PreviewSessionManager {
         private int startAt;
         private int previewStartedAt;
         private final Set<Integer> forwardedPacketTypes = new HashSet<>();
+        private final Map<BlockPos, BlockState> initialBlocks = new HashMap<>();
         private int lastCastCompletedAt;
         private int completedCasts;
         private int lastReplayAt = Integer.MIN_VALUE / 2;

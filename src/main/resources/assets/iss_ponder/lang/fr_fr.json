@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Maintenez [%s] pour prévisualiser le sort",
   "gui.iss_ponder.title": "Aperçu du sort",
-  "gui.iss_ponder.replay": "Relancer",
+  "gui.iss_ponder.play": "Lecture",
+  "gui.iss_ponder.pause": "Pause",
   "gui.iss_ponder.preparing": "Préparation de l'aperçu",
   "gui.iss_ponder.casting": "Incantation",
   "gui.iss_ponder.follow_up": "Démonstration de l'action suivante",

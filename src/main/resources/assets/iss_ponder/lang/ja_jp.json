@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "[%s]を長押しして呪文をプレビュー",
   "gui.iss_ponder.title": "呪文プレビュー",
-  "gui.iss_ponder.replay": "リプレイ",
+  "gui.iss_ponder.play": "再生",
+  "gui.iss_ponder.pause": "一時停止",
   "gui.iss_ponder.preparing": "プレビューを準備中",
   "gui.iss_ponder.casting": "詠唱中",
   "gui.iss_ponder.follow_up": "後続動作を実演中",

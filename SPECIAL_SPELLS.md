@@ -1,6 +1,6 @@
 # Special Spell Preview Checklist
 
-This list covers built-in Iron's Spellbooks 3.15.4 spells whose important
+This list covers built-in Iron's Spellbooks 3.16.2 spells whose important
 behavior is not represented by one ordinary cast. The implementation lives in
 `BuiltinSpellPreviewAdapters`; add-on mods can register equivalent behavior
 through `SpellPreviewAdapters.register`.
@@ -42,6 +42,10 @@ immediately consuming every recast.
 | Spell ID | Preparation | Test expectation |
 | --- | --- | --- |
 | `counterspell` | Places a stationary `MagicArrowProjectile` on the casting ray. | Counterspell recognizes an `AntiMagicSusceptible` target and removes it. |
+| `wololo` | Replaces the primary zombie with a sheep. | The cast succeeds, changes the sheep's color, and emits critical particles. |
+| `sacrifice` | Replaces the primary zombie with a summoned zombie owned by the caster. | The cast recognizes its own `IMagicSummon`, consumes it, and creates the blood explosion. |
+| `spectral_hammer` | Places a `5 x 5` stone wall on the horizontal casting ray. | The hammer spawns and removes its mineable target blocks. |
+| `touch_dig` | Uses the same harvestable stone wall. | The pre-cast block check succeeds and the targeted block breaks. |
 
 ## Restricted Simulation
 
@@ -76,8 +80,9 @@ can guarantee cleanup outside the preview cell.
 
 ## Acceptance Procedure
 
-For each entry, test initial preview, Replay, spell switching, and closing the
-screen during the follow-up action. Watch both `latest.log` and the rendered
-scene. Include `ray_of_siphoning` start animation, `ray_of_frost`, `fang_strike`,
-and `fang_ward` in the next focused run. A clean log is not sufficient for
-animation, particles, hurt tint, or camera-facing problems.
+For each entry, test the initial preview, automatic loop, play/pause control,
+spell switching, and closing the screen during the follow-up action. Watch both
+`latest.log` and the rendered scene. Include `ray_of_siphoning` start animation,
+`ray_of_frost`, `fang_strike`, and `fang_ward` in the next focused run. A clean
+log is not sufficient for animation, particles, hurt tint, or camera-facing
+problems.

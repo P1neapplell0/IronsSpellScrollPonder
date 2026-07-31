@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Mantén [%s] para previsualizar el hechizo",
   "gui.iss_ponder.title": "Vista previa del hechizo",
-  "gui.iss_ponder.replay": "Repetir",
+  "gui.iss_ponder.play": "Reproducir",
+  "gui.iss_ponder.pause": "Pausar",
   "gui.iss_ponder.preparing": "Preparando la vista previa",
   "gui.iss_ponder.casting": "Conjurando",
   "gui.iss_ponder.follow_up": "Demostrando la acción posterior",

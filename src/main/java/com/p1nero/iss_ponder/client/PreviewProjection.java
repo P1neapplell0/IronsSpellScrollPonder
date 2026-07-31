@@ -64,6 +64,10 @@ public final class PreviewProjection {
     private static final int MAX_Y = 24;
     private static final int MIN_Z = -24;
     private static final int MAX_Z = 24;
+    private static final int FLOOR_MIN_X = -3;
+    private static final int FLOOR_MAX_X = 3;
+    private static final int FLOOR_MIN_Z = -5;
+    private static final int FLOOR_MAX_Z = 5;
     private static final float TARGET_HEALTH = 2_048.0F;
     private static final Vec3 DIFFUSE_LIGHT_0 = new Vec3(-0.2, 1.0, 0.7).normalize();
     private static final Vec3 DIFFUSE_LIGHT_1 = new Vec3(0.2, 1.0, -0.7).normalize();
@@ -117,6 +121,7 @@ public final class PreviewProjection {
         scene = new PonderScene(level, localization, ISSPonderMod.MOD_ID,
                 net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ISSPonderMod.MOD_ID, "spell_preview"),
                 java.util.List.of(), java.util.List.of());
+        // Keep the original 7x7 camera basis; the longer custom floor must not change the default framing height.
         scene.builder().configureBasePlate(-3, -3, 7);
         scene.builder().scaleSceneView(0.82F);
         scene.builder().removeShadow();
@@ -134,17 +139,18 @@ public final class PreviewProjection {
     }
 
     private static void installBlocks(PonderLevel target) {
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
+        for (int x = FLOOR_MIN_X; x <= FLOOR_MAX_X; x++) {
+            for (int z = FLOOR_MIN_Z; z <= FLOOR_MAX_Z; z++) {
                 BlockPos floor = new BlockPos(x, 0, z);
-                boolean border = Math.abs(x) == 3 || Math.abs(z) == 3;
+                boolean border = x == FLOOR_MIN_X || x == FLOOR_MAX_X
+                        || z == FLOOR_MIN_Z || z == FLOOR_MAX_Z;
                 target.setBlock(floor, (border ? Blocks.POLISHED_DEEPSLATE : Blocks.DEEPSLATE_TILES).defaultBlockState(), 19);
             }
         }
-        for (int z = -3; z <= 3; z++) {
+        for (int z = FLOOR_MIN_Z; z <= FLOOR_MAX_Z; z++) {
             target.setBlock(new BlockPos(0, 0, z), Blocks.POLISHED_BLACKSTONE.defaultBlockState(), 19);
         }
-        target.setBlock(new BlockPos(0, 0, 3), Blocks.CHISELED_DEEPSLATE.defaultBlockState(), 19);
+        target.setBlock(new BlockPos(0, 0, FLOOR_MAX_Z), Blocks.CHISELED_DEEPSLATE.defaultBlockState(), 19);
     }
 
     public static void resetForReplay(double x, double y, double z) {

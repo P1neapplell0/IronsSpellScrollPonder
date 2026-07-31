@@ -11,7 +11,7 @@ continues in a new session.
 | Minecraft | `1.20.1` | `gradle.properties` |
 | Forge | `47.4.4` | `gradle.properties` |
 | Parchment | `2023.09.03-1.20.1` | `gradle.properties` |
-| Iron's Spellbooks | CurseForge file `7691158`, mod `3.15.4` | `build.gradle`, `mods.toml` |
+| Iron's Spellbooks | CurseForge file `8364933`, mod `3.16.2` | `build.gradle`, `mods.toml` |
 | Ponder | `1.0.92` | `gradle.properties`, Jar-in-Jar |
 | Flywheel | `1.0.0-215` | `gradle.properties`, Jar-in-Jar |
 | Player Animator | CurseForge file `4587214` | `build.gradle` |
@@ -81,7 +81,7 @@ then calls `AbstractSpell.onClientCast` in the projected context.
 
 ### Upstream Iron's References
 
-These were inspected from the decompiled `3.15.4` dependency:
+These were inspected from the decompiled `3.16.2` dependency:
 
 - `io.redspace.ironsspellbooks.api.spells.AbstractSpell`
   - `attemptInitiateCast`
@@ -117,9 +117,21 @@ they reach the client. The Ponder scene is centered at `BlockPos.ZERO`, while th
 server cells are spread far apart to reduce interference between simultaneous
 sessions.
 
-The client base plate is `7 x 7`, but projection and cleanup bounds are larger.
+The client and server base plates are `7 x 11`, extending two blocks behind the
+caster (`-Z`) and two behind the targets (`+Z`). The floor is symmetrical around
+`Z = 0`, but `PonderSceneBuilder#configureBasePlate` deliberately retains the
+original `(-3, -3, 7)` camera basis so the default framing height remains the
+same as the original `7 x 7` scene. Projection and cleanup bounds are larger.
 Do not shrink those bounds to match the visible floor: large projectiles,
 summons, area effects, and particles need room outside the plate.
+
+The screen starts in playing mode and loops completed previews. Its play/pause
+control changes only whether another replay is requested; it never stops Ponder
+ticks or the server simulation. The server marks only the final `PreviewStatus`
+for a completed lifecycle, rather than each `ProjectionCastFinished`, because
+adapters may recast several times before their follow-up is complete. Playing
+mode waits 20 ticks before requesting a replay and pauses that countdown while
+the spell selection menu is open.
 
 ### Upstream Ponder References
 
@@ -168,7 +180,7 @@ the real tab list and would otherwise fall back to a default skin.
 The missing start animation was not caused by the isolated layer. The projected
 start path created `new MagicData()` and immediately called `initiateCast`, but
 the no-argument constructor leaves `syncedSpellData` null and `initiateCast`
-dereferences that field directly. Iron's 3.15.4
+dereferences that field directly. Iron's 3.16.2
 `ClientSpellCastHelper#handleClientBoundOnCastStarted` does not construct or
 initialize `MagicData`; it installs the animation first and passes null to
 `onClientPreCast`. The preview deliberately supplies usable `MagicData` for
@@ -257,7 +269,7 @@ client then follows `ClientPacketListener#handleEntityEvent` by invoking
 sound. Event projection is therefore necessary for both `fang_strike` and
 `fang_ward`.
 
-Both additions changed the wire format/order, so `ModNetwork.PROTOCOL` is `7`.
+These additions changed the wire format/order, so `ModNetwork.PROTOCOL` is `8`.
 
 ## Mixin Maintenance
 
@@ -291,12 +303,17 @@ cast or depends on persistent/global state.
 | `ray_of_frost` | Generic entity projection plus Forge additional spawn data | `RayOfFrostVisualEntity#writeSpawnData` transfers the beam distance outside NBT | Build-verified; focused visual acceptance is still required. |
 | `fang_strike`, `fang_ward` | Generic entity projection plus vanilla entity events | `ExtendedEvokerFang#tick` broadcasts event `4`; projected `EvokerFangs#handleEntityEvent` consumes it | Build-verified; focused visual acceptance is still required. |
 | `echoing_strikes` | Physical follow-up attack adapter | `EchoingStrikesSpell#onCast`; `EchoingStrikesEffect#createEcho` | User-verified: the physical hit correctly triggers the later echo entity hit. |
+| `wololo` | Sheep primary target | `WololoSpell#checkPreCastConditions` accepts only `Sheep` | Confirm the sheep changes color and emits critical particles. |
+| `sacrifice` | Caster-owned summoned-zombie target | `SacrificeSpell#checkPreCastConditions` accepts only the caster's `IMagicSummon` | Confirm the summon is consumed by the blood explosion. |
+| `spectral_hammer`, `touch_dig` | Projected `5 x 5` stone target wall | Both pre-cast checks require a block on the horizontal casting ray | Confirm the wall appears on every loop and removed blocks do not persist into the next one. |
 
 The adapter API is implemented by `SpellPreviewAdapter`,
-`SpellPreviewContext`, and `SpellPreviewAdapters`. It provides scene-ready,
-post-cast, per-tick follow-up, before-recast, and cleanup hooks. Built-in
-corrections live in `BuiltinSpellPreviewAdapters`; the complete test matrix is
-in `SPECIAL_SPELLS.md`. Keep spell IDs centralized in that registry.
+`SpellPreviewContext`, and `SpellPreviewAdapters`. It provides primary-target
+selection, origin-relative initial blocks, scene-ready, post-cast, per-tick
+follow-up, before-recast, and cleanup hooks. Initial blocks are bounds-checked,
+projected after each client scene reset, and removed with the server session.
+Built-in corrections live in `BuiltinSpellPreviewAdapters`; the complete test
+matrix is in `SPECIAL_SPELLS.md`. Keep spell IDs centralized in that registry.
 
 ## Known Gaps and Regression Cases
 

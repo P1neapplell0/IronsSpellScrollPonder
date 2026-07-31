@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Replays an allowlist of Iron's built-in client particle packets against the virtual level.
- * Packet indexes and payload layouts are tied to Iron's Spellbooks 3.15.4 and must be re-audited on upgrade.
+ * Packet indexes and payload layouts are tied to Iron's Spellbooks 3.16.2 and must be re-audited on upgrade.
  * Index 22 maps to BloodSiphonParticlesPacket; its dedicated adapter mirrors
  * ClientSpellCastHelper#handleClientboundBloodSiphonParticles directly in PonderLevel.
  */
@@ -48,7 +48,7 @@ public final class PreviewPacketBridge {
     }
 
     private static void decodeVisualPacket(int index, FriendlyByteBuf buffer) {
-        // Indexes follow Iron's Spellbooks 3.15.4 PacketDistributor#register in exact registration order.
+        // Indexes follow Iron's Spellbooks 3.16.2 PacketDistributor#register in exact registration order.
         switch (index) {
             case 16 -> ClientSpellCastHelper.handleClientboundTeleport(readPosition(buffer), readPosition(buffer));
             case 17 -> ClientSpellCastHelper.handleClientboundFrostStep(readPosition(buffer), readPosition(buffer));

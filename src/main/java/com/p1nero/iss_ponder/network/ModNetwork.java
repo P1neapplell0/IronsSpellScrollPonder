@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public final class ModNetwork {
     // Registration order is the wire discriminator table. Bump this protocol whenever order or encoding changes.
-    private static final String PROTOCOL = "7";
+    private static final String PROTOCOL = "8";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.fromNamespaceAndPath(ISSPonderMod.MOD_ID, "main"),
             () -> PROTOCOL,
@@ -176,18 +176,27 @@ public final class ModNetwork {
         }
     }
 
-    public record PreviewStatus(Component status) {
+    public record PreviewStatus(Component status, boolean previewComplete) {
+        public PreviewStatus(Component status) {
+            this(status, false);
+        }
+
         private static void encode(PreviewStatus message, FriendlyByteBuf buffer) {
             buffer.writeComponent(message.status);
+            buffer.writeBoolean(message.previewComplete);
         }
 
         private static PreviewStatus decode(FriendlyByteBuf buffer) {
-            return new PreviewStatus(buffer.readComponent());
+            return new PreviewStatus(buffer.readComponent(), buffer.readBoolean());
         }
 
         private static void handle(PreviewStatus message, Supplier<NetworkEvent.Context> contextSupplier) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                    com.p1nero.iss_ponder.client.ClientPreviewController.setStatus(message.status));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                com.p1nero.iss_ponder.client.ClientPreviewController.setStatus(message.status);
+                if (message.previewComplete) {
+                    com.p1nero.iss_ponder.client.ClientPreviewController.previewComplete();
+                }
+            });
         }
     }
 
@@ -205,6 +214,7 @@ public final class ModNetwork {
         private static void handle(ProjectionStart message, Supplier<NetworkEvent.Context> contextSupplier) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 try {
+                    com.p1nero.iss_ponder.client.ClientPreviewController.replayStarted();
                     com.p1nero.iss_ponder.client.PreviewProjection.resetForReplay(message.x, message.y, message.z);
                 } catch (RuntimeException exception) {
                     ISSPonderMod.LOGGER.error("Could not recreate the virtual spell preview", exception);

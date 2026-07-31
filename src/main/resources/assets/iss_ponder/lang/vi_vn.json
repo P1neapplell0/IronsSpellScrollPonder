@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Giữ [%s] để xem trước phép",
   "gui.iss_ponder.title": "Xem trước phép",
-  "gui.iss_ponder.replay": "Phát lại",
+  "gui.iss_ponder.play": "Phát",
+  "gui.iss_ponder.pause": "Tạm dừng",
   "gui.iss_ponder.preparing": "Đang chuẩn bị xem trước",
   "gui.iss_ponder.casting": "Đang phóng phép",
   "gui.iss_ponder.follow_up": "Đang minh họa hành động tiếp theo",
