@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Hold [%s] to preview spell",
   "gui.iss_ponder.title": "Spell Preview",
-  "gui.iss_ponder.replay": "Replay",
+  "gui.iss_ponder.play": "Play",
+  "gui.iss_ponder.pause": "Pause",
   "gui.iss_ponder.preparing": "Preparing preview",
   "gui.iss_ponder.casting": "Casting",
   "gui.iss_ponder.follow_up": "Demonstrating follow-up action",

@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Утримуйте [%s], щоб переглянути заклинання",
   "gui.iss_ponder.title": "Попередній перегляд заклинання",
-  "gui.iss_ponder.replay": "Повторити",
+  "gui.iss_ponder.play": "Відтворити",
+  "gui.iss_ponder.pause": "Пауза",
   "gui.iss_ponder.preparing": "Підготовка перегляду",
   "gui.iss_ponder.casting": "Чаклування",
   "gui.iss_ponder.follow_up": "Демонстрація наступної дії",

@@ -68,6 +68,18 @@ public final class ClientPreviewController {
         return status;
     }
 
+    public static void previewComplete() {
+        if (Minecraft.getInstance().screen instanceof SpellPreviewScreen screen) {
+            screen.onPreviewComplete();
+        }
+    }
+
+    public static void replayStarted() {
+        if (Minecraft.getInstance().screen instanceof SpellPreviewScreen screen) {
+            screen.onReplayStarted();
+        }
+    }
+
     public static boolean isPending() {
         if (pending && Util.getMillis() - requestedAt > 5_000) {
             pending = false;

@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "[%s] 키를 길게 눌러 주문 미리 보기",
   "gui.iss_ponder.title": "주문 미리 보기",
-  "gui.iss_ponder.replay": "다시 보기",
+  "gui.iss_ponder.play": "재생",
+  "gui.iss_ponder.pause": "일시 정지",
   "gui.iss_ponder.preparing": "미리 보기 준비 중",
   "gui.iss_ponder.casting": "시전 중",
   "gui.iss_ponder.follow_up": "후속 동작 시연 중",

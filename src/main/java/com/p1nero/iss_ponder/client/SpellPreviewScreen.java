@@ -30,6 +30,7 @@ public class SpellPreviewScreen extends Screen {
     private static final long OPEN_DURATION_MS = 320;
     private static final long CLOSE_DURATION_MS = 180;
     private static final long REPLAY_FEEDBACK_MS = 520;
+    private static final int LOOP_RESTART_DELAY_TICKS = 20;
 
     private static final int BACKGROUND_TOP = 0xB8050708;
     private static final int BACKGROUND_BOTTOM = 0xD0090D0F;
@@ -54,6 +55,9 @@ public class SpellPreviewScreen extends Screen {
     private double panelScroll;
     private int panelContentHeight;
     private int panelViewportHeight;
+    private int loopRestartTicks = -1;
+    private boolean playbackEnabled = true;
+    private boolean previewComplete;
     private boolean ending;
 
     public SpellPreviewScreen(ResourceLocation spellId, int spellLevel, boolean simulationAllowed) {
@@ -350,20 +354,22 @@ public class SpellPreviewScreen extends Screen {
         graphics.fill(panelX + 8, footerY - 5, width - 8, height - 9,
                 withOpacity(0xE8101415, opacity));
 
-        int replayX = panelX + 15;
+        int playbackX = panelX + 15;
         int closeX = width - 37;
-        int replayWidth = Math.max(60, closeX - replayX - 8);
-        boolean replayHovered = contains(mouseX, mouseY, replayX, footerY, replayWidth, 22);
+        int playbackWidth = Math.max(60, closeX - playbackX - 8);
+        boolean playbackHovered = contains(mouseX, mouseY, playbackX, footerY, playbackWidth, 22);
         boolean closeHovered = contains(mouseX, mouseY, closeX, footerY, 22, 22);
         float replayPulse = replayPulse();
 
         int replayFill = simulationAllowed
-                ? blend(0xFF182120, 0xFF263B36, Math.max(replayHovered ? 1.0F : 0.0F, replayPulse))
+                ? blend(0xFF182120, 0xFF263B36, Math.max(playbackHovered ? 1.0F : 0.0F, replayPulse))
                 : 0xFF171919;
-        drawButton(graphics, replayX, footerY, replayWidth, 22,
-                replayFill, replayHovered ? ARCANE : GOLD_DARK, opacity);
-        graphics.drawCenteredString(font, Component.translatable("gui.iss_ponder.replay"),
-                replayX + replayWidth / 2, footerY + 7,
+        drawButton(graphics, playbackX, footerY, playbackWidth, 22,
+                replayFill, playbackHovered ? ARCANE : GOLD_DARK, opacity);
+        Component playbackLabel = Component.translatable(playbackEnabled
+                ? "gui.iss_ponder.pause" : "gui.iss_ponder.play");
+        graphics.drawCenteredString(font, playbackLabel,
+                playbackX + playbackWidth / 2, footerY + 7,
                 withOpacity(simulationAllowed ? PARCHMENT : 0xFF6F7472, opacity));
 
         drawButton(graphics, closeX, footerY, 22, 22,
@@ -447,6 +453,7 @@ public class SpellPreviewScreen extends Screen {
         super.tick();
         PreviewProjection.tick();
         spellMenu.tick();
+        tickPlaybackLoop();
         if (closingAt >= 0 && Util.getMillis() - closingAt >= CLOSE_DURATION_MS) {
             finishClose();
             return;
@@ -476,6 +483,24 @@ public class SpellPreviewScreen extends Screen {
         }
     }
 
+    private void tickPlaybackLoop() {
+        if (loopRestartTicks < 0) {
+            return;
+        }
+        if (!playbackEnabled || !simulationAllowed || closingAt >= 0) {
+            loopRestartTicks = -1;
+            return;
+        }
+        if (spellMenu.isVisible()) {
+            return;
+        }
+        if (loopRestartTicks > 0) {
+            loopRestartTicks--;
+            return;
+        }
+        requestReplay();
+    }
+
     private static boolean isDown(long window, int key) {
         return GLFW.glfwGetKey(window, key) == GLFW.GLFW_PRESS;
     }
@@ -496,16 +521,15 @@ public class SpellPreviewScreen extends Screen {
         int panelWidth = panelWidth();
         int panelX = width - panelWidth + Math.round((1.0F - progress) * 38.0F);
         int footerY = height - 43 + Math.round((1.0F - progress) * 15.0F);
-        int replayX = panelX + 15;
+        int playbackX = panelX + 15;
         int closeX = width - 37;
-        int replayWidth = Math.max(60, closeX - replayX - 8);
+        int playbackWidth = Math.max(60, closeX - playbackX - 8);
         if (contains(mouseX, mouseY, closeX, footerY, 22, 22)) {
             onClose();
             return true;
         }
-        if (simulationAllowed && contains(mouseX, mouseY, replayX, footerY, replayWidth, 22)) {
-            replayAt = Util.getMillis();
-            ModNetwork.sendToServer(new ModNetwork.ReplayPreview());
+        if (simulationAllowed && contains(mouseX, mouseY, playbackX, footerY, playbackWidth, 22)) {
+            togglePlayback();
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -572,7 +596,36 @@ public class SpellPreviewScreen extends Screen {
         spell = SpellRegistry.getSpell(newSpellId);
         panelScroll = 0;
         replayAt = -1;
+        loopRestartTicks = -1;
+        previewComplete = false;
         spellMenu.closeImmediately();
+    }
+
+    public void onPreviewComplete() {
+        previewComplete = true;
+        if (playbackEnabled && simulationAllowed && closingAt < 0) {
+            loopRestartTicks = LOOP_RESTART_DELAY_TICKS;
+        }
+    }
+
+    public void onReplayStarted() {
+        loopRestartTicks = -1;
+        previewComplete = false;
+    }
+
+    private void togglePlayback() {
+        playbackEnabled = !playbackEnabled;
+        if (!playbackEnabled) {
+            loopRestartTicks = -1;
+        } else if (previewComplete) {
+            requestReplay();
+        }
+    }
+
+    private void requestReplay() {
+        onReplayStarted();
+        replayAt = Util.getMillis();
+        ModNetwork.sendToServer(new ModNetwork.ReplayPreview());
     }
 
     private void requestSpellSwitch(ResourceLocation newSpellId) {

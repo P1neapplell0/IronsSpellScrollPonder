@@ -139,9 +139,21 @@ non-finite or more than 128 blocks from the projected spawn. This is a final
 guard against add-ons passing an unprojected coordinate into an implementation
 that allocates geometry or child particles in proportion to path length.
 
-The client base plate is `7 x 7`, but projection and cleanup bounds are larger.
+The client and server base plates are `7 x 11`, extending two blocks behind the
+caster (`-Z`) and two behind the targets (`+Z`). The floor is symmetrical around
+`Z = 0`, but `PonderSceneBuilder#configureBasePlate` deliberately retains the
+original `(-3, -3, 7)` camera basis so the default framing height remains the
+same as the original `7 x 7` scene. Projection and cleanup bounds are larger.
 Do not shrink those bounds to match the visible floor: large projectiles,
 summons, area effects, and particles need room outside the plate.
+
+The screen starts in playing mode and loops completed previews. Its play/pause
+control changes only whether another replay is requested; it never stops Ponder
+ticks or the server simulation. The server marks only the final `PreviewStatus`
+for a completed lifecycle, rather than each `ProjectionCastFinished`, because
+adapters may recast several times before their follow-up is complete. Playing
+mode waits 20 ticks before requesting a replay and pauses that countdown while
+the spell selection menu is open.
 
 ### Upstream Ponder References
 
@@ -331,12 +343,17 @@ cast or depends on persistent/global state.
 | `ray_of_frost` | Generic entity projection plus NeoForge complex spawn data | `RayOfFrostVisualEntity#writeSpawnData` transfers the beam distance outside NBT | Build-verified; focused visual acceptance is still required. |
 | `fang_strike`, `fang_ward` | Generic entity projection plus vanilla entity events | `ExtendedEvokerFang#tick` broadcasts event `4`; projected `EvokerFangs#handleEntityEvent` consumes it | Build-verified; focused visual acceptance is still required. |
 | `echoing_strikes` | Physical follow-up attack adapter | `EchoingStrikesSpell#onCast`; `EchoingStrikesEffect#createEcho` | User-verified: the physical hit correctly triggers the later echo entity hit. |
+| `wololo` | Sheep primary target | `WololoSpell#checkPreCastConditions` accepts only `Sheep` | Confirm the sheep changes color and emits critical particles. |
+| `sacrifice` | Caster-owned summoned-zombie target | `SacrificeSpell#checkPreCastConditions` accepts only the caster's `IMagicSummon` | Confirm the summon is consumed by the blood explosion. |
+| `spectral_hammer`, `touch_dig` | Projected `5 x 5` stone target wall | Both pre-cast checks require a block on the horizontal casting ray | Confirm the wall appears on every loop and removed blocks do not persist into the next one. |
 
 The adapter API is implemented by `SpellPreviewAdapter`,
-`SpellPreviewContext`, and `SpellPreviewAdapters`. It provides scene-ready,
-post-cast, per-tick follow-up, before-recast, and cleanup hooks. Built-in
-corrections live in `BuiltinSpellPreviewAdapters`; the complete test matrix is
-in `SPECIAL_SPELLS.md`. Keep spell IDs centralized in that registry.
+`SpellPreviewContext`, and `SpellPreviewAdapters`. It provides primary-target
+selection, origin-relative initial blocks, scene-ready, post-cast, per-tick
+follow-up, before-recast, and cleanup hooks. Initial blocks are bounds-checked,
+projected after each client scene reset, and removed with the server session.
+Built-in corrections live in `BuiltinSpellPreviewAdapters`; the complete test
+matrix is in `SPECIAL_SPELLS.md`. Keep spell IDs centralized in that registry.
 
 ## Known Gaps and Regression Cases
 
@@ -379,7 +396,7 @@ Minimum regression categories:
 1. Run `./gradlew compileJava` and `./gradlew build` with Java 21.
 2. Run `./gradlew runGameTestServer` and confirm the preview dimension loads.
 3. Run `./gradlew runClient` and test the regression categories above.
-4. Inspect `build/libs/iss_ponder-neoforge1.21.1-1.0.0.jar` and its
+4. Inspect `build/libs/iss_ponder-neoforge1.21.1-1.0.1.jar` and its
    `META-INF/jarjar/metadata.json`.
 5. Confirm bundled Ponder/Flywheel versions and licenses.
 6. Confirm `ModNetwork.PROTOCOL` was bumped for any payload wire-format change.

@@ -4,16 +4,27 @@ import com.p1nero.iss_ponder.api.SpellPreviewAdapter;
 import com.p1nero.iss_ponder.api.SpellPreviewAdapters;
 import com.p1nero.iss_ponder.api.SpellPreviewContext;
 import io.redspace.ironsspellbooks.entity.spells.magic_arrow.MagicArrowProjectile;
+import io.redspace.ironsspellbooks.capabilities.magic.SummonManager;
+import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** Built-in corrections derived from the corresponding Iron's Spellbooks 3.16.2 spell/effect classes. */
 public final class BuiltinSpellPreviewAdapters {
+    private static final Map<BlockPos, BlockState> STONE_TARGET_WALL = createStoneTargetWall();
     private static boolean registered;
 
     private BuiltinSpellPreviewAdapters() {
@@ -78,6 +89,34 @@ public final class BuiltinSpellPreviewAdapters {
             context.level().addFreshEntity(projectile);
         }));
 
+        SpellPreviewAdapter blockTarget = new SpellPreviewAdapter() {
+            @Override
+            public Map<BlockPos, BlockState> initialBlocks(SpellPreviewContext context) {
+                return STONE_TARGET_WALL;
+            }
+        };
+        // SpectralHammerSpell requires its own mineable block tag; TouchDigSpell requires any harvestable block.
+        register(blockTarget, "spectral_hammer", "touch_dig");
+        SpellPreviewAdapters.register(id("wololo"), new SpellPreviewAdapter() {
+            @Override
+            public EntityType<? extends LivingEntity> primaryTargetType() {
+                return EntityType.SHEEP;
+            }
+        });
+        SpellPreviewAdapters.register(id("sacrifice"), new SpellPreviewAdapter() {
+            @Override
+            public EntityType<? extends LivingEntity> primaryTargetType() {
+                return EntityRegistry.SUMMONED_ZOMBIE.get();
+            }
+
+            @Override
+            public void onSceneReady(SpellPreviewContext context) {
+                if (context.primaryTarget() != null) {
+                    SummonManager.setOwner(context.primaryTarget(), context.caster());
+                }
+            }
+        });
+
         SpellPreviewAdapter fastRecasts = automaticRecasts(8, 12, 0.0F);
         SpellPreviewAdapters.register(id("eldritch_blast"), fastRecasts);
         SpellPreviewAdapters.register(id("flaming_barrage"), fastRecasts);
@@ -128,6 +167,16 @@ public final class BuiltinSpellPreviewAdapters {
                 }
             }
         };
+    }
+
+    private static Map<BlockPos, BlockState> createStoneTargetWall() {
+        Map<BlockPos, BlockState> blocks = new LinkedHashMap<>();
+        for (int x = -2; x <= 2; x++) {
+            for (int y = 1; y <= 5; y++) {
+                blocks.put(new BlockPos(x, y, 5), Blocks.STONE.defaultBlockState());
+            }
+        }
+        return Map.copyOf(blocks);
     }
 
     private static void register(SpellPreviewAdapter adapter, String... paths) {

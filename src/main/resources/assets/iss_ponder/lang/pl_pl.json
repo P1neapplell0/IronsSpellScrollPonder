@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Przytrzymaj [%s], aby wyświetlić podgląd zaklęcia",
   "gui.iss_ponder.title": "Podgląd zaklęcia",
-  "gui.iss_ponder.replay": "Powtórz",
+  "gui.iss_ponder.play": "Odtwórz",
+  "gui.iss_ponder.pause": "Pauza",
   "gui.iss_ponder.preparing": "Przygotowywanie podglądu",
   "gui.iss_ponder.casting": "Rzucanie zaklęcia",
   "gui.iss_ponder.follow_up": "Demonstrowanie dalszej akcji",

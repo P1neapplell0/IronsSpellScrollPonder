@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "Segure [%s] para pré-visualizar o feitiço",
   "gui.iss_ponder.title": "Prévia do feitiço",
-  "gui.iss_ponder.replay": "Repetir",
+  "gui.iss_ponder.play": "Reproduzir",
+  "gui.iss_ponder.pause": "Pausar",
   "gui.iss_ponder.preparing": "Preparando prévia",
   "gui.iss_ponder.casting": "Conjurando",
   "gui.iss_ponder.follow_up": "Demonstrando ação subsequente",

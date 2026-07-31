@@ -45,13 +45,14 @@ SpellPreviewAdapters.register(
         });
 ```
 
-The adapter lifecycle also provides `onSceneReady`, `beforeRecast`, and
-`onSessionClosed`, while `SpellPreviewContext` exposes bounded helpers for
-common interactions. Return `false` from `allowsSimulation` for spells that
-cannot be isolated safely, such as persistent portals or cross-dimension
-travel. Custom client-only packets are not automatically trusted: prefer
-standard entity, particle, sound, and block APIs, or contribute a narrowly
-reviewed projection handler for that packet. See
+The adapter lifecycle also provides `primaryTargetType` for spells that require
+a specific target, `initialBlocks` for origin-relative scene structures,
+`onSceneReady`, `beforeRecast`, and `onSessionClosed`. `SpellPreviewContext`
+exposes bounded helpers for common interactions. Return `false` from
+`allowsSimulation` for spells that cannot be isolated safely, such as persistent
+portals or cross-dimension travel. Custom client-only packets are not
+automatically trusted: prefer standard entity, particle, sound, and block APIs,
+or contribute a narrowly reviewed projection handler for that packet. See
 [`SpellPreviewAdapter`](src/main/java/com/p1nero/iss_ponder/api/SpellPreviewAdapter.java)
 and [`SpellPreviewContext`](src/main/java/com/p1nero/iss_ponder/api/SpellPreviewContext.java)
 for the complete API.
@@ -61,8 +62,10 @@ for the complete API.
 - Hold the normal Ponder key while viewing a scroll tooltip to open the preview.
 - Display spell name, description, school, rarity, level, cast type, mana cost,
   cooldown, spell power, unique statistics, and observed target damage.
-- Render a compact `7 x 7` arena with a simulated caster and three targets.
-- Replay the current spell without resetting the camera.
+- Render a compact `7 x 11` arena with two extra rows behind both the simulated
+  caster and the three targets.
+- Loop completed previews by default, with a play/pause control that does not
+  freeze the simulated scene.
 - Browse enabled spells by school, search them, and switch the active preview.
 - Rotate, pan, and zoom the Ponder-style scene.
 - Show server-synchronized cast progress for charged and continuous spells.
@@ -88,12 +91,12 @@ dependencies are still required. Install this mod on both the client and server.
 2. Hold the Ponder key shown in the tooltip.
 3. Drag to rotate the scene, use the mouse wheel to zoom, and use the movement
    keys shown by the interface to pan the camera.
-4. Use **Replay** to rebuild and cast the current spell again.
+4. Use **Pause** to stop looping after the current preview, or **Play** to resume.
 5. Click the scroll icon to search for and preview another enabled spell.
 6. Press Escape or close the screen to end the server preview session.
 
 The Ponder key can be changed in Minecraft's key bindings.
-The generated `config/iss_ponder-client.toml` file also provides
+The generated `config/iss_ponder-client.toml` file provides
 `tooltip.showScrollSpellDescription`; set it to `false` to stop adding the
 spell's guide description to scroll tooltips without disabling the preview
 prompt.
@@ -127,7 +130,7 @@ The `1.21.1` branch uses ModDevGradle `2.0.143`, Gradle `8.11.1`, Parchment
 ./gradlew runClient
 ```
 
-The release artifact is `build/libs/iss_ponder-neoforge1.21.1-1.0.0.jar`.
+The release artifact is `build/libs/iss_ponder-neoforge1.21.1-1.0.1.jar`.
 
 ## License
 

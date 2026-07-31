@@ -1,7 +1,8 @@
 {
   "tooltip.iss_ponder.hold_to_preview": "长按[%s]进行思索",
   "gui.iss_ponder.title": "法术思索",
-  "gui.iss_ponder.replay": "重新演示",
+  "gui.iss_ponder.play": "播放",
+  "gui.iss_ponder.pause": "暂停",
   "gui.iss_ponder.preparing": "正在准备演示",
   "gui.iss_ponder.casting": "正在施法",
   "gui.iss_ponder.follow_up": "正在演示后续机制",

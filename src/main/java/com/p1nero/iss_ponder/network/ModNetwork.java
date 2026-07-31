@@ -27,7 +27,7 @@ import java.util.UUID;
 
 public final class ModNetwork {
     // Bump this version whenever an existing payload's binary encoding changes.
-    private static final String PROTOCOL = "7";
+    private static final String PROTOCOL = "8";
     private static final Map<Class<?>, CustomPacketPayload.Type<?>> PAYLOAD_TYPES = Map.ofEntries(
             payloadType(StartPreview.class, "start_preview"),
             payloadType(EndPreview.class, "end_preview"),
@@ -202,17 +202,25 @@ public final class ModNetwork {
         }
     }
 
-    public record PreviewStatus(Component status) implements Payload {
+    public record PreviewStatus(Component status, boolean previewComplete) implements Payload {
+        public PreviewStatus(Component status) {
+            this(status, false);
+        }
+
         private static void encode(PreviewStatus message, RegistryFriendlyByteBuf buffer) {
             ComponentSerialization.STREAM_CODEC.encode(buffer, message.status);
+            buffer.writeBoolean(message.previewComplete);
         }
 
         private static PreviewStatus decode(RegistryFriendlyByteBuf buffer) {
-            return new PreviewStatus(ComponentSerialization.STREAM_CODEC.decode(buffer));
+            return new PreviewStatus(ComponentSerialization.STREAM_CODEC.decode(buffer), buffer.readBoolean());
         }
 
         private static void handle(PreviewStatus message, IPayloadContext context) {
             com.p1nero.iss_ponder.client.ClientPreviewController.setStatus(message.status);
+            if (message.previewComplete) {
+                com.p1nero.iss_ponder.client.ClientPreviewController.previewComplete();
+            }
         }
     }
 
@@ -229,6 +237,7 @@ public final class ModNetwork {
 
         private static void handle(ProjectionStart message, IPayloadContext context) {
             try {
+                com.p1nero.iss_ponder.client.ClientPreviewController.replayStarted();
                 com.p1nero.iss_ponder.client.PreviewProjection.resetForReplay(message.x, message.y, message.z);
             } catch (RuntimeException exception) {
                 ISSPonderMod.LOGGER.error("Could not recreate the virtual spell preview", exception);
