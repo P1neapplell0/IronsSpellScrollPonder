@@ -35,11 +35,13 @@ import io.redspace.ironsspellbooks.particle.TintedBubblePopParticleOptions;
 import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -79,6 +81,9 @@ import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.connection.ConnectionType;
+import net.neoforged.neoforge.network.registration.ChannelAttributes;
+import net.neoforged.neoforge.network.registration.NetworkPayloadSetup;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -112,6 +117,8 @@ public final class PreviewSessionManager {
     private static final int CAST_DELAY = 30;
     private static final int MAX_CAST_TICKS = 20 * 15;
     private static final Map<UUID, PreviewSession> SESSIONS = new HashMap<>();
+    private static final Object FAKE_CONNECTION_LOCK = new Object();
+    private static EmbeddedChannel fakeConnectionChannel;
 
     private PreviewSessionManager() {
     }
@@ -705,6 +712,7 @@ public final class PreviewSessionManager {
                 ("iss_ponder:" + realPlayer.getUUID()).getBytes(java.nio.charset.StandardCharsets.UTF_8)),
                 "Spell Preview");
         FakePlayer fake = new FakePlayer(level, profile);
+        initializeFakeConnection(fake);
         fake.moveTo(session.origin.getX() + 0.5, FLOOR_Y + 1.0, session.origin.getZ() - 2.0, 0, 0);
         fake.setNoGravity(true);
         fake.setInvulnerable(true);
@@ -715,6 +723,31 @@ public final class PreviewSessionManager {
         fake.getAbilities().flying = true;
         level.addFreshEntity(fake);
         return fake;
+    }
+
+    private static void initializeFakeConnection(FakePlayer fakePlayer) {
+        Connection connection = fakePlayer.connection.getConnection();
+        if (connection.channel() != null) {
+            return;
+        }
+        synchronized (FAKE_CONNECTION_LOCK) {
+            if (connection.channel() != null) {
+                return;
+            }
+            // Reference: NeoForge 21.1.234 FakePlayer$FakeConnection is shared by every FakePlayer but never
+            // receives channelActive, leaving Connection#channel null. Optional-payload checks in mods such as
+            // AppleSkin and Music And Melody call ICommonPacketListener#hasChannel during player ticks and crash
+            // before FakePlayerNetHandler can discard the packet. An active embedded channel supplies the normal
+            // channel attributes while keeping all traffic local and preserving the upstream no-op listener.
+            fakeConnectionChannel = new EmbeddedChannel(connection);
+            if (connection.channel() == null) {
+                fakeConnectionChannel.close();
+                fakeConnectionChannel = null;
+                throw new IllegalStateException("Could not initialize the spell preview FakePlayer connection");
+            }
+            ChannelAttributes.setConnectionType(connection, ConnectionType.OTHER);
+            ChannelAttributes.setPayloadSetup(connection, NetworkPayloadSetup.empty());
+        }
     }
 
     private static void rebuildScene(ServerLevel level, PreviewSession session) {

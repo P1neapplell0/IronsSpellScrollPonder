@@ -84,6 +84,24 @@ The `AbstractSpellProjectionMixin` injects after `AbstractSpell.castSpell` and
 sends `ProjectionCastEffect` with the spell's additional cast data. The client
 then calls `AbstractSpell.onClientCast` in the projected context.
 
+### FakePlayer Network Compatibility
+
+NeoForge 21.1.234 constructs every `FakePlayer` with a shared
+`FakePlayer$FakeConnection`. That `Connection` is never attached to a Netty
+channel, so `Connection#channel()` remains null. This is normally harmless
+because `FakePlayerNetHandler` discards outgoing packets, but optional-network
+helpers commonly call `ICommonPacketListener#hasChannel` first. NeoForge's
+`ChannelAttributes#getPayloadSetup` dereferences the missing channel, causing
+the simulated player's normal `doTick()` to crash in unrelated mods such as
+AppleSkin or Music And Melody.
+
+`PreviewSessionManager#initializeFakeConnection` attaches the shared dummy
+connection to one persistent `EmbeddedChannel` before the simulated player is
+added to the level. It also installs `ConnectionType.OTHER` and an empty
+`NetworkPayloadSetup`. Channel capability checks can therefore return false
+normally, while the upstream no-op packet listener continues to prevent any
+virtual traffic from leaving the server process.
+
 ### Upstream Iron's References
 
 These were inspected from the resolved `1.21.1-3.16.2` dependency:

@@ -2,6 +2,21 @@
 
 All notable changes to Iron's Spell Scroll Ponder are documented in this file.
 
+## 1.0.2 - 2026-08-03
+
+### Changed
+
+- Documented the virtual FakePlayer networking lifecycle and its upstream
+  NeoForge references in `TECHNICAL_NOTES.md`.
+
+### Fixed
+
+- Initialized NeoForge's shared FakePlayer connection with a persistent local
+  Netty channel so optional network checks from mods such as AppleSkin and
+  Music And Melody no longer crash the preview server tick with a null channel.
+- Kept virtual payload negotiation empty and all FakePlayer packet handling
+  local, preventing unrelated mod packets from leaving the preview process.
+
 ## 1.0.1 - 2026-07-31
 
 ### Added

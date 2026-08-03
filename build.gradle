@@ -102,6 +102,7 @@ dependencies {
     implementation "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
     jarJar "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
 
+    implementation "curse.maven:appleskin-248787:7854442"
     implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
     implementation "curse.maven:irons-spells-n-spellbooks-855414:${irons_spellbooks_file}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
