@@ -16,11 +16,19 @@ import io.redspace.ironsspellbooks.network.EntityEventPacket;
 import io.redspace.ironsspellbooks.network.particles.FieryExplosionParticlesPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStartTrackingPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStopTrackingPacket;
+import io.redspace.ironsspellbooks.particle.SoulfireRayParticleOptions;
+import io.redspace.ironsspellbooks.particle.SwirlingParticleOptions;
+import io.redspace.ironsspellbooks.particle.TintedBubblePopParticleOptions;
+import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
+import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
@@ -44,10 +52,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.ICustomPacket;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -55,6 +65,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +97,8 @@ public final class PreviewSessionManager {
     private static final float TARGET_HEALTH = 2_048.0F;
     private static final int CAST_DELAY = 30;
     private static final int MAX_CAST_TICKS = 20 * 15;
+    private static final Object FAKE_CONNECTION_LOCK = new Object();
+    private static EmbeddedChannel fakeConnectionChannel;
     // Iron's 3.16.2 client-only particle messages that are safe to replay against PonderLevel.
     // Tracking-only IDs 39-42 are forwarded from their typed messages instead of this raw self-send path.
     private static final Set<Integer> PLAYER_VISUAL_PACKET_TYPES = Set.of(16, 17, 21, 22, 23, 26, 27, 31, 43);
@@ -253,9 +266,60 @@ public final class PreviewSessionManager {
     public static void forwardParticles(ServerLevel level, ParticleOptions particle, boolean longDistance,
                                         double x, double y, double z, int count,
                                         double xOffset, double yOffset, double zOffset, double speed) {
-        forProjectionRelative(level, new Vec3(x, y, z), (player, projected) -> ModNetwork.sendToPlayer(player,
-                new ModNetwork.ProjectionParticle(particle, longDistance, projected.x, projected.y, projected.z,
-                        count, (float) xOffset, (float) yOffset, (float) zOffset, (float) speed)));
+        if (level.dimension() != PREVIEW_LEVEL) {
+            return;
+        }
+        Vec3 serverPosition = new Vec3(x, y, z);
+        for (PreviewSession session : List.copyOf(SESSIONS.values())) {
+            AABB bounds = new AABB(session.origin.offset(-24, -8, -24), session.origin.offset(25, 24, 25));
+            if (!session.projectionReady || session.simulatedPlayer == null || !bounds.contains(serverPosition)) {
+                continue;
+            }
+            ServerPlayer player = level.getServer().getPlayerList().getPlayer(session.playerId);
+            if (player == null || player.connection == null) {
+                continue;
+            }
+            Vec3 origin = Vec3.atLowerCornerOf(session.origin);
+            Vec3 projected = serverPosition.subtract(origin);
+            ParticleOptions projectedParticle = projectParticleOptions(level, particle, origin);
+            ModNetwork.sendToPlayer(player, new ModNetwork.ProjectionParticle(projectedParticle, longDistance,
+                    projected.x, projected.y, projected.z, count, (float) xOffset, (float) yOffset,
+                    (float) zOffset, (float) speed));
+        }
+    }
+
+    /** Translates absolute endpoints embedded inside particle options along with the outer particle position. */
+    private static ParticleOptions projectParticleOptions(ServerLevel level, ParticleOptions particle, Vec3 origin) {
+        if (particle instanceof ZapParticleOption zap) {
+            return new ZapParticleOption(zap.getDestination().subtract(origin));
+        }
+        if (particle instanceof SoulfireRayParticleOptions ray) {
+            return new SoulfireRayParticleOptions(ray.getDestination().subtract(origin));
+        }
+        if (particle instanceof TraceParticleOptions trace) {
+            Vector3f destination = new Vector3f(trace.destination)
+                    .sub((float) origin.x, (float) origin.y, (float) origin.z);
+            return new TraceParticleOptions(destination, new Vector3f(trace.color));
+        }
+        if (particle instanceof TintedBubblePopParticleOptions bubble) {
+            return new TintedBubblePopParticleOptions(bubble.cauldronPos().subtract(BlockPos.containing(origin)));
+        }
+        if (particle instanceof VibrationParticleOption vibration
+                && vibration.getDestination() instanceof BlockPositionSource blockSource) {
+            return blockSource.getPosition(level)
+                    .map(position -> new VibrationParticleOption(
+                            new BlockPositionSource(BlockPos.containing(position.subtract(origin))),
+                            vibration.getArrivalInTicks()))
+                    .orElse(vibration);
+        }
+        if (particle instanceof SwirlingParticleOptions swirling) {
+            ParticleOptions nested = projectParticleOptions(level, swirling.particleOptions(), origin);
+            if (nested != swirling.particleOptions()) {
+                return new SwirlingParticleOptions(nested, swirling.normal(), swirling.up(),
+                        swirling.heightWidthSpeed(), swirling.deltaHeightWidthSpeed());
+            }
+        }
+        return particle;
     }
 
     public static void forwardBlock(ServerLevel level, BlockPos position, BlockState state) {
@@ -608,6 +672,7 @@ public final class PreviewSessionManager {
                 ("iss_ponder:" + realPlayer.getUUID()).getBytes(java.nio.charset.StandardCharsets.UTF_8)),
                 "Spell Preview");
         FakePlayer fake = new FakePlayer(level, profile);
+        initializeFakeConnection(fake);
         fake.moveTo(session.origin.getX() + 0.5, FLOOR_Y + 1.0, session.origin.getZ() - 2.0, 0, 0);
         fake.setNoGravity(true);
         fake.setInvulnerable(true);
@@ -618,6 +683,31 @@ public final class PreviewSessionManager {
         fake.getAbilities().flying = true;
         level.addFreshEntity(fake);
         return fake;
+    }
+
+    private static void initializeFakeConnection(FakePlayer fakePlayer) {
+        Connection connection = fakePlayer.connection.connection;
+        if (connection.channel() != null) {
+            return;
+        }
+        synchronized (FAKE_CONNECTION_LOCK) {
+            if (connection.channel() != null) {
+                return;
+            }
+            // Reference: Forge 47.4.4 FakePlayer$FakePlayerNetHandler uses one shared DUMMY_CONNECTION but never
+            // attaches it to a Netty channel. Forge NetworkHooks#getConnectionData and getChannelList are called by
+            // SimpleChannel#isRemotePresent in optional-payload checks; without a channel those checks crash before
+            // FakePlayerNetHandler can discard the packet. Keep the channel local and preserve the no-op listener.
+            fakeConnectionChannel = new EmbeddedChannel(connection);
+            if (connection.channel() == null) {
+                fakeConnectionChannel.close();
+                fakeConnectionChannel = null;
+                throw new IllegalStateException("Could not initialize the spell preview FakePlayer connection");
+            }
+            // Populate Forge's FML network-version attribute as well. NetworkHooks#getConnectionType treats a
+            // missing value as invalid, while NONE safely identifies this local connection as non-modded.
+            NetworkHooks.registerClientLoginChannel(connection);
+        }
     }
 
     private static void rebuildScene(ServerLevel level, PreviewSession session) {

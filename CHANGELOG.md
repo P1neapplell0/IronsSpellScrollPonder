@@ -2,6 +2,27 @@
 
 All notable changes to Iron's Spell Scroll Ponder are documented in this file.
 
+## 1.0.2 - 2026-08-03
+
+This release targets Minecraft 1.20.1 and Forge 47.
+
+### Changed
+
+- Documented the Forge FakePlayer networking lifecycle and its upstream code
+  references in `TECHNICAL_NOTES.md`.
+
+### Fixed
+
+- Initialized Forge's shared FakePlayer connection with a persistent local
+  Netty channel so optional network checks from add-on mods no longer crash
+  the preview server tick with a null channel.
+- Kept virtual packet handling local; unsupported remote channels are reported
+  as absent and FakePlayer packets continue to be discarded.
+- Fixed the Thunderstorm preview exhausting the render buffer by translating
+  absolute endpoints embedded in Iron's lightning particle options.
+- Added a client-side distance and finite-value guard for destination-bearing
+  particles so malformed add-on effects cannot allocate unbounded geometry.
+
 ## 1.0.1 - 2026-07-31
 
 This release targets Minecraft 1.20.1 and Forge 47.

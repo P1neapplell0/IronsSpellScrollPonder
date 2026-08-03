@@ -173,6 +173,7 @@ dependencies {
         transitive = false
     }
 
+    implementation fg.deobf("curse.maven:appleskin-248787:4770828")
     implementation fg.deobf("curse.maven:playeranimator-658587:4587214")
     implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:8364933")
     implementation fg.deobf("curse.maven:curios-309927:6418456")

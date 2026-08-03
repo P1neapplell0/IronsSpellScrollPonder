@@ -17,6 +17,10 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import io.redspace.ironsspellbooks.api.spells.SpellAnimations;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.particle.SoulfireRayParticleOptions;
+import io.redspace.ironsspellbooks.particle.SwirlingParticleOptions;
+import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
+import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.createmod.catnip.levelWrappers.WrappedClientLevel;
 import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
@@ -73,6 +77,7 @@ public final class PreviewProjection {
     private static final Vec3 DIFFUSE_LIGHT_1 = new Vec3(0.2, 1.0, -0.7).normalize();
     private static final int BLOOD_SIPHON_PARTICLES_PER_PACKET = 40;
     private static final int BLOOD_SIPHON_BEAM_TICKS = 3;
+    private static final double MAX_PROJECTED_PARTICLE_DISTANCE_SQR = 128.0 * 128.0;
 
     private static final Map<Integer, Entity> ENTITIES = new HashMap<>();
     private static PonderLevel level;
@@ -321,6 +326,16 @@ public final class PreviewProjection {
         if (!active || level == null || particle == null) {
             return;
         }
+        Vec3 embeddedDestination = embeddedParticleDestination(particle);
+        Vec3 spawnPosition = new Vec3(x, y, z);
+        if (embeddedDestination != null && (!isFinite(embeddedDestination)
+                || embeddedDestination.distanceToSqr(spawnPosition) > MAX_PROJECTED_PARTICLE_DISTANCE_SQR)) {
+            // Iron's destination-bearing particles allocate geometry proportional to their length. Reject any
+            // unprojected server-cell coordinate before it can grow Ponder's BufferBuilder without bound.
+            ISSPonderMod.LOGGER.warn("Dropped projected {} particle with invalid endpoint {} from {}",
+                    particle.getType(), embeddedDestination, spawnPosition);
+            return;
+        }
         net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
         if (count == 0) {
             level.addParticle(particle, x, y, z, xOffset * speed, yOffset * speed, zOffset * speed);
@@ -335,6 +350,22 @@ public final class PreviewProjection {
             double vz = random.nextGaussian() * speed;
             level.addParticle(particle, px, py, pz, vx, vy, vz);
         }
+    }
+
+    private static Vec3 embeddedParticleDestination(net.minecraft.core.particles.ParticleOptions particle) {
+        if (particle instanceof ZapParticleOption zap) {
+            return zap.getDestination();
+        }
+        if (particle instanceof SoulfireRayParticleOptions ray) {
+            return ray.getDestination();
+        }
+        if (particle instanceof TraceParticleOptions trace) {
+            return new Vec3(trace.destination.x, trace.destination.y, trace.destination.z);
+        }
+        if (particle instanceof SwirlingParticleOptions swirling) {
+            return embeddedParticleDestination(swirling.particleOptions());
+        }
+        return null;
     }
 
     /**

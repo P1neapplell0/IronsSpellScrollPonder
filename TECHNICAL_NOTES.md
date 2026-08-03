@@ -75,6 +75,26 @@ is a Forge `FakePlayer` placed in a per-player cell in the preview dimension.
 6. Cancel casts still active after 15 seconds through
    `Utils.serverSideCancelCast`.
 
+### FakePlayer Network Compatibility
+
+Forge 47.4.4 constructs every `FakePlayer` with a shared
+`FakePlayer$FakePlayerNetHandler.DUMMY_CONNECTION`. That connection is not
+attached to a Netty channel, so `Connection#channel()` remains null. This is
+normally harmless because the fake handler discards outgoing packets, but
+Forge's `NetworkHooks#getConnectionData` and `getChannelList` dereference the
+channel when `SimpleChannel#isRemotePresent` is used by optional-network
+checks. A mod performing that check during the simulated player's tick can
+therefore crash the preview server.
+
+`PreviewSessionManager#initializeFakeConnection` attaches the shared dummy
+connection to one persistent `EmbeddedChannel` before the simulated player is
+added to the level. It also calls `NetworkHooks#registerClientLoginChannel` to
+populate Forge's `FML_NETVERSION` attribute with `NONE`; this keeps
+`NetworkHooks#getConnectionType` safe for mods that inspect the connection
+type. Other Forge channel attributes remain empty, so remote-channel checks
+return false normally, while the upstream no-op listener keeps virtual packets
+local to the preview process.
+
 The `AbstractSpellProjectionMixin` injects after `AbstractSpell.castSpell` and
 sends `ProjectionCastEffect` with the spell's additional cast data. The client
 then calls `AbstractSpell.onClientCast` in the projected context.
@@ -116,6 +136,21 @@ All server positions must be translated relative to the session origin before
 they reach the client. The Ponder scene is centered at `BlockPos.ZERO`, while the
 server cells are spread far apart to reduce interference between simultaneous
 sessions.
+
+This includes positions nested inside particle options, not only the outer
+particle coordinates. Iron's 3.16.2 stores absolute destinations in
+`ZapParticleOption`, `SoulfireRayParticleOptions`, and `TraceParticleOptions`,
+and `SwirlingParticleOptions` may recursively contain one of them.
+`PreviewSessionManager#projectParticleOptions` translates those endpoints before
+encoding the projection packet. It also translates tinted-cauldron block
+positions and block-backed vanilla vibration destinations.
+
+The client rejects destination-bearing particles whose endpoint is non-finite
+or more than 128 blocks from the projected spawn. This guards against add-ons
+passing an unprojected coordinate to effects such as `ZapParticle`, whose tube
+geometry grows with path length. Without this check, a distant preview-cell
+coordinate can expand Ponder's `BufferBuilder` toward 2 GiB and crash while
+rendering the screen.
 
 The client and server base plates are `7 x 11`, extending two blocks behind the
 caster (`-Z`) and two behind the targets (`+Z`). The floor is symmetrical around
