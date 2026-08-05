@@ -2,6 +2,13 @@
 
 All notable changes to Iron's Spell Scroll Ponder are documented in this file.
 
+## 1.0.3 - 2026-08-06
+
+### Changed
+
+- Relaxed the Minecraft, Forge, loader, Iron's Spellbooks, and Ponder
+  dependency ranges to accept any available version.
+
 ## 1.0.2 - 2026-08-03
 
 This release targets Minecraft 1.20.1 and Forge 47.
