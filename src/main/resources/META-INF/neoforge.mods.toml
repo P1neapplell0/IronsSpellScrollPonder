@@ -29,13 +29,13 @@ side = "BOTH"
 [[dependencies."${mod_id}"]]
 modId = "irons_spellbooks"
 type = "required"
-versionRange = "[1.21.1-3.16.2,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies."${mod_id}"]]
 modId = "ponder"
 type = "required"
-versionRange = "[1.0.87,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "CLIENT"
