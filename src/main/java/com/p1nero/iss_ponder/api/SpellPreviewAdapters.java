@@ -1,5 +1,6 @@
 package com.p1nero.iss_ponder.api;
 
+import com.p1nero.iss_ponder.compat.ExperimentalCompat;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
@@ -20,6 +21,11 @@ public final class SpellPreviewAdapters {
     }
 
     public static SpellPreviewAdapter get(ResourceLocation spellId) {
-        return ADAPTERS.getOrDefault(spellId, DEFAULT);
+        SpellPreviewAdapter registered = ADAPTERS.get(spellId);
+        if (registered != null) {
+            return registered;
+        }
+        SpellPreviewAdapter experimental = ExperimentalCompat.find(spellId);
+        return experimental != null ? experimental : DEFAULT;
     }
 }

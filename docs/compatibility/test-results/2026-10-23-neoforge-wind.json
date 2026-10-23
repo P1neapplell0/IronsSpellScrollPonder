@@ -1,0 +1,138 @@
+{
+  "minecraft": "1.21.1",
+  "loader": "NeoForge 21.1.234",
+  "ironsSpellbooks": "1.21.1-3.16.3",
+  "fixtureProfile": "wind",
+  "addonVersion": "1.0.5",
+  "updatedAt": "2026-10-23T15:19:23.602932Z",
+  "finished": true,
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "wind_spellbooks:aeropic",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:aeropic",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:almighty_push",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:almighty_push",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:iron_slash",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:iron_slash",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tailwind",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tailwind",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tornado",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 91,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tornado",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 93,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_blade",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_blade",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_jump",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_jump",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ]
+}

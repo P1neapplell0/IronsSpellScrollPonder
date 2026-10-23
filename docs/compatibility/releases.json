@@ -1,0 +1,706 @@
+[
+  {
+    "artifact": "winds-spellbooks-irons-spells-n-spellbooks-addon",
+    "title": "Wind's Spellbooks : Iron's Spells 'n Spellbooks Addon",
+    "minecraft": "1.20.1",
+    "modId": "wind_spellbooks",
+    "runtimeVersion": "1.0.3",
+    "projectDownloads": 538109,
+    "file": 8486282,
+    "filename": "wind_spellbooks-1.20.1-1.0.3.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/winds-spellbooks-irons-spells-n-spellbooks-addon/files/8486282",
+    "sha256": "925189907f1f1a925751bf921685769e75c67d36d5ff46d12e2e774468865f61",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47.4.0,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.4.0,)",
+        "required": true
+      },
+      {
+        "mod": "geckolib",
+        "version": "[4.0,)",
+        "required": true
+      },
+      {
+        "mod": "curios",
+        "version": "[5.0,)",
+        "required": true
+      },
+      {
+        "mod": "playeranimator",
+        "version": "[1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20,1.21)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "winds-spellbooks-irons-spells-n-spellbooks-addon",
+    "title": "Wind's Spellbooks : Iron's Spells 'n Spellbooks Addon",
+    "minecraft": "1.21",
+    "modId": "wind_spellbooks",
+    "runtimeVersion": "1.0.5",
+    "projectDownloads": 538109,
+    "file": 8485822,
+    "filename": "wind_spellbooks-1.0.5.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/winds-spellbooks-irons-spells-n-spellbooks-addon/files/8485822",
+    "sha256": "2b3507abfa36df18bd49b289778ce59d1c3e3d9dc10b4e7aae4cbe0756815d40",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.200,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.21.2)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "legendary-spellbooks",
+    "title": "Legendary Spellbooks",
+    "minecraft": "1.20.1",
+    "modId": "legendary_spellbooks",
+    "runtimeVersion": "0.4.1",
+    "projectDownloads": 329969,
+    "file": 8673872,
+    "filename": "legendary_spellbooks-1.20.1+forge-0.4.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/legendary-spellbooks/files/8673872",
+    "sha256": "cb07996d7d8c30da257fc75307ae3a5ea87360e8c8376a1f46b9e13747c1388c",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1]",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.15.0,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "legendary-spellbooks",
+    "title": "Legendary Spellbooks",
+    "minecraft": "1.21.1",
+    "modId": "legendary_spellbooks",
+    "runtimeVersion": "0.3.2",
+    "projectDownloads": 329969,
+    "file": 8255715,
+    "filename": "legendary_spellbooks-1.21.1+neo-0.3.2.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/legendary-spellbooks/files/8255715",
+    "sha256": "c1e5421a621e87f82158ad1fc179277b7053e924fa71c1a8c36ee1e0249872a0",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21, 1.21.2)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.21.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "legendary_monsters",
+        "version": "[1.21.1]",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "cataclysm-spellbooks",
+    "title": "Cataclysm: Spellbooks",
+    "minecraft": "1.20.1",
+    "modId": "cataclysm_spellbooks",
+    "runtimeVersion": "1.2.9-1.20.1",
+    "projectDownloads": 3968602,
+    "file": 7687059,
+    "filename": "cataclysm_spellbooks-1.2.9-1.20.1-all.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/cataclysm-spellbooks/files/7687059",
+    "sha256": "e177494251434c5f04ebc065e6e1c478a327dcd14dd2550bde38adc640ff4ae8",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.21)",
+        "required": true
+      },
+      {
+        "mod": "azurelib",
+        "version": "[3.0,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "cataclysm",
+        "version": "[3.16,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "cataclysm-spellbooks",
+    "title": "Cataclysm: Spellbooks",
+    "minecraft": "1.21.1",
+    "modId": "cataclysm_spellbooks",
+    "runtimeVersion": "1.1.14-1.21",
+    "projectDownloads": 3968602,
+    "file": 8847070,
+    "filename": "cataclysm_spellbooks-1.1.14-1.21.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/cataclysm-spellbooks/files/8847070",
+    "sha256": "a5a0dcad537954f488c862b3409831e0d12b4dfdc50bbfade298cb3d05dff2cf",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.219,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1]",
+        "required": true
+      },
+      {
+        "mod": "azurelib",
+        "version": "[3.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "aces_spell_utils",
+        "version": "[1.1.6,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "to-tweaks-irons-spells",
+    "title": "T.O Magic 'n Extras - Iron's Spells Addon",
+    "minecraft": "1.20.1",
+    "modId": "traveloptics",
+    "runtimeVersion": "6.3.0-1.20.1",
+    "projectDownloads": 8736000,
+    "file": 7424522,
+    "filename": "traveloptics-6.3.0-1.20.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/to-tweaks-irons-spells/files/7424522",
+    "sha256": "878a0fb5a2057de530698fd63091b9fa1c23af0139054af108e9d566840a0fa9",
+    "dependencies": [
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1]",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "cataclysm",
+        "version": "[2.57.,)",
+        "required": true
+      },
+      {
+        "mod": "alexscaves",
+        "version": "[2.0.0,)",
+        "required": true
+      },
+      {
+        "mod": "attributeslib",
+        "version": "[1.3.7,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "to-tweaks-irons-spells",
+    "title": "T.O Magic 'n Extras - Iron's Spells Addon",
+    "minecraft": "1.21.1",
+    "modId": "traveloptics",
+    "runtimeVersion": "4.4.0.1-1.21.1",
+    "projectDownloads": 8736000,
+    "file": 6342780,
+    "filename": "traveloptics-4.4.0.1-1.21.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/to-tweaks-irons-spells/files/6342780",
+    "sha256": "0372b4b8593288726fb0d6e8cdb86202a87677d0c2dafeb96cab50bf057ec298",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.22)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.21.1-3.10.0,)",
+        "required": true
+      },
+      {
+        "mod": "cataclysm",
+        "version": "[2.60.,)",
+        "required": true
+      },
+      {
+        "mod": "apothic_attributes",
+        "version": "[2.6.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "alshanexs-familiars",
+    "title": "Alshanex's Familiars",
+    "minecraft": "1.20.1",
+    "modId": "alshanex_familiars",
+    "runtimeVersion": "1.20.1_v4.1.0",
+    "projectDownloads": 6042234,
+    "file": 9052384,
+    "filename": "alshanex_familiars-1.20.1_v4.1.0.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/alshanexs-familiars/files/9052384",
+    "sha256": "3393bf9d90e7a4368e078afd72660d3e19209375f18584a9a60b841aaa4475ae",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.21)",
+        "required": true
+      },
+      {
+        "mod": "familiarslib",
+        "version": "[1.20.1-1.8,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.16.3,)",
+        "required": true
+      },
+      {
+        "mod": "geckolib",
+        "version": "[4.8.4,)",
+        "required": true
+      },
+      {
+        "mod": "curios",
+        "version": "[5.14.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "alshanexs-familiars",
+    "title": "Alshanex's Familiars",
+    "minecraft": "1.21.1",
+    "modId": "alshanex_familiars",
+    "runtimeVersion": "1.21.1_v5.0",
+    "projectDownloads": 6042234,
+    "file": 9276628,
+    "filename": "alshanex_familiars-1.21.1_v5.0.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/alshanexs-familiars/files/9276628",
+    "sha256": "4760c6aab4b97f01ff4f414042dc633d8fbab4df5f38fa7204cb85ead21cc299",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.22)",
+        "required": true
+      },
+      {
+        "mod": "familiarslib",
+        "version": "[1.0.0,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.21.1-3.14.0,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "hazen-n-stuff",
+    "title": "Hazen 'N Stuff",
+    "minecraft": "1.20.1",
+    "modId": "hazennstuff",
+    "runtimeVersion": "1.1.2",
+    "projectDownloads": 3532405,
+    "file": 7501581,
+    "filename": "hazennstuff-watered-down-edition-1.1.2.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/hazen-n-stuff/files/7501581",
+    "sha256": "cce49aa74707634ac78e955442eb6a75e2122338db7f7b91da0286f375014f90",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.21)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "hazen-n-stuff",
+    "title": "Hazen 'N Stuff",
+    "minecraft": "1.21.1",
+    "modId": "hazennstuff",
+    "runtimeVersion": "1.4.0.14",
+    "projectDownloads": 3532405,
+    "file": 8277644,
+    "filename": "hazennstuff-1.4.0.14.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/hazen-n-stuff/files/8277644",
+    "sha256": "eeacf5b5536bbe2691e1687902a8c37cff775829457db6e116261bbff7a00462",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1, 1.22)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "*",
+        "required": true
+      },
+      {
+        "mod": "hazentouvelib",
+        "version": "*",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "gtbcs-geomancy-plus",
+    "title": "GTBC's Geomancy Plus - Iron's Spells Addon",
+    "minecraft": "1.20.1",
+    "modId": "gtbcs_geomancy_plus",
+    "runtimeVersion": "2.0.0-1.20.1",
+    "projectDownloads": 6208724,
+    "file": 7580390,
+    "filename": "gtbcs_geomancy_plus-2.0.0-1.20.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/gtbcs-geomancy-plus/files/7580390",
+    "sha256": "ffefab18ae5480ab13a1c1e98126d467040de1742ce9ae726c30dedf1dd1b721",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47.4.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.21)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "gtbcs_spell_lib",
+        "version": "[1.3.0-1.20.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "gtbcs-spellbooks",
+    "title": "GTBC's Spellbooks - Iron's Spells Addon",
+    "minecraft": "1.21.1",
+    "modId": "gametechbcs_spellbooks",
+    "runtimeVersion": "3.0.0-1.21.1",
+    "projectDownloads": 2023711,
+    "file": 6312018,
+    "filename": "gametechbcs_spellbooks-3.0.0-1.21.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/gtbcs-spellbooks/files/6312018",
+    "sha256": "e8e5e8f605d08ec56f64de1e54dcecdb2dc95eb4d14f910db5a5b80353346d83",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.22)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.21-3.10.0,)",
+        "required": true
+      },
+      {
+        "mod": "gtbcs_spell_lib",
+        "version": "[1.0.0-1.21.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "deeper-and-darker-spellbooks",
+    "title": "Deeper and Darker: Spellbooks",
+    "minecraft": "1.20.1",
+    "modId": "darkermagic",
+    "runtimeVersion": "1.3.1-1.20.1",
+    "projectDownloads": 462060,
+    "file": 7709065,
+    "filename": "darkermagic-1.3.1-1.20.1-ver.b.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/deeper-and-darker-spellbooks/files/7709065",
+    "sha256": "d3dfbafa13d8e7caf98882f76702c87a8a05f4c61b399021ffd1423cd391928a",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "deeperdarker",
+        "version": "[1.3.3,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "ice-and-fire-spellbooks",
+    "title": "Ice and Fire: Spellbooks",
+    "minecraft": "1.20.1",
+    "modId": "ice_and_fire_spellbooks",
+    "runtimeVersion": "2.3.2-1.20.1",
+    "projectDownloads": 8486930,
+    "file": 7413433,
+    "filename": "ice_and_fire_spellbooks-2.3.2-1.20.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-spellbooks/files/7413433",
+    "sha256": "c15f6234274407976c791f2d1b3776d0aacc5138341aaf81367bd9e47a7f13a5",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47.0.46,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.20.2)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-2.2.2,)",
+        "required": true
+      },
+      {
+        "mod": "iceandfire",
+        "version": "[2.1.13-1.20.1-beta-4,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "illage-and-spell-age",
+    "title": "Illage and Spell-age: Iron's Spells Addon",
+    "minecraft": "1.20.1",
+    "modId": "ias_spellbooks",
+    "runtimeVersion": "1.1.0-1.20.1",
+    "projectDownloads": 2181995,
+    "file": 7003776,
+    "filename": "ias_spellbooks-1.1.0-1.20.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/illage-and-spell-age/files/7003776",
+    "sha256": "6fc4b4b498bff7ebfde388ae8c02a7795d9a7bd9e8a4f93decb74d4ef5ff7e3f",
+    "dependencies": [
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1]",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.4.0.10,)",
+        "required": true
+      },
+      {
+        "mod": "illageandspillage",
+        "version": "[1.2.8,)",
+        "required": true
+      },
+      {
+        "mod": "gtbcs_spell_lib",
+        "version": "[1.3.0-1.20.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "deeper-and-darker-spellbooks",
+    "title": "Deeper and Darker: Spellbooks",
+    "minecraft": "1.21.1",
+    "modId": "darkermagic",
+    "runtimeVersion": "1.3.3-1.21.1",
+    "projectDownloads": 462060,
+    "file": 7897469,
+    "filename": "darkermagic-1.3.3-1.21.1-ver.b.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/deeper-and-darker-spellbooks/files/7897469",
+    "sha256": "b8e73636dca82c849591a6d7769e7b39a1b20f75f82637656604027f5f947bcf",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.219,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1]",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.21.1-3.15.0,)",
+        "required": true
+      },
+      {
+        "mod": "deeperdarker",
+        "version": "[1.3,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "gtbcs-geomancy-plus",
+    "title": "GTBC's Geomancy Plus - Iron's Spells Addon",
+    "minecraft": "1.21.1",
+    "modId": "gtbcs_geomancy_plus",
+    "runtimeVersion": "1.1.0-1.21.1",
+    "projectDownloads": 6208724,
+    "file": 7041615,
+    "filename": "gtbcs_geomancy_plus-1.1.0-1.21.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/gtbcs-geomancy-plus/files/7041615",
+    "sha256": "b645cf8852b3453f2d7ccc10cd4b4f897edcc6f857f912042dc9f4d96c8e8bf7",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1.0,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.22)",
+        "required": true
+      },
+      {
+        "mod": "gtbcs_spell_lib",
+        "version": "[1.3.1-1.21.1,)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "alexs-caves-spellbooks",
+    "title": "Alex's Caves: Spellbooks",
+    "minecraft": "1.20.1",
+    "modId": "alexs_caves_spellbooks",
+    "runtimeVersion": "1.2.0",
+    "projectDownloads": 440505,
+    "file": 9013630,
+    "filename": "alexs_caves_spellbooks-1.2.0.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/alexs-caves-spellbooks/files/9013630",
+    "sha256": "323f681a654b7659b975b93c9a24ab3f88ff9d4db4f2d3f5790e02a86cf516d5",
+    "dependencies": [
+      {
+        "mod": "forge",
+        "version": "[47,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.20.1,1.21)",
+        "required": true
+      },
+      {
+        "mod": "alexscaves",
+        "version": "[2.0.0,)",
+        "required": true
+      },
+      {
+        "mod": "irons_spellbooks",
+        "version": "[1.20.1-3.0.0,1.20.1-4.0.0)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "artifact": "alexs-caves-spellbooks",
+    "title": "Alex's Caves: Spellbooks",
+    "minecraft": "1.21.1",
+    "modId": "alexs_caves_spellbooks",
+    "runtimeVersion": "1.2.1",
+    "projectDownloads": 440505,
+    "file": 9239413,
+    "filename": "alexs_caves_spellbooks-1.2.1.jar",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/alexs-caves-spellbooks/files/9239413",
+    "sha256": "230aff5232063818edf7b41b69e2597194d0031db87138c447a6d337d2c72aa6",
+    "dependencies": [
+      {
+        "mod": "neoforge",
+        "version": "[21.1,)",
+        "required": true
+      },
+      {
+        "mod": "minecraft",
+        "version": "[1.21.1,1.22)",
+        "required": true
+      }
+    ]
+  }
+]

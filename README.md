@@ -21,6 +21,40 @@ particles, sounds, block changes, cast state, and reviewed visual packets into
 the Ponder scene. An ordinary add-on spell that uses Iron's standard casting and
 world APIs does not need a dedicated integration.
 
+### Experimental complex-spell adapters (1.1.0)
+
+Optional integrations add follow-up actions for selected spells from Legendary,
+Cataclysm Spellbooks, T.O Magic (Forge), Alshanex's Familiars, Hazen 'n
+Stuff (NeoForge), GTBC's Spellbooks (NeoForge), Geomancy Plus and Alex's Caves
+Spellbooks. Ordinary spells keep using the generic preview. No add-on becomes
+a required dependency.
+
+This feature is **disabled by default**. Set `experimental.enabled = true` in
+`config/iss_ponder-common.toml` and restart to opt in. Each add-on also has its
+own `experimental.addons.<modid>` switch. Disabled providers are not loaded;
+unknown add-on versions are skipped, and matching rules are guarded against
+runtime/linkage failures. Explicit adapters registered by add-on authors win.
+These guards cannot repair arbitrary exceptions in the add-on's own spell code.
+
+Forge also offers a separate, default-off `experimental.cataclysmLegacyPatch`
+for Cataclysm Spellbooks 1.2.9 with Cataclysm 3.31. It requires the master switch,
+is skipped when BielGG's Spells is installed, and does not exist on NeoForge.
+See the [compatibility guide](docs/compatibility/README.md) for the exact audited
+versions, configuration, startup recovery instructions and limitations;
+[SPELL_AUDIT.md](docs/compatibility/SPELL_AUDIT.md) records individual spell
+reviews. Real-client registry smoke runs and remaining upstream restrictions
+are recorded in the development guide; complete visual/mechanical and
+dedicated-server verification is still required. T.O's deprecated 1.21.1 release is
+not included in the supported experimental profiles.
+
+For opt-in development dependencies, isolated add-on profiles and a real-client
+preview runner, see [Development testing](docs/compatibility/DEVELOPMENT_TESTING.md).
+These fixtures are not release dependencies. The guide separates actual
+rendered-complete cases, blocked cases and outstanding visual review;
+compilation alone does not certify demonstrations.
+
+### Integration API for add-on authors
+
 Complex spells may require an adapter when their important behavior happens
 after the initial cast, such as a recast, a later physical attack, an effect
 removal callback, or another gameplay interaction. Add-on authors can register a
@@ -47,7 +81,10 @@ SpellPreviewAdapters.register(
 
 The adapter lifecycle also provides `primaryTargetType` for spells that require
 a specific target, `initialBlocks` for origin-relative scene structures,
-`onSceneReady`, `beforeRecast`, and `onSessionClosed`. `SpellPreviewContext`
+`onSceneReady`, `beforeCast`, `beforeRecast`, and `onSessionClosed`. Override
+`castSource` only when normal validation requires a source other than COMMAND
+(for example, a book-exclusive spell with its required Curios book equipped).
+`SpellPreviewContext`
 exposes bounded helpers for common interactions. Return `false` from
 `allowsSimulation` for spells that cannot be isolated safely, such as persistent
 portals or cross-dimension travel. Custom client-only packets are not
@@ -77,8 +114,8 @@ for the complete API.
 This branch targets:
 
 - Minecraft `1.21.1`
-- NeoForge `21.1.234` or newer in the NeoForge 21.1 line
-- Iron's Spells 'n Spellbooks `1.21.1-3.16.2`
+- NeoForge `21.1.248` (development baseline; dependency metadata remains permissive)
+- Iron's Spells 'n Spellbooks `1.21.1-3.16.3 (development baseline; dependency metadata remains permissive)`
 - Java `21`
 
 Ponder `1.0.87+mc1.21.1` and Flywheel `1.0.6` are packaged with Jar-in-Jar and do not
@@ -130,7 +167,7 @@ The `1.21.1` branch uses ModDevGradle `2.0.143`, Gradle `8.11.1`, Parchment
 ./gradlew runClient
 ```
 
-The release artifact is `build/libs/iss_ponder-neoforge1.21.1-1.0.1.jar`.
+The release artifact is `build/libs/iss_ponder-neoforge1.21.1-1.1.0.jar`.
 
 ## License
 

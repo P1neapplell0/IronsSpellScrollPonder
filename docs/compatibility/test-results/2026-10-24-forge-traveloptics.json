@@ -1,0 +1,628 @@
+{
+  "updatedAt": "2026-10-23T16:33:26.068408Z",
+  "finished": true,
+  "runId": "1792773188008",
+  "fixtureIdentity": "{\n  \"minecraft\": \"1.20.1\",\n  \"profile\": [\n    \"traveloptics\"\n  ],\n  \"mode\": \"on\",\n  \"scope\": \"all\",\n  \"fixtures\": [\n    {\n      \"key\": \"traveloptics\",\n      \"slug\": \"to-tweaks-irons-spells\",\n      \"project\": 1046916,\n      \"file\": 7424522,\n      \"filename\": \"traveloptics-6.3.0-1.20.1.jar\",\n      \"sha256\": \"878a0fb5a2057de530698fd63091b9fa1c23af0139054af108e9d566840a0fa9\",\n      \"modId\": \"traveloptics\"\n    },\n    {\n      \"key\": \"cataclysm_traveloptics\",\n      \"slug\": \"lendercataclysm\",\n      \"project\": 551586,\n      \"file\": 6906993,\n      \"filename\": \"L_Enders_Cataclysm-3.16.jar\",\n      \"sha256\": \"ac1028f4bfaa2629d80ce3c1f26e28ceec2e6f2aaaac3bb03dd8957856d2e7ca\",\n      \"modId\": \"cataclysm\"\n    },\n    {\n      \"key\": \"lionfish_traveloptics\",\n      \"slug\": \"lionfish-api\",\n      \"project\": 1001614,\n      \"file\": 7923140,\n      \"filename\": \"lionfishapi-2.7.jar\",\n      \"sha256\": \"aa3191415ca5263a86b7baedead2aeaffaa94f093dcd42381e4b258e450130e3\",\n      \"modId\": \"lionfishapi\"\n    },\n    {\n      \"key\": \"alexscaves_base\",\n      \"slug\": \"alexs-caves\",\n      \"project\": 924854,\n      \"file\": 5848216,\n      \"filename\": \"alexscaves-2.0.2.jar\",\n      \"sha256\": \"131e205ce3eed384d701b336d8a0d4a671108ed56b6eff6014f0e407db2997f0\",\n      \"modId\": \"alexscaves\"\n    },\n    {\n      \"key\": \"citadel\",\n      \"slug\": \"citadel\",\n      \"project\": 331936,\n      \"file\": 7476570,\n      \"filename\": \"citadel-2.6.3-1.20.1.jar\",\n      \"sha256\": \"56c7ab87348a5292583aac787b6cf11b5193e77f02af1d17ea75a96f8640b3ce\",\n      \"modId\": \"citadel\"\n    },\n    {\n      \"key\": \"attributes\",\n      \"slug\": \"apothic-attributes\",\n      \"project\": 898963,\n      \"file\": 5634071,\n      \"filename\": \"ApothicAttributes-1.20.1-1.3.7.jar\",\n      \"sha256\": \"68487b11c0d4e2f67a85f2b04bf65e99ac15294f2923f4391f83e9542293187a\",\n      \"modId\": \"attributeslib\"\n    },\n    {\n      \"key\": \"placebo\",\n      \"slug\": \"placebo\",\n      \"project\": 283644,\n      \"file\": 6274231,\n      \"filename\": \"Placebo-1.20.1-8.6.3.jar\",\n      \"sha256\": \"1cdf906cfbcbb5e5be2ef1bb721f79a24b01bd2ac559c8cdbfb7693f62421571\",\n      \"modId\": \"placebo\"\n    }\n  ]\n}",
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "traveloptics:abyssal_blast",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 82,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:aerial_collapse",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:annihilation",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 126,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:apex_harvest",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:aqua_missiles",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 152,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:ashen_breath",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:astral_sense",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:axe_of_the_doomed",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:blackout",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 71,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:blink",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:blood_howl",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 73,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:bubble_spray",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 131,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:burning_judgment",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 83,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:call_forth_the_dead_king",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 330,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:conjure_void_tomes",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 82,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:coral_barrage",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 65,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:cursed_minefield",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 37,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:cursed_revenants",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:death_laser",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:despair",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 79,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:eek",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:em_pulse",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:eternal_sentinel",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 113,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:extinction",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:flames_reborn",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:flood_slash",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:floodgate",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:galena_shatter",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 48,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:gyro_slash",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:halberd_horizon",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 144,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:herald_of_acropolis",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 133,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:hydroshot",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:ignited_onslaught",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:lava_bomb",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 82,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:lingering_strain",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:magnetron_deployment",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 93,
+      "peakProjectedEntities": 15,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:mechanized_predator",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 111,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:meteor_storm",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 46,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:nocturnal_swarm",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 114,
+      "peakProjectedEntities": 14,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:nullflare",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 146,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:orbital_void",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 19,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:overflow",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 49,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:primal_pack",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 113,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:primordial_steed",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 133,
+      "peakProjectedEntities": 12,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:psychic_bolt",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 64,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:rainfall",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 71,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:rapid_laser",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 133,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:reversal",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 55,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:serpentide",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 51,
+      "peakProjectedEntities": 16,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:shadowed_miasma",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 58,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:shear_of_the_stars",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 93,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:skypiercer",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:spectral_blink",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:stele_cascade",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 108,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:sticky_steed_summon",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 98,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:summon_desert_dwellers",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:supernova",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:sword_of_the_ancients",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:the_forgotten_beast",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 123,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:the_howling_tempest",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 233,
+      "peakProjectedEntities": 23,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:tidal_grasp",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 48,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:tsunami",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 46,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:vigor_siphon",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 61,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:void_eruption",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 75,
+      "peakProjectedEntities": 103,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:vortex_of_the_deep",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 71,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:vortex_punch",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 47,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:echo_of_the_abyss",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 122,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "traveloptics:jet_steam",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 55,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ],
+  "minecraft": "1.20.1",
+  "loader": "Forge 47.4.4",
+  "ironsSpellbooks": "1.20.1-3.16.3",
+  "cataclysm": "3.16",
+  "lionfish": "2.7",
+  "evidenceDirectory": "run/compat/traveloptics-on",
+  "archiveNote": "All 68 actual enabled registered T.O spells at maximum configured level. Resumed completed rows use identical fixture identity. Not full visual/mechanical certification."
+}

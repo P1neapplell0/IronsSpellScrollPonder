@@ -17,7 +17,6 @@ import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import io.redspace.ironsspellbooks.api.spells.SpellAnimations;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.particle.SoulfireRayParticleOptions;
 import io.redspace.ironsspellbooks.particle.SwirlingParticleOptions;
 import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
@@ -83,6 +82,7 @@ public final class PreviewProjection {
     private static final double MAX_PROJECTED_PARTICLE_DISTANCE_SQR = 128.0 * 128.0;
 
     private static final Map<Integer, Entity> ENTITIES = new HashMap<>();
+    private static final java.util.Set<EntityType<?>> UNRENDERED_TYPES = new java.util.HashSet<>();
     private static PonderLevel level;
     private static PonderScene scene;
     private static ClientLevel projectedClientLevel;
@@ -105,6 +105,10 @@ public final class PreviewProjection {
     private static boolean active;
 
     private PreviewProjection() {
+    }
+
+    public static boolean isProjectionLevel(PonderLevel candidate) {
+        return candidate == level;
     }
 
     public static void start(double ignoredX, double ignoredY, double ignoredZ) {
@@ -359,8 +363,9 @@ public final class PreviewProjection {
         if (particle instanceof ZapParticleOption zap) {
             return zap.getDestination();
         }
-        if (particle instanceof SoulfireRayParticleOptions ray) {
-            return ray.getDestination();
+        Vec3 optional = com.p1nero.iss_ponder.network.OptionalParticleOptions.destination(particle);
+        if (optional != null) {
+            return optional;
         }
         if (particle instanceof TraceParticleOptions trace) {
             return new Vec3(trace.destination.x, trace.destination.y, trace.destination.z);
@@ -757,6 +762,31 @@ public final class PreviewProjection {
                 .setColor(red, green, blue, alpha);
     }
 
+    private static void renderSceneWithAvailableRenderers(PonderScene scene, SuperRenderTypeBuffer buffer,
+                                                          GuiGraphics graphics, float partialTick) {
+        // Reference: PonderLevel#renderEntity dereferences getRenderer before dispatching the draw.
+        // Addons can spawn server-only helpers (e.g. Wind's DashStopEntity) without a renderer.
+        // Preserve their projection/ticking/event state; hide them only for this drawing pass.
+        var entities = level.getEntityList();
+        var dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        java.util.List<Entity> hidden = new java.util.ArrayList<>();
+        for (Entity entity : entities) {
+            if (dispatcher.getRenderer(entity) == null) {
+                hidden.add(entity);
+                if (UNRENDERED_TYPES.add(entity.getType())) {
+                    ISSPonderMod.LOGGER.debug("Keeping preview helper {} out of Ponder's render pass: no renderer",
+                            net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
+                }
+            }
+        }
+        entities.removeAll(hidden);
+        try {
+            scene.renderScene(buffer, graphics, partialTick);
+        } finally {
+            entities.addAll(hidden);
+        }
+    }
+
     private static final class RenderSystemFacade {
         private static void render(PonderScene scene, SuperRenderTypeBuffer buffer, GuiGraphics graphics,
                                    int width, int height, float partialTick, Vec3 pan) {
@@ -782,7 +812,7 @@ public final class PreviewProjection {
                 scene.getTransform().apply(pose, partialTick);
                 pose.translate(pan.x, pan.y, pan.z);
                 scene.getTransform().updateSceneRVE(partialTick);
-                scene.renderScene(buffer, graphics, partialTick);
+                renderSceneWithAvailableRenderers(scene, buffer, graphics, partialTick);
                 renderBloodSiphon(pose, buffer, partialTick);
                 sceneRenderCompleted = true;
             } finally {

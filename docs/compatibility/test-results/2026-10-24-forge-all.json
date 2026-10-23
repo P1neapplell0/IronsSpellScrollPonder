@@ -1,0 +1,1379 @@
+{
+  "updatedAt": "2026-10-23T16:17:33.758230Z",
+  "finished": true,
+  "runId": "1792772216078",
+  "fixtureIdentity": "{\n  \"minecraft\": \"1.20.1\",\n  \"profile\": [\n    \"all\"\n  ],\n  \"mode\": \"on\",\n  \"scope\": \"all\",\n  \"fixtures\": [\n    {\n      \"key\": \"wind\",\n      \"slug\": \"winds-spellbooks-irons-spells-n-spellbooks-addon\",\n      \"project\": 1519158,\n      \"file\": 8486282,\n      \"filename\": \"wind_spellbooks-1.20.1-1.0.3.jar\",\n      \"sha256\": \"925189907f1f1a925751bf921685769e75c67d36d5ff46d12e2e774468865f61\",\n      \"modId\": \"wind_spellbooks\"\n    },\n    {\n      \"key\": \"legendary\",\n      \"slug\": \"legendary-spellbooks\",\n      \"project\": 1478875,\n      \"file\": 8673872,\n      \"filename\": \"legendary_spellbooks-1.20.1+forge-0.4.1.jar\",\n      \"sha256\": \"cb07996d7d8c30da257fc75307ae3a5ea87360e8c8376a1f46b9e13747c1388c\",\n      \"modId\": \"legendary_spellbooks\"\n    },\n    {\n      \"key\": \"monsters\",\n      \"slug\": \"legendary-monsters\",\n      \"project\": 944035,\n      \"file\": 8902349,\n      \"filename\": \"legendarymonsters-2.2.3 MC 1.20.1.jar\",\n      \"sha256\": \"a90a3009e502ba4f235e5bd9a7493c2307e4060f0ee21fd02e62f9893912321c\",\n      \"modId\": \"legendary_monsters\"\n    },\n    {\n      \"key\": \"cataclysm\",\n      \"slug\": \"cataclysm-spellbooks\",\n      \"project\": 1099461,\n      \"file\": 7687059,\n      \"filename\": \"cataclysm_spellbooks-1.2.9-1.20.1-all.jar\",\n      \"sha256\": \"e177494251434c5f04ebc065e6e1c478a327dcd14dd2550bde38adc640ff4ae8\",\n      \"modId\": \"cataclysm_spellbooks\"\n    },\n    {\n      \"key\": \"cataclysm_base\",\n      \"slug\": \"lendercataclysm\",\n      \"project\": 551586,\n      \"file\": 8246047,\n      \"filename\": \"L_Enders_Cataclysm-3.31.jar\",\n      \"sha256\": \"c29dcf940168208517b72f2d9965828b106a6b94cbea55d5001558c69a27b362\",\n      \"modId\": \"cataclysm\"\n    },\n    {\n      \"key\": \"lionfish\",\n      \"slug\": \"lionfish-api\",\n      \"project\": 1001614,\n      \"file\": 8095554,\n      \"filename\": \"lionfishapi-3.0.jar\",\n      \"sha256\": \"d2fdaf7e9bc53fde7da4a86ab17018a3ed6c16fc2d46de5054e5a83e2bef7871\",\n      \"modId\": \"lionfishapi\"\n    },\n    {\n      \"key\": \"azurelib\",\n      \"slug\": \"azurelib\",\n      \"project\": 817423,\n      \"file\": 9213706,\n      \"filename\": \"azurelib-neo-1.20.1-3.1.24.jar\",\n      \"sha256\": \"982bcf03d208c446baca002f8948fccbf853f71e2121f32b365f1565c4541add\",\n      \"modId\": \"azurelib\"\n    },\n    {\n      \"key\": \"familiars\",\n      \"slug\": \"alshanexs-familiars\",\n      \"project\": 1171602,\n      \"file\": 9052384,\n      \"filename\": \"alshanex_familiars-1.20.1_v4.1.0.jar\",\n      \"sha256\": \"3393bf9d90e7a4368e078afd72660d3e19209375f18584a9a60b841aaa4475ae\",\n      \"modId\": \"alshanex_familiars\"\n    },\n    {\n      \"key\": \"familiarslib\",\n      \"slug\": \"familiarslib\",\n      \"project\": 1316458,\n      \"file\": 9052376,\n      \"filename\": \"familiarslib-1.20.1-1.9.jar\",\n      \"sha256\": \"a9fab7cff07ff2300e3f20a7a07f5941ce61a1e28e63ebf400d51851ff2cea4f\",\n      \"modId\": \"familiarslib\"\n    },\n    {\n      \"key\": \"geomancy\",\n      \"slug\": \"gtbcs-geomancy-plus\",\n      \"project\": 1352485,\n      \"file\": 7580390,\n      \"filename\": \"gtbcs_geomancy_plus-2.0.0-1.20.1.jar\",\n      \"sha256\": \"ffefab18ae5480ab13a1c1e98126d467040de1742ce9ae726c30dedf1dd1b721\",\n      \"modId\": \"gtbcs_geomancy_plus\"\n    },\n    {\n      \"key\": \"spelllib\",\n      \"slug\": \"gtbcs-spelllib\",\n      \"project\": 1194714,\n      \"file\": 7584987,\n      \"filename\": \"gtbcs_spell_lib-1.5.0-1.20.1.jar\",\n      \"sha256\": \"33cf72f9863f1b601e9562a40f1bd3a15f799178dcd7918778e4df3ede3b921e\",\n      \"modId\": \"gtbcs_spell_lib\"\n    },\n    {\n      \"key\": \"mowzies\",\n      \"slug\": \"mowzies-mobs\",\n      \"project\": 250498,\n      \"file\": 6586086,\n      \"filename\": \"mowziesmobs-1.7.3.jar\",\n      \"sha256\": \"4d54374808bb4c91dc2660d67a2558dd4a79eb56ae4eeeec4e4d7446973cb0ba\",\n      \"modId\": \"mowziesmobs\"\n    },\n    {\n      \"key\": \"alexscaves\",\n      \"slug\": \"alexs-caves-spellbooks\",\n      \"project\": 1429793,\n      \"file\": 9013630,\n      \"filename\": \"alexs_caves_spellbooks-1.2.0.jar\",\n      \"sha256\": \"323f681a654b7659b975b93c9a24ab3f88ff9d4db4f2d3f5790e02a86cf516d5\",\n      \"modId\": \"alexs_caves_spellbooks\"\n    },\n    {\n      \"key\": \"alexscaves_base\",\n      \"slug\": \"alexs-caves\",\n      \"project\": 924854,\n      \"file\": 5848216,\n      \"filename\": \"alexscaves-2.0.2.jar\",\n      \"sha256\": \"131e205ce3eed384d701b336d8a0d4a671108ed56b6eff6014f0e407db2997f0\",\n      \"modId\": \"alexscaves\"\n    },\n    {\n      \"key\": \"citadel\",\n      \"slug\": \"citadel\",\n      \"project\": 331936,\n      \"file\": 7476570,\n      \"filename\": \"citadel-2.6.3-1.20.1.jar\",\n      \"sha256\": \"56c7ab87348a5292583aac787b6cf11b5193e77f02af1d17ea75a96f8640b3ce\",\n      \"modId\": \"citadel\"\n    },\n    {\n      \"key\": \"deeper\",\n      \"slug\": \"deeper-and-darker-spellbooks\",\n      \"project\": 1432746,\n      \"file\": 7709065,\n      \"filename\": \"darkermagic-1.3.1-1.20.1-ver.b.jar\",\n      \"sha256\": \"d3dfbafa13d8e7caf98882f76702c87a8a05f4c61b399021ffd1423cd391928a\",\n      \"modId\": \"darkermagic\"\n    },\n    {\n      \"key\": \"deeper_base\",\n      \"slug\": \"deeperdarker\",\n      \"project\": 659011,\n      \"file\": 5906086,\n      \"filename\": \"deeperdarker-forge-1.20.1-1.3.3.jar\",\n      \"sha256\": \"d07dc6155e0b751c7d1ec26dabb7284a41798c85e48b0d809fd1254e489ed455\",\n      \"modId\": \"deeperdarker\"\n    },\n    {\n      \"key\": \"illage\",\n      \"slug\": \"illage-and-spell-age\",\n      \"project\": 1152648,\n      \"file\": 7003776,\n      \"filename\": \"ias_spellbooks-1.1.0-1.20.1.jar\",\n      \"sha256\": \"6fc4b4b498bff7ebfde388ae8c02a7795d9a7bd9e8a4f93decb74d4ef5ff7e3f\",\n      \"modId\": \"ias_spellbooks\"\n    },\n    {\n      \"key\": \"illage_base\",\n      \"slug\": \"illage-and-spillage-finally-ported\",\n      \"project\": 1079714,\n      \"file\": 6156035,\n      \"filename\": \"illageandspillagerespillaged-1.2.8.jar\",\n      \"sha256\": \"295bdc3948c4ac0cd2621d835324003441ad1ad61fe6e430e3a16419335cc133\",\n      \"modId\": \"illageandspillage\"\n    }\n  ]\n}",
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "alexs_caves_spellbooks:aspect_of_tremorsaurus",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alexs_caves_spellbooks:summon_grottoceratops",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 151,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alexs_caves_spellbooks:summon_vesper",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:birds_spell",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:default_note",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 80,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:end_mayhem",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 71,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:explosion_melody",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 63,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:fire_fist",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:guardian_angel",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 61,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:harp_symphony",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:ice_age",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 136,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:ice_chamber",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:lullaby",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 330,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:megido",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 13,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:music_bolt",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:sonata",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 330,
+      "peakProjectedEntities": 19,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:summon_shadows",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:abyss_fireball",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:abyssal_blast",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 93,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:abyssal_predator",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:abyssal_slash",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 48,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:aerial_assault",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 192,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:amethyst_puncture",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:ashen_breath",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:atomic_laser",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:bone_storm",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 65,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:comet_shower",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 40,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_amethyst_crab",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 106,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_clawdian",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_coral_golem",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_coralssus",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 63,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_ignited_reinforcement",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_koboldiator",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:conjure_thralls",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 111,
+      "peakProjectedEntities": 14,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:construct_prowler",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 113,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:construct_watchers",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:cryopiercer",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 33,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:cursed_rush",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 24,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:ddos",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 57,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:depth_charge",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 142,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:desert_winds",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:dimensional_rift",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 73,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:disabling_swipe",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 115,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:dos_swarm",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:emp_blast",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 51,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:final_rend",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 109,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:flash_bang",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:forgone_rage",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:gear_shift",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:gravitation_pull",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:gravity_storm",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:hardware_update",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:hellish_blade",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:hemorrhaging_impact",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:incineration",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 14,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:infernal_strike",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:intrusion_prevention_system",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 47,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:laserbolt",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 100,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:lock_on",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:malevolent_battlefield",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 129,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:meteor_spew",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 141,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:missile_launch",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 20,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:monolith_crash",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 73,
+      "peakProjectedEntities": 68,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:overcharged",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:parting_shot",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:phantasmal_blade",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 99,
+      "peakProjectedEntities": 46,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:pharaohs_wrath",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:piercing_bone",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 14,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:pilfer",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:quick_strike",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 95,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:reboot",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:rewire",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:sandstorm",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 57,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:scorched_earth",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:shutdown",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:software_update",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:summon_koboleton",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:surveillance_drone",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:tectonic_tremble",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 47,
+      "peakProjectedEntities": 21,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:tidal_grab",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:void_beam",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:void_bulwark",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 51,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:void_rune",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 22,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "darkermagic:summoned_sculk_centipede",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "darkermagic:summoned_sculk_snapper",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 73,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "darkermagic:summoned_shattered",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "darkermagic:summoned_warden",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 102,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:chunker",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:crystalline_conduit",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:dripstone_bolt",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:eroding_boulder",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 73,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:fissure",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:geo_conductor",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 57,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:petrivise",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 45,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:pillar_of_the_resounding_earth",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 53,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:seismic_surf",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:solar_beam",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:solar_chorus",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 13,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:solar_storm",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:tremor_spike",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 99,
+      "peakProjectedEntities": 34,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:tremor_step",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:weeping_cluster",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "gtbcs_geomancy_plus:weeping_wall",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 19,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:blazing_imprint",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:dragline",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:thoths_witness",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:hellish_horde",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:pumpkin_spice",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 46,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:restorative_rain",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 120,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:silken_breath",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 132,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:snack_attack",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 46,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:zoom_n_boom",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:ambush_thorns",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_arrow",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 62,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_beam",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_bomb",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 58,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_resonance",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 108,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_shockwave",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 20,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:cloud_rail",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 16,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:cloud_ring",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 77,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:collapsed_kingdoms_legion",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:cumulo_charge",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flame_eater",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flame_sector",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 50,
+      "peakProjectedEntities": 42,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flameborn_drift",
+      "level": 7,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:fossilized_fury",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 112,
+      "peakProjectedEntities": 10,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:glacier_eruption",
+      "level": 7,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:glacier_ringburst",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 51,
+      "peakProjectedEntities": 28,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:hematite_trishula",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 92,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:nimbus_array",
+      "level": 7,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 51,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:overgrown_shockwave",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 137,
+      "peakProjectedEntities": 148,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:possessed_soul_blade",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 21,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:possessed_wing",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 52,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:quad_tornado",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:release_riftwalker_predator",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 131,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:sentinel_saturation",
+      "level": 2,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 91,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:summon_flameborn_knights",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 91,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:thunder_fanburst",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 50,
+      "peakProjectedEntities": 16,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:tornado",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 57,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:triple_nimbus_array",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 50,
+      "peakProjectedEntities": 17,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:aeropic",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:almighty_push",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:iron_slash",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 56,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tailwind",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:tornado",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 93,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_blade",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "wind_spellbooks:wind_jump",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:handemic",
+      "level": 5,
+      "result": "SKIPPED_BY_SAFETY_POLICY",
+      "ticks": 10,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.restricted",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:spirits_chosen",
+      "level": 5,
+      "result": "SKIPPED_BY_SAFETY_POLICY",
+      "ticks": 10,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.restricted",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "ias_spellbooks:venomous_reborn",
+      "level": 2,
+      "result": "SKIPPED_BY_SAFETY_POLICY",
+      "ticks": 10,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.restricted",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_geyser",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 153,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:energy_beam",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 77,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ],
+  "archiveNote": "Real Forge 47.4.4 client with Iron 3.16.3; maximum configured level for every registered enabled spell in the all profile. Resumed successful cases retain the identical fixture identity. Three Illage safety restrictions are NOT effect-test passes.",
+  "evidenceDirectory": "run/compat/all-on"
+}

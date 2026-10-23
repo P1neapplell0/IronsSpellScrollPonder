@@ -7,6 +7,7 @@ import com.p1nero.iss_ponder.api.SpellPreviewAdapters;
 import com.p1nero.iss_ponder.api.SpellPreviewContext;
 import com.p1nero.iss_ponder.mixin.WallOfFireEntityAccessor;
 import com.p1nero.iss_ponder.network.ModNetwork;
+import com.p1nero.iss_ponder.network.OptionalParticleOptions;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -29,9 +30,7 @@ import io.redspace.ironsspellbooks.network.particles.ShockwaveParticlesPacket;
 import io.redspace.ironsspellbooks.network.particles.TeleportParticlesPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStartTrackingPacket;
 import io.redspace.ironsspellbooks.network.spells.GuidingBoltManagerStopTrackingPacket;
-import io.redspace.ironsspellbooks.particle.SoulfireRayParticleOptions;
 import io.redspace.ironsspellbooks.particle.SwirlingParticleOptions;
-import io.redspace.ironsspellbooks.particle.TintedBubblePopParticleOptions;
 import io.redspace.ironsspellbooks.particle.TraceParticleOptions;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.netty.buffer.Unpooled;
@@ -314,16 +313,14 @@ public final class PreviewSessionManager {
         if (particle instanceof ZapParticleOption zap) {
             return new ZapParticleOption(zap.getDestination().subtract(origin));
         }
-        if (particle instanceof SoulfireRayParticleOptions ray) {
-            return new SoulfireRayParticleOptions(ray.getDestination().subtract(origin));
-        }
         if (particle instanceof TraceParticleOptions trace) {
             Vector3f destination = new Vector3f(trace.destination)
                     .sub((float) origin.x, (float) origin.y, (float) origin.z);
             return new TraceParticleOptions(destination, new Vector3f(trace.color));
         }
-        if (particle instanceof TintedBubblePopParticleOptions bubble) {
-            return new TintedBubblePopParticleOptions(bubble.cauldronPos().subtract(BlockPos.containing(origin)));
+        ParticleOptions optional = OptionalParticleOptions.project(particle, origin);
+        if (optional != particle) {
+            return optional;
         }
         if (particle instanceof VibrationParticleOption vibration
                 && vibration.getDestination() instanceof BlockPositionSource blockSource) {
@@ -479,6 +476,11 @@ public final class PreviewSessionManager {
 
     private static void beginCast(MinecraftServer server, PreviewSession session, MagicData magicData) {
         magicData.resetCastingState();
+        // MagicData#setMana clamps to MAX_MANA; setting mana alone leaves a new FakePlayer at 100.
+        // Book-only validation consumes mana, unlike the normal COMMAND preview path.
+        var maximumMana = session.simulatedPlayer.getAttribute(
+                io.redspace.ironsspellbooks.api.registry.AttributeRegistry.MAX_MANA);
+        if (maximumMana != null) maximumMana.setBaseValue(1_000_000);
         magicData.setMana(1_000_000);
         magicData.getSyncedData().learnSpell(session.spell, false);
         // Reference: AbstractSpell#attemptInitiateCast can call castSpell immediately for INSTANT casts.
@@ -487,9 +489,10 @@ public final class PreviewSessionManager {
                 new ModNetwork.ProjectionCastStarted(session.spell.getSpellId(), session.spellLevel));
         boolean started;
         try {
+            session.adapter.beforeCast(context(session, server.getTickCount()));
             started = session.spell.attemptInitiateCast(net.minecraft.world.item.ItemStack.EMPTY,
                     session.spellLevel, session.simulatedPlayer.level(), session.simulatedPlayer,
-                    CastSource.COMMAND, false, "iss_ponder");
+                    session.adapter.castSource(), false, "iss_ponder");
         } catch (RuntimeException exception) {
             ISSPonderMod.LOGGER.error("Failed to start simulated cast for {}", session.spell.getSpellId(), exception);
             started = false;

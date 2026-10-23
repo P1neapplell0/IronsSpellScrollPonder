@@ -12,6 +12,11 @@ import java.util.Map;
  * Implementations are server-side and must leave all persistent state inside the preview session.
  */
 public interface SpellPreviewAdapter {
+    /** Most previews use COMMAND; exclusive spellbook spells can request their normal validation path. */
+    default io.redspace.ironsspellbooks.api.spells.CastSource castSource() {
+        return io.redspace.ironsspellbooks.api.spells.CastSource.COMMAND;
+    }
+
     enum Action {
         WAIT,
         RECAST,
@@ -35,6 +40,10 @@ public interface SpellPreviewAdapter {
     }
 
     default void onSceneReady(SpellPreviewContext context) {
+    }
+
+    /** Runs before normal cast validation/initiation, including recasts; prepare predicate inputs here. */
+    default void beforeCast(SpellPreviewContext context) {
     }
 
     default void onCastCompleted(SpellPreviewContext context) {

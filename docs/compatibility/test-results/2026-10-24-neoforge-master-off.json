@@ -1,0 +1,34 @@
+{
+  "updatedAt": "2026-10-23T17:16:45.204038Z",
+  "finished": true,
+  "runId": "1792775786730",
+  "fixtureIdentity": "{\n  \"minecraft\": \"1.21.1\",\n  \"profile\": [\n    \"legendary\"\n  ],\n  \"mode\": \"off\",\n  \"scope\": \"targeted\",\n  \"fixtures\": [\n    {\n      \"key\": \"legendary\",\n      \"slug\": \"legendary-spellbooks\",\n      \"project\": 1478875,\n      \"file\": 8255715,\n      \"filename\": \"legendary_spellbooks-1.21.1+neo-0.3.2.jar\",\n      \"sha256\": \"c1e5421a621e87f82158ad1fc179277b7053e924fa71c1a8c36ee1e0249872a0\",\n      \"modId\": \"legendary_spellbooks\"\n    },\n    {\n      \"key\": \"monsters\",\n      \"slug\": \"legendary-monsters\",\n      \"project\": 944035,\n      \"file\": 8902342,\n      \"filename\": \"legendary_monsters-2.2.3 MC 1.21.1.jar\",\n      \"sha256\": \"54ab1d14156d69505a26f389ec6dee8f1202724ef9fda556d40fcbc5abaad231\",\n      \"modId\": \"legendary_monsters\"\n    }\n  ]\n}",
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "legendary_spellbooks:flame_eater",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flame_eater",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ],
+  "loader": "NeoForge 21.1.248",
+  "ironsSpellbooks": "1.21.1-3.16.3",
+  "classLoadingEvidence": {
+    "file": "/tmp/iss-neo-off-14362.log",
+    "testRunnerLoaded": true,
+    "optionalProviderAndSupportClassesLoaded": 0
+  }
+}

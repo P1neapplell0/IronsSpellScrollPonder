@@ -150,3 +150,6 @@ tasks.named('jar', Jar).configure {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+// Optional, isolated addon fixtures and renderer smoke tests; never mandatory release dependencies.
+apply from: 'gradle/compat-test.gradle'

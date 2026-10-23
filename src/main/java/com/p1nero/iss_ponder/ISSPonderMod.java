@@ -2,6 +2,7 @@ package com.p1nero.iss_ponder;
 
 import com.mojang.logging.LogUtils;
 import com.p1nero.iss_ponder.config.ClientConfig;
+import com.p1nero.iss_ponder.config.CompatConfig;
 import com.p1nero.iss_ponder.network.ModNetwork;
 import com.p1nero.iss_ponder.server.BuiltinSpellPreviewAdapters;
 import net.neoforged.bus.api.IEventBus;
@@ -18,6 +19,7 @@ public class ISSPonderMod {
 
     public ISSPonderMod(IEventBus modBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, "iss_ponder-common.toml");
         modBus.addListener(ModNetwork::register);
         BuiltinSpellPreviewAdapters.register();
     }

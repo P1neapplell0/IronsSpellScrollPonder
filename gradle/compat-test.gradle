@@ -1,0 +1,110 @@
+import groovy.json.JsonSlurper
+
+// Deliberately opt-in: no fixture downloads, extra source roots or addon runtime dependencies in normal builds.
+def profile = providers.gradleProperty('compatTestProfile').orNull
+// Also exclude stale classes left by a previous opt-in compile during an ordinary release build.
+tasks.withType(Jar).configureEach { exclude('com/p1nero/iss_ponder/dev/**') }
+tasks.register('listCompatTestProfiles') {
+    group = 'verification'
+    doLast {
+        def lock = new JsonSlurper().parse(file('gradle/compat-test-lock.json'))
+        println "${minecraft_version}: ${lock.targets[minecraft_version].profiles.keySet().join(', ')}, all"
+        lock.targets[minecraft_version].unavailableProfiles?.each { key, reason -> println "Unavailable ${key}: ${reason}" }
+    }
+}
+if (!profile) {
+    return
+}
+if (!(profile ==~ /[a-z0-9_,-]+/)) {
+    throw new GradleException('Invalid compatTestProfile')
+}
+def mode = providers.gradleProperty('compatTestMode').getOrElse('on')
+if (!(mode in ['on', 'off'])) {
+    throw new GradleException('compatTestMode must be on or off')
+}
+def lock = new JsonSlurper().parse(file('gradle/compat-test-lock.json')).targets[minecraft_version]
+def names = profile.split(',').toList().unique().sort()
+def keys = names.collectMany { name ->
+    if (name == 'all') {
+        return lock.profiles.findAll { key, value -> key != 'smoke' && !(key in (lock.isolatedProfiles ?: [])) }.values().flatten()
+    }
+    if (!lock.profiles.containsKey(name)) {
+        throw new GradleException(lock.unavailableProfiles?.get(name)
+                ?: "Unknown ${minecraft_version} compatibility test profile: ${name}")
+    }
+    lock.profiles[name]
+}.unique()
+keys.groupBy { lock.artifacts[it].modId }.each { modId, entries ->
+    if (entries.collect { lock.artifacts[it].file }.unique().size() > 1) {
+        throw new GradleException("Conflicting versions of ${modId}: ${entries}; run the isolated profiles separately")
+    }
+}
+def repository = new File(gradle.gradleUserHomeDir, 'caches/iss-ponder-compat/maven')
+def testDirectory = file("run/compat/${names.join('+')}-${mode}")
+def manifestFile = new File(testDirectory, 'compat-fixtures.json')
+if (!manifestFile.isFile()) {
+    throw new GradleException("Prepare fixtures first: node tools/compat/prepare-test-mods.mjs --profile ${profile} --mode ${mode}")
+}
+def prepared = new JsonSlurper().parse(manifestFile)
+if (prepared.minecraft != minecraft_version || prepared.mode != mode ||
+        prepared.fixtures.collect { it.key }.toSet() != keys.toSet() ||
+        prepared.fixtures.any { it.sha256 != lock.artifacts[it.key]?.sha256 }) {
+    throw new GradleException('Stale compatibility fixtures: rerun tools/compat/prepare-test-mods.mjs with the selected profile and mode')
+}
+repositories.maven {
+    name = 'LocalCompatibilityFixtures'
+    url = repository.toURI()
+    // Do not use exclusiveContent: ForgeGradle must also resolve its generated mapped artifact repository.
+    content { includeGroup('issponder.compat') }
+}
+keys.each { key ->
+    def fixture = lock.artifacts[key]
+    def coordinate = "issponder.compat:${fixture.slug}-${fixture.project}:${fixture.file}"
+    if (minecraft_version == '1.20.1') {
+        dependencies.add('runtimeOnly', fg.deobf(coordinate)) { transitive = false }
+    } else {
+        dependencies.add('localRuntime', coordinate) { transitive = false }
+    }
+}
+tasks.register('verifyCompatTestRuntime') {
+    group = 'verification'
+    description = 'Resolve/map the opt-in addon runtime classpath without launching Minecraft.'
+    doLast {
+        def files = configurations.runtimeClasspath.files
+        keys.each { key ->
+            def artifact = lock.artifacts[key]
+            if (!files.any { it.name.startsWith("${artifact.slug}-${artifact.project}-${artifact.file}") }) {
+                throw new GradleException("Missing compatibility fixture on runtime classpath: ${key}")
+            }
+        }
+        println "Resolved ${keys.size()} pinned addon/support JARs (${files.size()} runtime entries). This is NOT a game startup or rendering test."
+    }
+}
+// The event subscriber is compiled only for this opt-in run and is ALWAYS excluded from published JARs.
+sourceSets.main.java.srcDir(minecraft_version == '1.21.1' ? 'src/compatTestNeo/java' : 'src/compatTest/java')
+def configureRun = { run ->
+    def addProperty = { key, value ->
+        if (minecraft_version == '1.20.1') {
+            run.property(key, value)
+        } else {
+            run.systemProperty(key, value)
+        }
+    }
+    addProperty('issponder.dev.smoke', providers.gradleProperty('compatSmoke').getOrElse('false'))
+    addProperty('issponder.dev.autoWorld', providers.gradleProperty('compatAutoWorld').getOrElse('false'))
+    addProperty('issponder.dev.exit', providers.gradleProperty('compatSmokeExit').getOrElse('false'))
+    addProperty('issponder.dev.spells', providers.gradleProperty('compatSpells').getOrElse(''))
+    addProperty('issponder.dev.levels', providers.gradleProperty('compatLevels').getOrElse('max'))
+    addProperty('issponder.dev.resume', providers.gradleProperty('compatResume').getOrElse('false'))
+}
+if (minecraft_version == '1.20.1') {
+    minecraft.runs.configureEach {
+        workingDirectory testDirectory
+        configureRun(delegate)
+    }
+} else {
+    neoForge.runs.configureEach {
+        gameDirectory = testDirectory
+        configureRun(delegate)
+    }
+}
