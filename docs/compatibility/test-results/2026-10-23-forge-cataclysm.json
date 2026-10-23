@@ -1,0 +1,231 @@
+{
+  "minecraft": "1.20.1",
+  "loader": "Forge 47.4.4",
+  "ironsSpellbooks": "1.20.1-3.16.3",
+  "fixtureProfile": "cataclysm",
+  "addonVersion": "1.2.9-1.20.1",
+  "cataclysm": "3.31",
+  "azurelib": "3.1.24",
+  "startupPatchObserved": true,
+  "updatedAt": "2026-10-23T15:27:11.027135Z",
+  "finished": true,
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "cataclysm_spellbooks:abyss_fireball",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:abyss_fireball",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 85,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:amethyst_puncture",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:amethyst_puncture",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:cryopiercer",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 87,
+      "peakProjectedEntities": 33,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:cryopiercer",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 33,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:disabling_swipe",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 47,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:disabling_swipe",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 116,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:final_rend",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 107,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:final_rend",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 108,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:laserbolt",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:laserbolt",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 99,
+      "peakProjectedEntities": 7,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:meteor_spew",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 67,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:meteor_spew",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 141,
+      "peakProjectedEntities": 9,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:missile_launch",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:missile_launch",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 20,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:phantasmal_blade",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 100,
+      "peakProjectedEntities": 19,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:phantasmal_blade",
+      "level": 10,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 99,
+      "peakProjectedEntities": 46,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:piercing_bone",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:piercing_bone",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 86,
+      "peakProjectedEntities": 14,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:quick_strike",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:quick_strike",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 95,
+      "peakProjectedEntities": 5,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:rewire",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:rewire",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ]
+}

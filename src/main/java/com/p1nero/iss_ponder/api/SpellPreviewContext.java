@@ -40,10 +40,12 @@ public record SpellPreviewContext(ServerLevel level, ServerPlayer caster, @Nulla
         boolean invulnerable = caster.isInvulnerable();
         caster.setInvulnerable(false);
         caster.invulnerableTime = 0;
-        boolean hurt = caster.hurt(caster.damageSources().mobAttack(attacker), Math.max(0.1F, damage));
-        caster.setHealth(Math.max(health, 1.0F));
-        caster.setInvulnerable(invulnerable);
-        return hurt;
+        try {
+            return caster.hurt(caster.damageSources().mobAttack(attacker), Math.max(0.1F, damage));
+        } finally {
+            caster.setHealth(Math.max(health, 1.0F));
+            caster.setInvulnerable(invulnerable);
+        }
     }
 
     /** Runs the normal item finish path so Forge item-use events still fire. */

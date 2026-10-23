@@ -1,0 +1,105 @@
+{
+  "updatedAt": "2026-10-23T17:15:42.865223Z",
+  "finished": true,
+  "runId": "1792775654507",
+  "fixtureIdentity": "{\n  \"minecraft\": \"1.21.1\",\n  \"profile\": [\n    \"alexscaves\",\n    \"cataclysm\",\n    \"familiars\",\n    \"legendary\"\n  ],\n  \"mode\": \"on\",\n  \"scope\": \"all\",\n  \"fixtures\": [\n    {\n      \"key\": \"alexscaves\",\n      \"slug\": \"alexs-caves-spellbooks\",\n      \"project\": 1429793,\n      \"file\": 9239413,\n      \"filename\": \"alexs_caves_spellbooks-1.2.1.jar\",\n      \"sha256\": \"230aff5232063818edf7b41b69e2597194d0031db87138c447a6d337d2c72aa6\",\n      \"modId\": \"alexs_caves_spellbooks\"\n    },\n    {\n      \"key\": \"alexscaves_base\",\n      \"slug\": \"alexs-caves-unofficial-port\",\n      \"project\": 1420348,\n      \"file\": 7981977,\n      \"filename\": \"alexscaves-2.0.10.jar\",\n      \"sha256\": \"6fad35bf07fcb977aaa32d3fe05bf122150c6a30ed16b057385040207a3b788f\",\n      \"modId\": \"alexscaves\"\n    },\n    {\n      \"key\": \"citadel\",\n      \"slug\": \"citadel\",\n      \"project\": 331936,\n      \"file\": 8458935,\n      \"filename\": \"citadel-2.7.1-1.21.1.jar\",\n      \"sha256\": \"a2d4c5dd17375090467db9f66d2aae41e17cb0b324902534580078bd23944925\",\n      \"modId\": \"citadel\"\n    },\n    {\n      \"key\": \"cataclysm\",\n      \"slug\": \"cataclysm-spellbooks\",\n      \"project\": 1099461,\n      \"file\": 8847070,\n      \"filename\": \"cataclysm_spellbooks-1.1.14-1.21.jar\",\n      \"sha256\": \"a5a0dcad537954f488c862b3409831e0d12b4dfdc50bbfade298cb3d05dff2cf\",\n      \"modId\": \"cataclysm_spellbooks\"\n    },\n    {\n      \"key\": \"cataclysm_base\",\n      \"slug\": \"lendercataclysm\",\n      \"project\": 551586,\n      \"file\": 8931182,\n      \"filename\": \"L_Ender\\u0027s Cataclysm 1.21.1-3.33.jar\",\n      \"sha256\": \"371956d0c2e3b56729ee93b955e936875d210e372fe734cdb74326d89ef79875\",\n      \"modId\": \"cataclysm\"\n    },\n    {\n      \"key\": \"lionfish\",\n      \"slug\": \"lionfish-api\",\n      \"project\": 1001614,\n      \"file\": 8345326,\n      \"filename\": \"lionfishapi-3.1.jar\",\n      \"sha256\": \"aeebf0692650afbbc78259c0d4e3d5b7edf037707e8ae5d56045066d83a19cf6\",\n      \"modId\": \"lionfishapi\"\n    },\n    {\n      \"key\": \"azurelib\",\n      \"slug\": \"azurelib\",\n      \"project\": 817423,\n      \"file\": 9202756,\n      \"filename\": \"azurelib-neo-1.21.1-3.1.22.jar\",\n      \"sha256\": \"938e3ce0f38815ac9958d6265aa4c0110a2c6675e6cf561c044abba6537b0beb\",\n      \"modId\": \"azurelib\"\n    },\n    {\n      \"key\": \"aces\",\n      \"slug\": \"aces-spell-utils\",\n      \"project\": 1299492,\n      \"file\": 9136190,\n      \"filename\": \"aces_spell_utils-1.2.7.4-1.21.1.jar\",\n      \"sha256\": \"6f727a6ff8f78e88f521734c1f6c0affeb3b3df549a310a3130079e743eedd83\",\n      \"modId\": \"aces_spell_utils\"\n    },\n    {\n      \"key\": \"familiars\",\n      \"slug\": \"alshanexs-familiars\",\n      \"project\": 1171602,\n      \"file\": 9276628,\n      \"filename\": \"alshanex_familiars-1.21.1_v5.0.jar\",\n      \"sha256\": \"4760c6aab4b97f01ff4f414042dc633d8fbab4df5f38fa7204cb85ead21cc299\",\n      \"modId\": \"alshanex_familiars\"\n    },\n    {\n      \"key\": \"familiarslib\",\n      \"slug\": \"familiarslib\",\n      \"project\": 1316458,\n      \"file\": 9276592,\n      \"filename\": \"familiarslib-1.21.1-2.0.jar\",\n      \"sha256\": \"0b7593ed3e97bcc7685b78f849082ef687592c4061fa052a2f818fa95a30c340\",\n      \"modId\": \"familiarslib\"\n    },\n    {\n      \"key\": \"legendary\",\n      \"slug\": \"legendary-spellbooks\",\n      \"project\": 1478875,\n      \"file\": 8255715,\n      \"filename\": \"legendary_spellbooks-1.21.1+neo-0.3.2.jar\",\n      \"sha256\": \"c1e5421a621e87f82158ad1fc179277b7053e924fa71c1a8c36ee1e0249872a0\",\n      \"modId\": \"legendary_spellbooks\"\n    },\n    {\n      \"key\": \"monsters\",\n      \"slug\": \"legendary-monsters\",\n      \"project\": 944035,\n      \"file\": 8902342,\n      \"filename\": \"legendary_monsters-2.2.3 MC 1.21.1.jar\",\n      \"sha256\": \"54ab1d14156d69505a26f389ec6dee8f1202724ef9fda556d40fcbc5abaad231\",\n      \"modId\": \"legendary_monsters\"\n    }\n  ]\n}",
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "alshanex_familiars:switcheroo",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 61,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alshanex_familiars:switcheroo",
+      "level": 5,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 61,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:rewire",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "cataclysm_spellbooks:rewire",
+      "level": 8,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alexs_caves_spellbooks:aspect_of_tremorsaurus",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 76,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "alexs_caves_spellbooks:aspect_of_tremorsaurus",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 76,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_geyser",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 216,
+      "peakProjectedEntities": 23,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_geyser",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 216,
+      "peakProjectedEntities": 23,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:energy_beam",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 156,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:energy_beam",
+      "level": 3,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 156,
+      "peakProjectedEntities": 8,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ],
+  "loader": "NeoForge 21.1.248",
+  "ironsSpellbooks": "1.21.1-3.16.3",
+  "executionNotes": [
+    "Fresh explicit five-spell min/max suite; no resumed rows.",
+    "Validates target-setup timing and extended book-spell follow-up windows."
+  ]
+}

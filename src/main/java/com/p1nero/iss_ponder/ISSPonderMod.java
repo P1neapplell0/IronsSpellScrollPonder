@@ -2,6 +2,7 @@ package com.p1nero.iss_ponder;
 
 import com.mojang.logging.LogUtils;
 import com.p1nero.iss_ponder.config.ClientConfig;
+import com.p1nero.iss_ponder.config.CompatConfig;
 import com.p1nero.iss_ponder.network.ModNetwork;
 import com.p1nero.iss_ponder.server.BuiltinSpellPreviewAdapters;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -18,6 +19,7 @@ public class ISSPonderMod {
     @SuppressWarnings("removal") // Forge 1.20.1 still exposes config registration through this loading context.
     public ISSPonderMod() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, "iss_ponder-common.toml");
         BuiltinSpellPreviewAdapters.register();
         ModNetwork.register();
     }

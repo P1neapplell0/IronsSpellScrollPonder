@@ -1,0 +1,67 @@
+{
+  "minecraft": "1.20.1",
+  "loader": "Forge 47.4.4",
+  "ironsSpellbooks": "1.20.1-3.16.3",
+  "fixtureProfile": "legendary",
+  "addonVersion": "0.4.1",
+  "adapterObserved": "GuardedAdapter (confirmed by server log)",
+  "updatedAt": "2026-10-23T15:21:00.004380Z",
+  "finished": true,
+  "scope": "Real integrated-server casting and real Ponder screen rendering; NOT dedicated-server or visual certification",
+  "results": [
+    {
+      "spell": "legendary_spellbooks:annihilation_resonance",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 108,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:annihilation_resonance",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 108,
+      "peakProjectedEntities": 4,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flame_eater",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 45,
+      "peakProjectedEntities": 6,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:flame_eater",
+      "level": 6,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 72,
+      "peakProjectedEntities": 11,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:overgrown_shockwave",
+      "level": 1,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 57,
+      "peakProjectedEntities": 40,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    },
+    {
+      "spell": "legendary_spellbooks:overgrown_shockwave",
+      "level": 4,
+      "result": "RENDERED_COMPLETE",
+      "ticks": 138,
+      "peakProjectedEntities": 148,
+      "status": "gui.iss_ponder.complete",
+      "visualReview": "PENDING: inspect screenshots; completion alone does not prove correct effect"
+    }
+  ]
+}

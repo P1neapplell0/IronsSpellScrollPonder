@@ -1,5 +1,67 @@
 # Technical Notes
 
+## Additional real-client findings in 1.1.0
+
+`SpellPreviewAdapter#castSource` defaults to COMMAND. Legendary's book-exclusive
+Geyser/Beam rules request SPELLBOOK instead; Geyser equips its exact registered
+Curios book in `beforeCast`. Normal spell validation is not bypassed. An absent
+item/slot fails preparation through `GuardedAdapter`, rather than casting with
+invalid prerequisites.
+
+`PonderLevelEntityTickMixin` redirects only the entity iterator in
+`PonderLevel#tick`, and only for `PreviewProjection`'s current level.
+`ProjectionEntityIterator` traverses a snapshot, forwards removals to the live
+list and delays additions until the next tick. This fixes Legendary's observed
+`annihilation_beam` concurrent-modification crash without replacing upstream
+particle/interpolation/cleanup logic or changing ordinary Ponder scenes.
+
+Forge's Cataclysm `thoths_witness` rule resolves a Pharaoh helmet from the item
+registry before `canBeCastedBy`; no optional item class is linked. The optional
+Illage provider refuses three summon previews when the removed Iron
+`OwnerGetter` API is absent. That guard cannot fix ordinary addon gameplay.
+See [runtime findings](docs/compatibility/RUNTIME_FINDINGS.md) for evidence and
+test limitations.
+
+Familiars 5.0 `SwitcherooSpell` needs an owned `AbstractSpellCastingPet`.
+`OwnedFamiliarAdapter` resolves `mage_pet` by registry ID and reflects
+`setOwnerUUID(UUID)` immediately before normal cast validation. Target-dependent
+preparation runs in `beforeCast`: new scene entities may not yet be visible to
+the server UUID lookup during `onSceneReady`. Rewire ownership and fear-target
+AI preparation follow the same timing rule. Equipment/block preparation can
+still run at scene creation when it does not require an indexed target.
+
+## Optional development fixtures
+
+See [Development testing](docs/compatibility/DEVELOPMENT_TESTING.md). The opt-in
+`gradle/compat-test.gradle` reads pinned fixtures from `compat-test-lock.json`;
+normal builds do not add the fixture repository, runtime dependencies or test
+source roots. Forge uses `fg.deobf` runtime dependencies, NeoForge `localRuntime`.
+Every JAR task excludes the `dev` package, even without an active profile, to
+prevent stale test classes leaking from a previous opt-in compile.
+
+`tools/compat/prepare-test-mods.mjs` verifies downloads before writing an isolated
+fixture manifest. Gradle rejects stale manifests. `verify-test-fixtures.mjs`
+checks hashes, ZIP integrity and declared required mod-ID closure only; it does
+not validate version ranges or ABI compatibility. `verifyCompatTestRuntime`
+resolves/maps the actual runtime classpath without launching Minecraft.
+
+The opt-in `CompatPreviewSmoke` subscribes to client ticks only, requests real
+integrated-server previews, discovers runtime registry spells for all-scope
+runs, records status/timeout and screenshots, and refuses remote-server automation.
+It is not a visual oracle and does not cover dedicated-server projection.
+Keep render crashes visible; do not swallow VM/internal errors to manufacture
+passing results. The first Forge attempt failed at primary-monitor detection;
+subsequent NeoForge execution reached real previews. Static/build checks are
+not gameplay certification; see the development guide for actual coverage.
+
+Ponder's `PonderLevel#renderEntity` dereferences a renderer before dispatching a
+draw, even for server-only helper entities. Wind's `DashStopEntity` reproduced
+a null-renderer crash in a real NeoForge `iron_slash` preview. `PreviewProjection`
+now temporarily hides types without registered renderers only during the draw,
+restoring them in `finally`; entity IDs, ticking and event state are retained.
+This is generic projection safety, not optional addon API code, and applies
+with experimental adapters disabled too.
+
 This document records the architecture and upstream code references for Iron's
 Spell Scroll Ponder. It is intended to be the first document opened when work
 continues in a new session.
@@ -11,13 +73,74 @@ continues in a new session.
 | Minecraft | `1.20.1` | `gradle.properties` |
 | Forge | `47.4.4` | `gradle.properties` |
 | Parchment | `2023.09.03-1.20.1` | `gradle.properties` |
-| Iron's Spellbooks | CurseForge file `8364933`, mod `3.16.2` | `build.gradle`, `mods.toml` |
+| Iron's Spellbooks | CurseForge file `8680180`, mod `3.16.3` | `build.gradle`, `mods.toml` |
 | Ponder | `1.0.92` | `gradle.properties`, Jar-in-Jar |
 | Flywheel | `1.0.0-215` | `gradle.properties`, Jar-in-Jar |
 | Player Animator | CurseForge file `4587214` | `build.gradle` |
+| GeckoLib | `4.8.4` (Familiars 4.1.0 minimum) | `build.gradle` |
 
 Do not assume packet discriminators, private field names, Mixin descriptors, or
 animation-layer behavior are stable across upgrades.
+
+## Optional Add-on Integration Architecture (1.1.0)
+
+Read [the compatibility guide](docs/compatibility/README.md) and
+[the per-spell audit](docs/compatibility/SPELL_AUDIT.md) before extending a rule.
+The release inventory includes file IDs, SHA-256 hashes and upstream dependency
+declarations. The inventory is static evidence, not visual verification.
+
+`config/CompatConfig` registers `iss_ponder-common.toml`: the master switch is
+false, with individual add-on switches below it. Providers in
+`compat/{legendary,traveloptics,cataclysm,familiars,hazen,gtbc,geomancy,alexscaves}`
+are referenced by **class-name strings** in `ExperimentalCompat`, not static
+class literals or addon API imports. Only enabled, installed addons reach the
+lazy loader. Exact runtime addon versions and implementation class names are
+checked; unknown versions are logged once and use the generic adapter. Profile
+versions must come from mods.toml/manifest, not the website label (Cataclysm
+Spellbooks includes MC suffixes). This strict *integration* gate does not change
+the permissive mandatory dependency ranges introduced in 1.0.3.
+
+Selection order is explicit registration/builtin adapter, optional provider,
+then generic adapter. `GuardedAdapter` wraps every lifecycle callback and
+quarantines `RuntimeException`/`LinkageError` (including `NoSuchMethodError`)
+for the preview. The loader separately quarantines failed provider modules.
+The loader runs on the server thread; it is not a concurrent global registry
+for client rendering. Disabling a rule does not sandbox or fix upstream spell
+logic that already ran through the normal generic casting path.
+
+New API hook: `SpellPreviewAdapter#beforeCast` runs immediately before normal
+cast initiation/validation, including recasts. Use it for equipment or fluid
+state that a pre-cast predicate reads; `onCastCompleted` is too late. Initial
+origin-relative blocks and `onSceneReady` run earlier. Blocks remain session
+owned and are projected/removed by the existing lifecycle.
+
+`compat/support/PreviewActions` contains bounded recasts, a support floor,
+critical attacks, reactive hits, underwater setup, owned summon targets and
+fear navigation. Each provider cites the corresponding upstream spell; the
+guide identifies relevant event/effect handlers. In particular, Legendary's
+resonance needs `Player#attack` to emit the critical event, and Reversal must
+receive a hit during its short parry window. A summon's recast may dismiss it;
+never derive automatic recasts solely from `getRecastCount`.
+
+Forge-only startup path: `iss_ponder.compat.mixins.json` registers the small
+`compat/bootstrap/CataclysmMixinPlugin`. Forge has not constructed COMMON
+config values at that point, so the plugin reads the same TOML file early,
+failing closed. Only the explicitly enabled audited Cataclysm/Spellbooks pair
+without BielGG loads `compat/cataclysm/legacy`. The transformer remaps obsolete
+symbols on a copy, validates changed constructor shapes, then commits the
+result. The reflection bridge contains no addon types in public signatures.
+This is global ABI repair for a broken addon release, not a preview-only hook;
+therefore it has its own default-off switch and no NeoForge equivalent. Forge's
+coremod JavaScript sandbox cannot read this config, so no ungated JS coremod is
+bundled. See the guide for the 12-class ASM verification and remaining boot tests.
+
+The base particle projection also uses `network/OptionalParticleOptions` for
+SoulfireRay and TintedBubblePop. These classes do not exist in Iron's 3.15.4;
+using direct `instanceof` references would crash older dedicated-server
+previews despite permissive dependency metadata. Match the actual runtime
+class name and resolve only that particle's accessors/constructors lazily.
+Unknown signatures warn once and leave the particle unchanged; the existing
+client endpoint-distance guard still bounds rendering. No protocol changed.
 
 ## Why the Preview Is Split Across Server and Client
 

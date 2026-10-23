@@ -1,0 +1,8 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.p1nero.iss_ponder.mixin.compat",
+  "plugin": "com.p1nero.iss_ponder.compat.bootstrap.CataclysmMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": ["CataclysmLegacyMixin"]
+}
